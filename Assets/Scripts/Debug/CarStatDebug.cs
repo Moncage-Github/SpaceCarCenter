@@ -13,11 +13,11 @@ public class CarStatDebug : MonoBehaviour
     [SerializeField] private GameObject _panel;
     private bool _isPanelActive = false;
 
-    private CarMove _carMove;
+    private VehicleController _carMove;
 
     private void Awake()
     {
-        _carMove = GameObject.Find("Car").GetComponent<CarMove>();
+        _carMove = GameObject.Find("Car").GetComponent<VehicleController>();
     }
 
     private void OnEnable()
@@ -27,33 +27,33 @@ public class CarStatDebug : MonoBehaviour
 
     private void InitText()
     {
-        _drift.text = _carMove.DriftFacctor.ToString();
-        _accel.text = _carMove.AcclerationForce.ToString();
-        _rotate.text = _carMove.RotationForce.ToString();
-        _maxSpeed.text = _carMove.MaxSpeed.ToString();
+        //_drift.text = _carMove.DriftFacctor.ToString();
+        //_accel.text = _carMove.AcclerationForce.ToString();
+        //_rotate.text = _carMove.RotationForce.ToString();
+       // _maxSpeed.text = _carMove.MaxSpeed.ToString();
     }
 
     public void ApplyStat()
     {
         if(float.TryParse(_accel.text, out float newAccelValue))
         {
-            _carMove.AcclerationForce = newAccelValue;
+           // _carMove.AcclerationForce = newAccelValue;
         }
 
         if (float.TryParse(_drift.text, out float newDriftValue))
         {
             newDriftValue = Mathf.Clamp(newDriftValue, 0.0f, 0.99f);
-            _carMove.DriftFacctor = newDriftValue;
+           // _carMove.DriftFacctor = newDriftValue;
         }
 
         if (float.TryParse(_rotate.text, out float newRotateValue))
         {
-            _carMove.RotationForce = newRotateValue;
+          //  _carMove.RotationForce = newRotateValue;
         }
 
         if (float.TryParse(_maxSpeed.text, out float newMaxSpeedValue))
         {
-            _carMove.MaxSpeed = newMaxSpeedValue;
+          //  _carMove.MaxSpeed = newMaxSpeedValue;
         }
 
         InitText();
