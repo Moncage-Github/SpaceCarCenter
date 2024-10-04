@@ -4,9 +4,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CarInput : MonoBehaviour
+public class UserInput : MonoBehaviour
 {
-    private CarMove _carMove;
+    private VehicleController _carMove;
 
     private PlayerInput _playerInput;
     private InputAction _moveAction;
@@ -15,7 +15,7 @@ public class CarInput : MonoBehaviour
 
     private void Awake()
     {
-        _carMove = GetComponent<CarMove>();
+        _carMove = GetComponent<VehicleController>();
         _playerInput = GetComponent<PlayerInput>();
         _moveAction = _playerInput.actions["Move"];
         _turnAction = _playerInput.actions["Turn"];

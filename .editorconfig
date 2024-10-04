@@ -213,6 +213,10 @@ dotnet_naming_rule.public_or_protected_field_should_be_pascal_case.severity = wa
 dotnet_naming_rule.public_or_protected_field_should_be_pascal_case.symbols = public_or_protected_field
 dotnet_naming_rule.public_or_protected_field_should_be_pascal_case.style = pascal_case
 
+dotnet_naming_rule.const_member_var_should_be_const.severity = warning
+dotnet_naming_rule.const_member_var_should_be_const.symbols = const_member_var
+dotnet_naming_rule.const_member_var_should_be_const.style = const
+
 dotnet_naming_rule.variable_should_be_camelcase.severity = warning
 dotnet_naming_rule.variable_should_be_camelcase.symbols = variable
 dotnet_naming_rule.variable_should_be_camelcase.style = camelcase
@@ -224,11 +228,11 @@ dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, p
 dotnet_naming_symbols.interface.required_modifiers = 
 
 dotnet_naming_symbols.public_or_protected_field.applicable_kinds = field
-dotnet_naming_symbols.public_or_protected_field.applicable_accessibilities = public
+dotnet_naming_symbols.public_or_protected_field.applicable_accessibilities = public, protected
 dotnet_naming_symbols.public_or_protected_field.required_modifiers = 
 
 dotnet_naming_symbols.private_or_internal_field.applicable_kinds = field
-dotnet_naming_symbols.private_or_internal_field.applicable_accessibilities = internal, private, private_protected, protected
+dotnet_naming_symbols.private_or_internal_field.applicable_accessibilities = internal, private, private_protected
 dotnet_naming_symbols.private_or_internal_field.required_modifiers = 
 
 dotnet_naming_symbols.types.applicable_kinds = class, struct, enum
@@ -242,6 +246,10 @@ dotnet_naming_symbols.non_field_members.required_modifiers =
 dotnet_naming_symbols.variable.applicable_kinds = parameter, local
 dotnet_naming_symbols.variable.applicable_accessibilities = local
 dotnet_naming_symbols.variable.required_modifiers = 
+
+dotnet_naming_symbols.const_member_var.applicable_kinds = field
+dotnet_naming_symbols.const_member_var.applicable_accessibilities = *
+dotnet_naming_symbols.const_member_var.required_modifiers = const
 
 # 명명 스타일
 
@@ -264,3 +272,8 @@ dotnet_naming_style.camelcase.required_prefix =
 dotnet_naming_style.camelcase.required_suffix = 
 dotnet_naming_style.camelcase.word_separator = 
 dotnet_naming_style.camelcase.capitalization = camel_case
+
+dotnet_naming_style.const.required_prefix = 
+dotnet_naming_style.const.required_suffix = 
+dotnet_naming_style.const.word_separator = _
+dotnet_naming_style.const.capitalization = all_upper

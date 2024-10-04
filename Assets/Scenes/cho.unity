@@ -4741,7 +4741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcf0ea196974b0644affe0a193701b81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _vehicleStat: {fileID: 0}
+  _vehicleStat: {fileID: 11400000, guid: 16d9a767b2d7f704c8426417426229ff, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

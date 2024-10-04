@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 updatePos = _targetObject.transform.position;
+        Vector3 updatePos = Vector2.Lerp(transform.position, _targetObject.transform.position, Time.fixedDeltaTime * _cameraSpeed);
         updatePos.z = -10;
         transform.position = updatePos;
     }
