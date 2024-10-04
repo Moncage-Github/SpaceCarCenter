@@ -8,7 +8,7 @@ public class CarMove : MonoBehaviour
 {
     //TODO : CarStat으로 분리
     [Header("Car Stat")]
-    [SerializeField] private float _driftFactor;
+    [SerializeField] [Range(0.0f, 0.999f)] private float _driftFactor;
     [SerializeField] private float _acclerationForce;
     [SerializeField] private float _rotationForce;
     [SerializeField] private float _maxSpeed;
