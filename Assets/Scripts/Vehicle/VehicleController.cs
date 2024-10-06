@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class VehicleController : MonoBehaviour
+public class VehicleController : MonoBehaviour, IDamageable
 {
     // Components
-    [SerializeField] private VehicleStat _vehicleStat;
-    private Rigidbody2D _rigidbody2D;
+    [SerializeField] private VehicleStat _stat;
     [SerializeField] private VehicleUI _vehicleUI;
+
+    private Rigidbody2D _rigidbody2D;
 
 
     private float _accelerationInput = 0;
@@ -24,11 +25,11 @@ public class VehicleController : MonoBehaviour
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _vehicleStat.OnFuelChange += _vehicleUI.ChangeFuelBar;
-        _vehicleStat.OnHpChange += _vehicleUI.ChangeHpBar;
+        _stat.OnFuelChange += _vehicleUI.ChangeFuelBar;
+        _stat.OnHpChange += _vehicleUI.ChangeHpBar;
 
-        _vehicleStat.CurrentFuelAmount = _vehicleStat.MaxFuelAmount;
-        _vehicleStat.CurrentHp = _vehicleStat.MaxHp;
+        _stat.CurrentFuelAmount = _stat.MaxFuelAmount;
+        _stat.CurrentHp = _stat.MaxHp;
     }
 
     private void FixedUpdate()
@@ -41,10 +42,18 @@ public class VehicleController : MonoBehaviour
 
         ApplyFuelUsage();
     }
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
+        if (damageable != null)
+        {
+            Debug.Log("col : "+ damageable.ToString() );
+            damageable.TakeDamage(5.0f);
+        }
+    }
     private void ApplyEngineForce()
     {
-        if (_accelerationInput == 0 || _vehicleStat.IsFuelEmpty())
+        if (_accelerationInput == 0 || _stat.IsFuelEmpty())
         {
             _rigidbody2D.drag = Mathf.Lerp(_rigidbody2D.drag, 3.0f, Time.fixedDeltaTime * 3);
         }
@@ -55,24 +64,24 @@ public class VehicleController : MonoBehaviour
 
         _velocityVsUp = Vector2.Dot(transform.up, _rigidbody2D.velocity);
 
-        if (_velocityVsUp > _vehicleStat.MaxSpeed && _accelerationInput > 0)
+        if (_velocityVsUp > _stat.MaxSpeed && _accelerationInput > 0)
         {
             return;
         }
 
-        if (_velocityVsUp < -_vehicleStat.MaxSpeed * 0.5f && _accelerationInput < 0)
+        if (_velocityVsUp < -_stat.MaxSpeed * 0.5f && _accelerationInput < 0)
         {
             return;
         }
 
-        if (_rigidbody2D.velocity.sqrMagnitude > _vehicleStat.MaxSpeed * _vehicleStat.MaxSpeed && _accelerationInput > 0)
+        if (_rigidbody2D.velocity.sqrMagnitude > _stat.MaxSpeed * _stat.MaxSpeed && _accelerationInput > 0)
         {
             return;
         }
 
-        if (!_vehicleStat.IsFuelEmpty())
+        if (!_stat.IsFuelEmpty())
         {
-            Vector2 engineForeceVector = transform.up * _accelerationInput * _vehicleStat.AcclerationForce;
+            Vector2 engineForeceVector = transform.up * _accelerationInput * _stat.AcclerationForce;
             _rigidbody2D.AddForce(engineForeceVector, ForceMode2D.Force);
         }
     }
@@ -82,7 +91,7 @@ public class VehicleController : MonoBehaviour
         float minSpeedBeforeAllowTuring = (_rigidbody2D.velocity.magnitude / 8);
         minSpeedBeforeAllowTuring = Mathf.Clamp01(minSpeedBeforeAllowTuring);
 
-        _rotationAngle -= _vehicleStat.RotationForce * _steeringInput * minSpeedBeforeAllowTuring;
+        _rotationAngle -= _stat.RotationForce * _steeringInput * minSpeedBeforeAllowTuring;
 
         _rigidbody2D.MoveRotation(_rotationAngle);
     }
@@ -92,21 +101,24 @@ public class VehicleController : MonoBehaviour
         Vector2 forwardVelocity = transform.up * Vector2.Dot(_rigidbody2D.velocity, transform.up);
         Vector2 rightVelocity = transform.right * Vector2.Dot(_rigidbody2D.velocity, transform.right);
 
-        _rigidbody2D.velocity = forwardVelocity + rightVelocity * _vehicleStat.DRIFT_FACTOR;
+        _rigidbody2D.velocity = forwardVelocity + rightVelocity * _stat.DRIFT_FACTOR;
     }
 
     private void ApplyFuelUsage()
     {
-        if(_accelerationInput == 0 || _vehicleStat.IsFuelEmpty())
+        if (_accelerationInput == 0 || _stat.IsFuelEmpty())
         {
             return;
         }
-        float speedRatio = _rigidbody2D.velocity.magnitude / _vehicleStat.MaxSpeed;
-        _vehicleStat.CurrentFuelAmount -= Mathf.Lerp(0, _vehicleStat.FUEL_USE_AMOUNT, speedRatio) * Time.fixedDeltaTime;
+        float speedRatio = _rigidbody2D.velocity.magnitude / _stat.MaxSpeed;
+        _stat.CurrentFuelAmount -= Mathf.Lerp(0, _stat.FUEL_USE_AMOUNT, speedRatio) * Time.fixedDeltaTime;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void TakeDamage(float damage)
     {
-        _vehicleStat.CurrentHp -= 10.0f;
+        _stat.CurrentHp -= damage;
     }
+
+
 }
+
