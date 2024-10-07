@@ -20,7 +20,7 @@ public class VehicleStat : ScriptableObject
 
     readonly public float DRIFT_FACTOR = 0.95f;
 
-    private int _curentLevel = 1;
+    //private int _curentLevel = 1;
 
     public event Action<float> OnHpChange;
     public event Action OnHpZero;
@@ -30,7 +30,7 @@ public class VehicleStat : ScriptableObject
         get => _currentHp;
         set 
         { 
-            _currentHp = Mathf.Clamp(0, MaxHp, value);
+            _currentHp = Mathf.Clamp(value, 0, MaxFuelAmount);
             OnHpChange?.Invoke(value / MaxHp);
 
             if(_currentHp <= 0)
@@ -51,7 +51,7 @@ public class VehicleStat : ScriptableObject
         set
         {
             //Debug.Log("Current Feul Percentage : " +  value / MaxFuelAmount * 100 + "%");
-            _currentFuelAmount = Mathf.Clamp(0, MaxFuelAmount, value);
+            _currentFuelAmount = Mathf.Clamp(value, 0, MaxFuelAmount);
             _currentFuelAmount = value;
             OnFuelChange?.Invoke(value / MaxFuelAmount);
         }
@@ -59,6 +59,6 @@ public class VehicleStat : ScriptableObject
 
     public bool IsFuelEmpty()
     {
-        return CurrentFuelAmount <= 0;
+        return !(CurrentFuelAmount > 0);
     }
 }
