@@ -9,27 +9,36 @@ public class VehicleController : MonoBehaviour, IDamageable
     // Components
     [SerializeField] private VehicleStat _stat;
     [SerializeField] private VehicleUI _vehicleUI;
-
     private Rigidbody2D _rigidbody2D;
 
-
+    // User Input Value
     private float _accelerationInput = 0;
     private float _steeringInput = 0;
-
     public float AccelerationInput { set => _accelerationInput = value; }
     public float SteeringInput { set => _steeringInput = value; }
 
+    // Member Variable
     private float _rotationAngle = 0;
     private float _velocityVsUp = 0;
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _stat.OnFuelChange += _vehicleUI.ChangeFuelBar;
-        _stat.OnHpChange += _vehicleUI.ChangeHpBar;
 
         _stat.CurrentFuelAmount = _stat.MaxFuelAmount;
         _stat.CurrentHp = _stat.MaxHp;
+    }
+
+    private void OnEnable()
+    {
+        _stat.OnFuelChange += _vehicleUI.ChangeFuelBar;
+        _stat.OnHpChange += _vehicleUI.ChangeHpBar;
+    }
+
+    private void OnDisable()
+    {
+        _stat.OnFuelChange -= _vehicleUI.ChangeFuelBar;
+        _stat.OnHpChange -= _vehicleUI.ChangeHpBar;
     }
 
     private void FixedUpdate()
@@ -44,13 +53,16 @@ public class VehicleController : MonoBehaviour, IDamageable
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
-        if (damageable != null)
+        if (!collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
         {
-            Debug.Log("col : "+ damageable.ToString() );
-            damageable.TakeDamage(5.0f);
+            return;
         }
+            
+        Debug.Log("col : "+ damageable.ToString() );
+        damageable.TakeDamage(5.0f);    
     }
+
+    // 차량의 가속 및 감속을 제어
     private void ApplyEngineForce()
     {
         if (_accelerationInput == 0 || _stat.IsFuelEmpty())
@@ -86,6 +98,7 @@ public class VehicleController : MonoBehaviour, IDamageable
         }
     }
 
+    // 차량의 회전을 처리
     private void ApplySteering()
     {
         float minSpeedBeforeAllowTuring = (_rigidbody2D.velocity.magnitude / 8);
@@ -95,7 +108,8 @@ public class VehicleController : MonoBehaviour, IDamageable
 
         _rigidbody2D.MoveRotation(_rotationAngle);
     }
-
+    
+    // 차량의 진행방향의 수직방향의 속도를 감소
     private void KillOrthogonalVelocity()
     {
         Vector2 forwardVelocity = transform.up * Vector2.Dot(_rigidbody2D.velocity, transform.up);
@@ -104,6 +118,7 @@ public class VehicleController : MonoBehaviour, IDamageable
         _rigidbody2D.velocity = forwardVelocity + rightVelocity * _stat.DRIFT_FACTOR;
     }
 
+    // 연료 사용을 처리
     private void ApplyFuelUsage()
     {
         if (_accelerationInput == 0 || _stat.IsFuelEmpty())
@@ -114,11 +129,10 @@ public class VehicleController : MonoBehaviour, IDamageable
         _stat.CurrentFuelAmount -= Mathf.Lerp(0, _stat.FUEL_USE_AMOUNT, speedRatio) * Time.fixedDeltaTime;
     }
 
+    // IDamageable 구현
     public void TakeDamage(float damage)
     {
         _stat.CurrentHp -= damage;
     }
-
-
 }
 
