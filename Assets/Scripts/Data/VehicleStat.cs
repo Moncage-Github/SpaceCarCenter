@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.XR.Haptics;
 
 [CreateAssetMenu(fileName = "VehicleStat", menuName = "Data/VehicleStat")]
-public class VehicleStat : ScriptableObject
+public class VehicleStat : ScriptableObject, ICSVData
 {
     [field: SerializeField] public string Name { get; private set; }
 
@@ -64,4 +64,5 @@ public class VehicleStat : ScriptableObject
     {
         return !(CurrentFuelAmount > 0);
     }
+
 }

@@ -3,29 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.ComponentModel;
 using UnityEditor;
 using UnityEngine;
-using static UnityEngine.Analytics.ValueProperty;
 
 #if UNITY_EDITOR
 public class CSVToSO
 {
-    [MenuItem("Util/ReadData")]
-    private static void ReadCSV()
+    public static void ReadCSV<T>(string filePath, string savePath) where T : ScriptableObject, ICSVData
     {
-        string filePath = "Assets/DataTable/";
-        string fileName = "Vehiclestat.csv";
-        string path = Path.Combine(filePath, fileName);
+        // CSV 파일 Read후 리스트로 저장
+        List<string> allLines = File.ReadAllLines(filePath).ToList();
 
-        List<string> allLines = File.ReadAllLines(path).ToList();
+        // 변수명 추출
         string[] readVariableNames = allLines[0].Split(',');
         allLines.RemoveAt(0);
 
-
-        Type type = typeof(VehicleStat);
+        //생성할 타입에 추출한 변수가 모두 있는지 확인
+        Type type = typeof(T);
         foreach(var readVariableName in readVariableNames)
         {
+            //없는 변수 있을시 리턴
             PropertyInfo propertyInfo = type.GetProperty(readVariableName);
             if (propertyInfo == null)
             {
@@ -34,6 +31,7 @@ public class CSVToSO
             }
         }
 
+        //한줄씩 읽어 오브젝트 생성
         foreach (string line in allLines)
         {
             string[] splitData = line.Split(",");
@@ -43,18 +41,25 @@ public class CSVToSO
                 map[readVariableNames[i]] = splitData[i];
             }
 
-            VehicleStat newObj = ScriptableObject.CreateInstance<VehicleStat>();
+            T newObj = ScriptableObject.CreateInstance<T>();
             foreach (var readVariableName in readVariableNames)
             {
                 PropertyInfo propertyInfo = type.GetProperty(readVariableName);
                 Type propertyType = propertyInfo.PropertyType;
 
+                // 알맞은 타입으로 형 변환
                 object convertedValue = Convert.ChangeType(map[readVariableName], propertyType);
                 propertyInfo.SetValue(newObj, convertedValue);
             }
 
-            AssetDatabase.CreateAsset(newObj, $"Assets/Data/{map["Name"]}.asset");
+            //에셋 파일 생성
+            string fileName = map["Name"] + ".asset";
+            string path = Path.Combine(savePath, fileName);
+            Debug.Log(path + "is Create");
+            AssetDatabase.CreateAsset(newObj, path);
         }
+
+        // 에셋 파일 저장
         AssetDatabase.SaveAssets();
     }
 }
