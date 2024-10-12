@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class VehicleController : MonoBehaviour, IDamageable
+public class Vehicle : MonoBehaviour, IDamageable
 {
     // Components
-    [SerializeField] private VehicleStat _stat;
     [SerializeField] private VehicleUI _vehicleUI;
     private Rigidbody2D _rigidbody2D;
+
+    private VehicleStat _stat;
 
     // User Input Value
     private float _accelerationInput = 0;
@@ -25,8 +26,8 @@ public class VehicleController : MonoBehaviour, IDamageable
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
 
-        _stat.CurrentFuelAmount = _stat.MaxFuelAmount;
-        _stat.CurrentHp = _stat.MaxHp;
+        var data = DataManager.Instance.GetVehicleStat("Truck");
+        _stat = new VehicleStat(data);
     }
 
     private void OnEnable()
@@ -76,24 +77,24 @@ public class VehicleController : MonoBehaviour, IDamageable
 
         _velocityVsUp = Vector2.Dot(transform.up, _rigidbody2D.velocity);
 
-        if (_velocityVsUp > _stat.MaxSpeed && _accelerationInput > 0)
+        if (_velocityVsUp > _stat.Data.MaxSpeed && _accelerationInput > 0)
         {
             return;
         }
 
-        if (_velocityVsUp < -_stat.MaxSpeed * 0.5f && _accelerationInput < 0)
+        if (_velocityVsUp < -_stat.Data.MaxSpeed * 0.5f && _accelerationInput < 0)
         {
             return;
         }
 
-        if (_rigidbody2D.velocity.sqrMagnitude > _stat.MaxSpeed * _stat.MaxSpeed && _accelerationInput > 0)
+        if (_rigidbody2D.velocity.sqrMagnitude > _stat.Data.MaxSpeed * _stat.Data.MaxSpeed && _accelerationInput > 0)
         {
             return;
         }
 
         if (!_stat.IsFuelEmpty())
         {
-            Vector2 engineForeceVector = transform.up * _accelerationInput * _stat.AcclerationForce;
+            Vector2 engineForeceVector = transform.up * _accelerationInput * _stat.Data.AcclerationForce;
             _rigidbody2D.AddForce(engineForeceVector, ForceMode2D.Force);
         }
     }
@@ -104,7 +105,7 @@ public class VehicleController : MonoBehaviour, IDamageable
         float minSpeedBeforeAllowTuring = (_rigidbody2D.velocity.magnitude / 8);
         minSpeedBeforeAllowTuring = Mathf.Clamp01(minSpeedBeforeAllowTuring);
 
-        _rotationAngle -= _stat.RotationForce * _steeringInput * minSpeedBeforeAllowTuring;
+        _rotationAngle -= _stat.Data.RotationForce * _steeringInput * minSpeedBeforeAllowTuring;
 
         _rigidbody2D.MoveRotation(_rotationAngle);
     }
@@ -115,7 +116,7 @@ public class VehicleController : MonoBehaviour, IDamageable
         Vector2 forwardVelocity = transform.up * Vector2.Dot(_rigidbody2D.velocity, transform.up);
         Vector2 rightVelocity = transform.right * Vector2.Dot(_rigidbody2D.velocity, transform.right);
 
-        _rigidbody2D.velocity = forwardVelocity + rightVelocity * _stat.DRIFT_FACTOR;
+        _rigidbody2D.velocity = forwardVelocity + rightVelocity * _stat.Data.DRIFT_FACTOR;
     }
 
     // 연료 사용을 처리
@@ -125,7 +126,7 @@ public class VehicleController : MonoBehaviour, IDamageable
         {
             return;
         }
-        float speedRatio = _rigidbody2D.velocity.magnitude / _stat.MaxSpeed;
+        float speedRatio = _rigidbody2D.velocity.magnitude / _stat.Data.MaxSpeed;
         _stat.CurrentFuelAmount -= Mathf.Lerp(0, _stat.FUEL_USE_AMOUNT, speedRatio) * Time.fixedDeltaTime;
     }
 

@@ -22,7 +22,7 @@ public class CSVToSO
         Type type = typeof(T);
         foreach(var readVariableName in readVariableNames)
         {
-            //없는 변수 있을시 리턴
+            //데이터 테이블에 없는 변수 있을시 리턴
             PropertyInfo propertyInfo = type.GetProperty(readVariableName);
             if (propertyInfo == null)
             {
@@ -30,6 +30,8 @@ public class CSVToSO
                 return;
             }
         }
+
+        savePath = Path.Combine(savePath, Path.GetFileNameWithoutExtension(filePath));
 
         //한줄씩 읽어 오브젝트 생성
         foreach (string line in allLines)
@@ -51,6 +53,8 @@ public class CSVToSO
                 object convertedValue = Convert.ChangeType(map[readVariableName], propertyType);
                 propertyInfo.SetValue(newObj, convertedValue);
             }
+
+            Directory.CreateDirectory(savePath);
 
             //에셋 파일 생성
             string fileName = map["Name"] + ".asset";

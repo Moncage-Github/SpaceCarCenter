@@ -13,11 +13,11 @@ public class CarStatDebug : MonoBehaviour
     [SerializeField] private GameObject _panel;
     private bool _isPanelActive = false;
 
-    private VehicleController _carMove;
+    private Vehicle _carMove;
 
     private void Awake()
     {
-        _carMove = GameObject.Find("Car").GetComponent<VehicleController>();
+        _carMove = GameObject.Find("Car").GetComponent<Vehicle>();
     }
 
     private void OnEnable()

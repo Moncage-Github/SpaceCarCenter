@@ -7,8 +7,8 @@ using System.Linq;
 #if UNITY_EDITOR
 public class CSVReaderWindow : EditorWindow
 {
-    private string _filePath = "Assets/DataTable/VehicleStat.csv";
-    private string _savePath = "Assets/Data/";
+    private string _filePath = "Assets/DataTable/";
+    private string _savePath = "Assets/Resources/GameData";
 
     private int _selectedClassIndex = 0;
     private string[] _classNames;
