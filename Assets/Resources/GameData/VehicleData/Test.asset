@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Test
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Test
-  <MaxHp>k__BackingField: 50
-  <MaxFuelAmount>k__BackingField: 10
+  <MaxHp>k__BackingField: 1100
+  <MaxFuelAmount>k__BackingField: 50
   <AcclerationForce>k__BackingField: 4
   <MaxSpeed>k__BackingField: 12
   <RotationForce>k__BackingField: 3

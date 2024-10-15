@@ -26,7 +26,7 @@ public class Vehicle : MonoBehaviour, IDamageable
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
 
-        var data = DataManager.Instance.GetVehicleStat("Truck");
+        var data = DataManager.Instance.GetVehicleData("Truck");
         _stat = new VehicleStat(data);
     }
 
@@ -59,7 +59,7 @@ public class Vehicle : MonoBehaviour, IDamageable
             return;
         }
             
-        Debug.Log("col : "+ damageable.ToString() );
+        // Debug.Log("col : "+ damageable.ToString() );
         damageable.TakeDamage(5.0f);    
     }
 
@@ -116,7 +116,7 @@ public class Vehicle : MonoBehaviour, IDamageable
         Vector2 forwardVelocity = transform.up * Vector2.Dot(_rigidbody2D.velocity, transform.up);
         Vector2 rightVelocity = transform.right * Vector2.Dot(_rigidbody2D.velocity, transform.right);
 
-        _rigidbody2D.velocity = forwardVelocity + rightVelocity * _stat.Data.DRIFT_FACTOR;
+        _rigidbody2D.velocity = forwardVelocity + rightVelocity * _stat.Data.DriftFactor;
     }
 
     // 연료 사용을 처리

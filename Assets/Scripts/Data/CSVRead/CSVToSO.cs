@@ -32,6 +32,7 @@ public class CSVToSO
         }
 
         savePath = Path.Combine(savePath, Path.GetFileNameWithoutExtension(filePath));
+        Directory.CreateDirectory(savePath);
 
         //한줄씩 읽어 오브젝트 생성
         foreach (string line in allLines)
@@ -44,17 +45,7 @@ public class CSVToSO
             }
 
             T newObj = ScriptableObject.CreateInstance<T>();
-            foreach (var readVariableName in readVariableNames)
-            {
-                PropertyInfo propertyInfo = type.GetProperty(readVariableName);
-                Type propertyType = propertyInfo.PropertyType;
-
-                // 알맞은 타입으로 형 변환
-                object convertedValue = Convert.ChangeType(map[readVariableName], propertyType);
-                propertyInfo.SetValue(newObj, convertedValue);
-            }
-
-            Directory.CreateDirectory(savePath);
+            newObj.SetDataFromCSV(map);
 
             //에셋 파일 생성
             string fileName = map["Name"] + ".asset";

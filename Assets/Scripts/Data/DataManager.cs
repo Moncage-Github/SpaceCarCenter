@@ -29,14 +29,17 @@ public class DataManager
     {
         _vehicleDatas = new Dictionary<string, VehicleData>();
 
-        var vehicleStats = Resources.LoadAll<VehicleData>("GameData/VehicleData");
-        foreach (var vehicle in vehicleStats)
+        //Debug.Log("Start Load Vehicle Data");
+        var vehicleDatas = Resources.LoadAll<VehicleData>("GameData/VehicleData");
+        foreach (var vehicle in vehicleDatas)
         {
             _vehicleDatas[vehicle.Name] = vehicle;
         }
+        //Debug.Log("Finish Load Vehicle Data: " + _vehicleDatas.Count);
+
     }
 
-    public VehicleData GetVehicleStat(string name)
+    public VehicleData GetVehicleData(string name)
     {
         if (_vehicleDatas == null)
         {
@@ -45,11 +48,21 @@ public class DataManager
 
         if (!_vehicleDatas.TryGetValue(name, out VehicleData vehicleStat))
         {
-            Debug.LogWarning($"Vehicle {name} not Found!");
+            Debug.LogError($"Vehicle {name} not Found!");
             return null;
         }
 
         return vehicleStat;
     }
 
+    public List<VehicleData> GetVehicleDataList()
+    {
+        if (_vehicleDatas == null)
+        {
+            LoadVehicleData ();
+        }
+
+        var list = new List<VehicleData>(_vehicleDatas.Values);
+        return list;
+    }
 }
