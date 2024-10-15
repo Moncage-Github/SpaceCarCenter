@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class UserInput : MonoBehaviour
 {
-    private VehicleController _carMove;
+    private Vehicle _carMove;
 
     private PlayerInput _playerInput;
     private InputAction _moveAction;
@@ -15,7 +15,7 @@ public class UserInput : MonoBehaviour
 
     private void Awake()
     {
-        _carMove = GetComponent<VehicleController>();
+        _carMove = GetComponent<Vehicle>();
         _playerInput = GetComponent<PlayerInput>();
         _moveAction = _playerInput.actions["Move"];
         _turnAction = _playerInput.actions["Turn"];

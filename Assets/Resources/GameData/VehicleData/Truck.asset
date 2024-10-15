@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b4b753b63588f914ebc9d9026f9e688b, type: 3}
-  m_Name: TruckStat
+  m_Name: Truck
   m_EditorClassIdentifier: 
+  <Name>k__BackingField: Truck
   <MaxHp>k__BackingField: 100
-  <MaxFuelAmount>k__BackingField: 100
+  <MaxFuelAmount>k__BackingField: 50
   <AcclerationForce>k__BackingField: 4
   <MaxSpeed>k__BackingField: 12
   <RotationForce>k__BackingField: 3
+  <DriftFactor>k__BackingField: 0.8
