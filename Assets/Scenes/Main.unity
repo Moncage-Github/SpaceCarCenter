@@ -2350,11 +2350,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8853404597619482896, guid: cba0c7c9083b9f848b5b93089f398008, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -21.77
+      value: -11.67
       objectReference: {fileID: 0}
     - target: {fileID: 8853404597619482896, guid: cba0c7c9083b9f848b5b93089f398008, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.93
+      value: 7.96
       objectReference: {fileID: 0}
     - target: {fileID: 8853404597619482896, guid: cba0c7c9083b9f848b5b93089f398008, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3110,11 +3110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81cf9f8156268124caeac180ee9e3322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drift: {fileID: 1448385100}
-  _accel: {fileID: 826990651}
-  _rotate: {fileID: 1685659398}
-  _maxSpeed: {fileID: 1495139507}
-  _panel: {fileID: 250387601}
 --- !u!1 &1495139506
 GameObject:
   m_ObjectHideFlags: 0
@@ -3275,7 +3270,7 @@ GameObject:
   - component: {fileID: 1524048691}
   - component: {fileID: 1524048690}
   - component: {fileID: 1524048689}
-  - component: {fileID: 1524048688}
+  - component: {fileID: 1524048695}
   m_Layer: 6
   m_Name: Vehicle
   m_TagString: Player
@@ -3283,20 +3278,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1524048688
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1524048687}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcf0ea196974b0644affe0a193701b81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stat: {fileID: 11400000, guid: 16d9a767b2d7f704c8426417426229ff, type: 2}
-  _vehicleUI: {fileID: 475310053}
 --- !u!114 &1524048689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3488,6 +3469,19 @@ Transform:
   - {fileID: 1872883077}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1524048695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524048687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa0933d789b59bf45b944f40d03431c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _vehicleUI: {fileID: 475310053}
 --- !u!1 &1575922109
 GameObject:
   m_ObjectHideFlags: 0
