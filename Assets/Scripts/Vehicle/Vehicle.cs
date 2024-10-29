@@ -22,24 +22,27 @@ public class Vehicle : MonoBehaviour, IDamageable
     private float _rotationAngle = 0;
     private float _velocityVsUp = 0;
 
+    private Action _hpChangeAction;
+
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
 
         var data = DataManager.Instance.GetVehicleData("Truck");
         _stat = new VehicleStat(data);
+        _hpChangeAction = () => { _vehicleUI.ChangeHpBar(_stat.CurrentHp / _stat.Data.MaxHp); };
     }
 
     private void OnEnable()
     {
         _stat.OnFuelChange += _vehicleUI.ChangeFuelBar;
-        _stat.OnHpChange += _vehicleUI.ChangeHpBar;
+        _stat.OnHpChange += _hpChangeAction;
     }
 
     private void OnDisable()
     {
         _stat.OnFuelChange -= _vehicleUI.ChangeFuelBar;
-        _stat.OnHpChange -= _vehicleUI.ChangeHpBar;
+        _stat.OnHpChange -= _hpChangeAction;
     }
 
     private void FixedUpdate()
@@ -52,6 +55,7 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         ApplyFuelUsage();
     }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!collision.gameObject.TryGetComponent<IDamageable>(out var damageable))

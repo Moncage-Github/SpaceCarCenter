@@ -43,10 +43,10 @@ public class CSVToSO
             {
                 map[readVariableNames[i]] = splitData[i];
             }
+            ICSVData data;
 
             T newObj = ScriptableObject.CreateInstance<T>();
             newObj.SetDataFromCSV(map);
-
             //에셋 파일 생성
             string fileName = map["Name"] + ".asset";
             string path = Path.Combine(savePath, fileName);
