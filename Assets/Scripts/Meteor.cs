@@ -13,6 +13,7 @@ public class Meteor : MonoBehaviour, IDamageable
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // TODO : GetComponent ¾ø¾Ö±â
         if (!collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
         {
             return;

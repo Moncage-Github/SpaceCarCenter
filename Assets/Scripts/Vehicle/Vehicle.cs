@@ -8,6 +8,8 @@ public class Vehicle : MonoBehaviour, IDamageable
 {
     // Components
     [SerializeField] private VehicleUI _vehicleUI;
+    private VehicleInventory _inventory;
+
     private Rigidbody2D _rigidbody2D;
 
     private VehicleStat _stat;
@@ -23,10 +25,12 @@ public class Vehicle : MonoBehaviour, IDamageable
     private float _velocityVsUp = 0;
 
     private Action _hpChangeAction;
+    
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _inventory = GetComponent<VehicleInventory>();
 
         var data = DataManager.Instance.GetVehicleData("Truck");
         _stat = new VehicleStat(data);
@@ -55,6 +59,7 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         ApplyFuelUsage();
     }
+
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -138,6 +143,15 @@ public class Vehicle : MonoBehaviour, IDamageable
     public void TakeDamage(float damage)
     {
         _stat.CurrentHp -= damage;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.TryGetComponent(out CollectibleItem item))
+        {
+            _inventory.AddItemToInventory(item.ItemCode);
+            Destroy(item.gameObject);
+        }
     }
 }
 
