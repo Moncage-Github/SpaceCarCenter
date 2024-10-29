@@ -13,7 +13,9 @@ public class EnemyBullet : MonoBehaviour
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        //TODO: 함수화해서 에너미에서 플레이어의 방향을 계산한 뒤 방향값만 넘겨주기
         _player = GameObject.FindGameObjectWithTag("Player");
+        
 
         Vector3 direction = _player.transform.position - transform.position;
         _rigidbody2D.velocity = new Vector2(direction.x, direction.y).normalized * _bulletForce;
