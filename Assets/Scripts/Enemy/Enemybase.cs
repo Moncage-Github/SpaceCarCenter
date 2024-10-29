@@ -36,11 +36,11 @@ public class EnemyBase : MonoBehaviour
     IEnemyState _enemyState;
 
     //State
-    protected EnemyIdle _enemyIdle;
-    protected EnemyMove _enemyMove;
-    protected EnemyDead _enemyDead;
-    protected EnemySkill _enemySkill;
-    protected EnemyAttack _enemyAttack;
+    protected EnemyIdle EnemyIdle;
+    protected EnemyMove EnemyMove;
+    protected EnemyDead EnemyDead;
+    protected EnemySkill EnemySkill;
+    protected EnemyAttack EnemyAttack;
 
     private Rigidbody2D _rigidbody2D;
     private CircleCollider2D _circleCollider2D;
@@ -59,11 +59,11 @@ public class EnemyBase : MonoBehaviour
 
         _currentState = State.Move;
 
-        _enemyIdle = new EnemyIdle(this);
-        _enemyMove = new EnemyMove(this);
-        _enemyDead = new EnemyDead(this);
-        _enemySkill = new EnemySkill(this);
-        _enemyAttack = new EnemyAttack(this, _bullet);
+        EnemyIdle = new EnemyIdle(this);
+        EnemyMove = new EnemyMove(this);
+        EnemyDead = new EnemyDead(this);
+        EnemySkill = new EnemySkill(this);
+        EnemyAttack = new EnemyAttack(this, _bullet);
 }
 
     // Update is called once per frame
@@ -89,7 +89,7 @@ public class EnemyBase : MonoBehaviour
     //기본 Enemy는 스킬 없음
     protected virtual void OnSkill()
     {
-        _enemyState = _enemySkill;
+        _enemyState = EnemySkill;
         return;
     }
 
@@ -97,7 +97,7 @@ public class EnemyBase : MonoBehaviour
     {
         //animation
         Debug.Log("Can Idle");
-        _enemyState = _enemyIdle;
+        _enemyState = EnemyIdle;
         return;
     }
 
@@ -107,7 +107,7 @@ public class EnemyBase : MonoBehaviour
         {
             _currentState = State.Dead;
         }
-        _enemyState = _enemyDead;
+        _enemyState = EnemyDead;
         return;
     }
 
@@ -117,7 +117,7 @@ public class EnemyBase : MonoBehaviour
         {
             _currentState = State.Move;
         }
-        _enemyState = _enemyMove;
+        _enemyState = EnemyMove;
         return;
     }
 
@@ -132,7 +132,7 @@ public class EnemyBase : MonoBehaviour
         {
             _currentState = State.Attack;
         }
-        _enemyState = _enemyAttack;
+        _enemyState = EnemyAttack;
         Debug.Log(_enemyState);
         return;
     }
