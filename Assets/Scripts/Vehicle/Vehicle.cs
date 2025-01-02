@@ -147,7 +147,7 @@ public class Vehicle : MonoBehaviour, IDamageable
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.TryGetComponent(out CollectibleItem item))
+        if (other.gameObject.TryGetComponent(out CollectableItem item))
         {
             _inventory.AddItemToInventory(item.ItemCode);
             Destroy(item.gameObject);

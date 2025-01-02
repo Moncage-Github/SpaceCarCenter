@@ -2,13 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Meteor : MonoBehaviour, IDamageable
+public class Meteor : MapObject, IDamageable
 {
-    private Rigidbody2D _rigidbody;
+    [SerializeField] private Rigidbody2D _rigidbody;
 
-    private void Awake()
+    public override void Init()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+
+        ObjectType = MapObjectType.METEOR;
+
+
+
+
+    }
+
+    private void SetMeteorType()
+    {
+        int rand = Random.Range(0, 100);
+
+        
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -47,7 +61,6 @@ public class Meteor : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage)
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
     }
-
 }
