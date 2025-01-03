@@ -5,6 +5,10 @@ using UnityEngine;
 public class Meteor : MapObject, IDamageable
 {
     [SerializeField] private Rigidbody2D _rigidbody;
+    [SerializeField] private GameObject _collectablePrefab;
+
+    private float _hp = 100.0f;
+    public float HP { get => _hp; private set => _hp = value; }
 
     public override void Init()
     {
@@ -12,17 +16,13 @@ public class Meteor : MapObject, IDamageable
 
         ObjectType = MapObjectType.METEOR;
 
-
-
-
+        SetMeteorType();
     }
 
     private void SetMeteorType()
     {
         int rand = Random.Range(0, 100);
 
-        
-        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -35,7 +35,7 @@ public class Meteor : MapObject, IDamageable
 
         Vector2 impulse = CalculateImpulseVector2D(collision);
         float damage = impulse.magnitude;
-        Debug.Log("Meteor Damage : " + damage);
+        //Debug.Log("Meteor Damage : " + damage);
         damageable.TakeDamage(damage);
     }
 
@@ -61,6 +61,23 @@ public class Meteor : MapObject, IDamageable
 
     public void TakeDamage(float damage)
     {
-        //Destroy(gameObject);
+        HP = 0;
+        if(HP <= 0)
+        {
+            HP = 0;
+            DestoryEvent();
+            Destroy(gameObject);
+        }
+    }
+
+    private void DestoryEvent()
+    {
+        int rand = Random.Range(1, 4);
+        for(int  i = 0; i < rand; i++)
+        {
+            CollectableItem item = Instantiate(_collectablePrefab).GetComponent<CollectableItem>();
+            item.transform.position = transform.position;
+            item.Init();
+        }
     }
 }

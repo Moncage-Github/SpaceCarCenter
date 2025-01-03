@@ -19,7 +19,7 @@ public class MapInfo
 
     public Dictionary<MapObjectType ,List<Vector2>> ObjectInfos = new();
 
-    const float MIN_DISTANCE = 5.0f;
+    const float MIN_DISTANCE = 8.0f;
 
     public static MapInfo CreateMapInfo(Vector2 mapSize, int meteorCount, int objectCount)
     {
@@ -31,13 +31,19 @@ public class MapInfo
         info.ObjectInfos.Add(MapObjectType.METEOR, new List<Vector2>());
         for (int i = 0; i < meteorCount; i++)
         {
-            info.GenerateMeteor();
+            info.GenerateMeteor(MapObjectType.METEOR, MIN_DISTANCE);
+        }
+
+        info.ObjectInfos.Add(MapObjectType.COLLECTABLE, new List<Vector2>());
+        for (int i = 0; i < objectCount; i++)
+        {
+            info.GenerateMeteor(MapObjectType.COLLECTABLE, 5);
         }
 
         return info;
     }
 
-    private bool GenerateMeteor()
+    private bool GenerateMeteor(MapObjectType type, float minDistance)
     {
         Vector2 randomPos = Vector2.zero;
 
@@ -48,7 +54,7 @@ public class MapInfo
 
             if (IsPositionValid(randomPos, MIN_DISTANCE))
             {
-                ObjectInfos[MapObjectType.METEOR].Add(randomPos);
+                ObjectInfos[type].Add(randomPos);
                 return true;
             }
         }
@@ -58,11 +64,14 @@ public class MapInfo
 
     private bool IsPositionValid(Vector2 newPosition, float minDistance)
     {
-        foreach (Vector2 position in ObjectInfos[MapObjectType.METEOR])
-        { 
-            if (Vector2.Distance(newPosition, position) < minDistance)
+        foreach (var positions in ObjectInfos.Values)
+        {
+            foreach (Vector2 pos in positions)
             {
-                return false;
+                if (Vector2.Distance(newPosition, pos) < minDistance)
+                {
+                    return false;
+                }
             }
         }
         return true;
@@ -76,6 +85,7 @@ public class MapGenerator : MonoBehaviour
 
     private MapInfo _mapInfo;
     [SerializeField] private GameObject _meteorPrefab;
+    [SerializeField] private GameObject _collectablePrefab;
 
     private void Start()
     {
@@ -84,7 +94,7 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
-        _mapInfo = MapInfo.CreateMapInfo(_mapSize, _meteorCount, 0);
+        _mapInfo = MapInfo.CreateMapInfo(_mapSize, _meteorCount, 5);
 
         CreateBoundary();
 
@@ -114,6 +124,7 @@ public class MapGenerator : MonoBehaviour
             switch (type)
             {
                 case MapObjectType.COLLECTABLE:
+                    prefab = _collectablePrefab;
                     break;
                 case MapObjectType.METEOR:
                     prefab = _meteorPrefab;

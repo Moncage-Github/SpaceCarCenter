@@ -23,14 +23,14 @@ public class CSVImporter : AssetPostprocessor
         {
             if (Path.GetExtension(path) != ".csv") return;
 
-            ProcessCSVFile(path);
+            //ProcessCSVFile(path);
         }
 
         foreach (string asset in deletedAssets)
         {
             if (Path.GetExtension(asset) == ".csv")
             {
-                Debug.Log("A");
+                //Debug.Log("A");
             }
         }
     }

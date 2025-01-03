@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 1038354217716761009}
+  _collectablePrefab: {fileID: 110691898170072751, guid: e55c2b48f0867d14689bc9a8dcef32ea, type: 3}
 --- !u!58 &-8881108552269944435
 CircleCollider2D:
   m_ObjectHideFlags: 0
