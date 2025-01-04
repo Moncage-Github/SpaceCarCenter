@@ -10,7 +10,6 @@ public class BoostEquipment : BaseEquipment
     private Vector3 _direction;
     private Action _scheduledPhysicsAction;
 
-    Vehicle _vehicle;
     [SerializeField] private float _boostDuration;
     private float _timer = 0.0f;
     private bool _boostTimer = false;
@@ -19,8 +18,6 @@ public class BoostEquipment : BaseEquipment
     // Start is called before the first frame update
     void Start()
     {
-        
-        _vehicle = transform.parent.GetComponent<Vehicle>();
         _rigidbody = transform.parent.GetComponent<Rigidbody2D>();
 
         _timer = _boostDuration;
@@ -40,7 +37,7 @@ public class BoostEquipment : BaseEquipment
             _timer -= Time.deltaTime;
             if(_timer < 0)
             {
-                _vehicle.IsBoost = false;
+                Vehicle.IsBoost = false;
                 _boostTimer = false;
                 Debug.Log("boost off");
             }
@@ -60,7 +57,7 @@ public class BoostEquipment : BaseEquipment
         _boostTimer = true;
         _timer = _boostDuration;
 
-        _vehicle.IsBoost = true;
+        Vehicle.IsBoost = true;
         _direction = transform.up;
         _rigidbody.AddForce(_direction * _boostForce, ForceMode2D.Impulse);
     }

@@ -7,9 +7,13 @@ public class PlayerEquipment : MonoBehaviour
     //TODO:: 다른 vehicle일 경우 어떻게 처리할지
     [SerializeField] public Dictionary<EquipIndexNumber, GameObject> CurrentEquip = new Dictionary<EquipIndexNumber, GameObject>();
 
+    private Vehicle _vehicle;
+
     // Start is called before the first frame update
     void Start()
     {
+        _vehicle = GetComponent<Vehicle>();
+
         TruckInit();
 
         foreach (var data in EquipmentsData.Instance.TruckEquipData)
@@ -23,6 +27,7 @@ public class PlayerEquipment : MonoBehaviour
             //TODO:: 장착 위치에 따른 장비의 생성 위치 정해야함.
             GameObject equipmentPrefab = Instantiate(result.Equipment.Prefab);
             equipmentPrefab.transform.parent = transform;
+            equipmentPrefab.GetComponent<BaseEquipment>().SetVehivle(_vehicle);
         }
     }
 

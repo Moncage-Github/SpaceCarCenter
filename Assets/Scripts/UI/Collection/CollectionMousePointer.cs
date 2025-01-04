@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseEquipment : MonoBehaviour
+public class CollectionMousePointer : MonoBehaviour
 {
-    protected Vehicle Vehicle;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -16,10 +14,5 @@ public class BaseEquipment : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void SetVehivle(Vehicle vehicle)
-    {
-        Vehicle = vehicle;
     }
 }

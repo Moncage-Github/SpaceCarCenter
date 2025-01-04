@@ -14,6 +14,6 @@ public class EnemyDead : IEnemyState
     // Update is called once per frame
     public void Update(EnemyBase enemy)
     {
-        
+
     }
 }
