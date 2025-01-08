@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] private GameObject _targetObject;
     [SerializeField] private float _cameraSpeed;
-    [SerializeField] private Vector2 _mapSize;
+
     
     private Camera _camera;
 
@@ -20,17 +20,19 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         _camera = GetComponent<Camera>();
+
+
     }
 
-    private void Start()
+    public void Init(Vector2 mapSize)
     {
         Vector3 startPos = _targetObject.transform.position;
         startPos.z = -10;
 
         transform.position = startPos;
 
-        _minBound = new Vector2(-(_mapSize.x / 2), -(_mapSize.y / 2));
-        _maxBound = new Vector2((_mapSize.x / 2), (_mapSize.y / 2));
+        _minBound = new Vector2(-(mapSize.x / 2), -(mapSize.y / 2));
+        _maxBound = new Vector2((mapSize.x / 2), (mapSize.y / 2));
         _halfHeight = _camera.orthographicSize;
         _halfWidth = _halfHeight * Screen.width / Screen.height;
     }

@@ -2,6 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Flags]
+public enum MeteorType
+{
+    None = 0,
+    Meteor1 = 1,
+    Meteor2 = 2, 
+    Meteor3 = 4, 
+    Meteor4 = 8, 
+}
+
 public class Meteor : MapObject, IDamageable
 {
     [SerializeField] private Rigidbody2D _rigidbody;
@@ -77,7 +87,18 @@ public class Meteor : MapObject, IDamageable
         {
             CollectableItem item = Instantiate(_collectablePrefab).GetComponent<CollectableItem>();
             item.transform.position = transform.position;
+            item.transform.parent = transform.parent;
             item.Init();
+            item.MoveInRandomDirection();
         }
+
+    }
+
+    public void MoveInRandomDirection()
+    {
+        Vector2 randomDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+        float moveSpeed = Random.Range(0.3f, 1.0f);
+
+        _rigidbody.velocity = randomDirection * moveSpeed;
     }
 }

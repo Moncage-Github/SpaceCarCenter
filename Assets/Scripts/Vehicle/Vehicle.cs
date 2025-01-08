@@ -12,6 +12,7 @@ public class Vehicle : MonoBehaviour, IDamageable
 
     private Rigidbody2D _rigidbody2D;
 
+    [SerializeField]
     private VehicleStat _stat;
 
     // User Input Value
@@ -32,7 +33,7 @@ public class Vehicle : MonoBehaviour, IDamageable
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _inventory = GetComponent<VehicleInventory>();
 
-        var data = DataManager.Instance.GetVehicleData("Truck");
+        VehicleData data = DataManager.Instance.GetVehicleData("Test");
         _stat = new VehicleStat(data);
         _hpChangeAction = () => { _vehicleUI.ChangeHpBar(_stat.CurrentHp / _stat.Data.MaxHp); };
     }
