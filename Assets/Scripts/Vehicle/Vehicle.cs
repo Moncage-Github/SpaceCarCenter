@@ -12,7 +12,8 @@ public class Vehicle : MonoBehaviour, IDamageable
 
     private Rigidbody2D _rigidbody2D;
 
-    private VehicleStat _stat;
+    [SerializeField] private VehicleStat _stat;
+    [SerializeField] private VehicleData _data;
 
     // User Input Value
     private float _accelerationInput = 0;
@@ -36,8 +37,8 @@ public class Vehicle : MonoBehaviour, IDamageable
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _inventory = GetComponent<VehicleInventory>();
 
-        var data = DataManager.Instance.GetVehicleData("Truck");
-        _stat = new VehicleStat(data);
+        //VehicleData data = DataManager.Instance.GetVehicleData("Test");
+        _stat = new VehicleStat(_data);
         _hpChangeAction = () => { _vehicleUI.ChangeHpBar(_stat.CurrentHp / _stat.Data.MaxHp); };
     }
 
@@ -158,7 +159,7 @@ public class Vehicle : MonoBehaviour, IDamageable
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.TryGetComponent(out CollectibleItem item))
+        if (other.gameObject.TryGetComponent(out CollectableItem item))
         {
             _inventory.AddItemToInventory(item.ItemCode);
             Destroy(item.gameObject);

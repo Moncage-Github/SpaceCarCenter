@@ -15,8 +15,8 @@ TagManager:
   - UI
   - MainCamera
   - MinimapCamera
-  - 
-  - 
+  - MapBorder
+  - MapObject
   - 
   - 
   - 
