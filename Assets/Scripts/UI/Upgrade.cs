@@ -19,6 +19,6 @@ public class Upgrade : MonoBehaviour
 
     public void StartGameButton()
     {
-        SceneManager.LoadScene("jinho");
+        SceneManager.LoadScene("cho 1");
     }
 }
