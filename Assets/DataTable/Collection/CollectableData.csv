@@ -1,9 +1,0 @@
-﻿ItemCode,Name,InventoryWeight,SpawnRate
-0,Scrap,1,10
-1,Iron,1,10
-2,Copper,1,10
-3,Gold,3,3
-4,Vibranium,10,1
-5,BlackIron,100,0.5
-6,Diamond,50,0.01
-7,Glass,4,3

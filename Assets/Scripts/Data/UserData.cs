@@ -1,14 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestData : ScriptableObject, ICSVData
+[Serializable]
+public class UserData
 {
-    public void SetDataFromCSV(Dictionary<string, string> csvData)
-    {
-        throw new System.NotImplementedException();
-    }
-
     // Start is called before the first frame update
     void Start()
     {

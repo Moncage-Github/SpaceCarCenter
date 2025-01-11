@@ -60,7 +60,7 @@ public class CSVReaderWindow : EditorWindow
         GUILayout.Space(10.0f);
         if (GUILayout.Button("Read CSV"))
         {
-            Type type = typeof(CSVUtil);
+            Type type = typeof(CSVToSO);
             MethodInfo genericMethod = type.GetMethod("ReadCSV", BindingFlags.Static | BindingFlags.Public);
             MethodInfo concreteMethod = genericMethod.MakeGenericMethod(_dataTypes[_selectedClassIndex]);
 

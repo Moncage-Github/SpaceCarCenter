@@ -37,4 +37,6 @@ public class VehicleData : ScriptableObject, ICSVData
             propertyInfo.SetValue(this, convertedValue);
         }
     }
+
+    //private int _curentLevel = 1;
 }
