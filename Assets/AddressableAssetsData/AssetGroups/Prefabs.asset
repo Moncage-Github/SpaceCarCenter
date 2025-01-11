@@ -10,25 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Built In Data
+  m_Name: Prefabs
   m_EditorClassIdentifier: 
-  m_GroupName: Built In Data
+  m_GroupName: Prefabs
   m_Data:
     m_SerializedData: []
-  m_GUID: c1c47ba461015c34fba53d0ecfb68fc5
+  m_GUID: 1baa8d4e1a6653f4b95d992003bd8150
   m_SerializeEntries:
-  - m_GUID: EditorSceneList
-    m_Address: EditorSceneList
-    m_ReadOnly: 1
-    m_SerializedLabels: []
+  - m_GUID: a687406ce7e54e4408a993fdffa68ed1
+    m_Address: Assets/Prefab/Meteor.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Collection
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: Resources
-    m_Address: Resources
-    m_ReadOnly: 1
-    m_SerializedLabels: []
+  - m_GUID: e55c2b48f0867d14689bc9a8dcef32ea
+    m_Address: Assets/Prefab/CollectableItem.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Collection
     FlaggedDuringContentUpdateRestriction: 0
-  m_ReadOnly: 1
+  m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 042509bc15f1b2d49821b49d71c06ffc, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 285212adb43b80b42a001b9faa055ff8, type: 2}
+    - {fileID: 11400000, guid: dd741a5ab3b5f4b48abdbc0555476566, type: 2}
+    - {fileID: 11400000, guid: b210690dbef66234cb082c0b93492317, type: 2}
