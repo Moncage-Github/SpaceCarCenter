@@ -12,8 +12,8 @@ public class Vehicle : MonoBehaviour, IDamageable
 
     private Rigidbody2D _rigidbody2D;
 
-    [SerializeField]
-    private VehicleStat _stat;
+    [SerializeField] private VehicleStat _stat;
+    [SerializeField] private VehicleData _data;
 
     // User Input Value
     private float _accelerationInput = 0;
@@ -33,8 +33,8 @@ public class Vehicle : MonoBehaviour, IDamageable
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _inventory = GetComponent<VehicleInventory>();
 
-        VehicleData data = DataManager.Instance.GetVehicleData("Test");
-        _stat = new VehicleStat(data);
+        //VehicleData data = DataManager.Instance.GetVehicleData("Test");
+        _stat = new VehicleStat(_data);
         _hpChangeAction = () => { _vehicleUI.ChangeHpBar(_stat.CurrentHp / _stat.Data.MaxHp); };
     }
 

@@ -61,7 +61,7 @@ public class CSVImporter : AssetPostprocessor
         }
 
         // ReadCSV<T> 메서드 찾기
-        MethodInfo method = typeof(CSVToSO).GetMethod("ReadCSV", BindingFlags.Public | BindingFlags.Static);
+        MethodInfo method = typeof(CSVUtil).GetMethod("ReadCSV", BindingFlags.Public | BindingFlags.Static);
         if (method == null)
         {
             Debug.LogError("ReadCSV method not found.");
