@@ -29,7 +29,7 @@ public class EnemyAttack : IEnemyState
         }
         else
         {
-            // 회전이 완료되면 이동 시작
+            // 회전이 완료되면 총알 발사
             if (Quaternion.Angle(_enemy.transform.rotation, Quaternion.Euler(0, 0, GetAngleToTarget() - 90)) < 0.3f)
             {
                 _timer = 0;

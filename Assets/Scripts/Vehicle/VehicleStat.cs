@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class VehicleStat
 {
     public VehicleData Data { get; private set; }
 
-    public event Action<float> OnHpChange;
+    public event Action OnHpChange;
     public event Action OnHpZero;
     private float _currentHp;
     public float CurrentHp
@@ -16,7 +17,7 @@ public class VehicleStat
         set
         {
             _currentHp = Mathf.Clamp(value, 0, Data.MaxHp);
-            OnHpChange?.Invoke(_currentHp / Data.MaxHp);
+            OnHpChange?.Invoke();
 
             if (_currentHp <= 0)
             {

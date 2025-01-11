@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletForce: 5
+  _bulletDamage: 10
 --- !u!70 &3051300119030106444
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

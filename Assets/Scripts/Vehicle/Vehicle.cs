@@ -8,9 +8,12 @@ public class Vehicle : MonoBehaviour, IDamageable
 {
     // Components
     [SerializeField] private VehicleUI _vehicleUI;
+    private VehicleInventory _inventory;
+
     private Rigidbody2D _rigidbody2D;
 
-    private VehicleStat _stat;
+    [SerializeField] private VehicleStat _stat;
+    [SerializeField] private VehicleData _data;
 
     // User Input Value
     private float _accelerationInput = 0;
@@ -22,24 +25,33 @@ public class Vehicle : MonoBehaviour, IDamageable
     private float _rotationAngle = 0;
     private float _velocityVsUp = 0;
 
+    private Action _hpChangeAction;
+
+    //boost 실행 여부
+    private bool _isBoost = false;
+    public bool IsBoost { set => _isBoost = value; get { return _isBoost; } }
+
+
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _inventory = GetComponent<VehicleInventory>();
 
-        var data = DataManager.Instance.GetVehicleData("Truck");
-        _stat = new VehicleStat(data);
+        //VehicleData data = DataManager.Instance.GetVehicleData("Test");
+        _stat = new VehicleStat(_data);
+        _hpChangeAction = () => { _vehicleUI.ChangeHpBar(_stat.CurrentHp / _stat.Data.MaxHp); };
     }
 
     private void OnEnable()
     {
         _stat.OnFuelChange += _vehicleUI.ChangeFuelBar;
-        _stat.OnHpChange += _vehicleUI.ChangeHpBar;
+        _stat.OnHpChange += _hpChangeAction;
     }
 
     private void OnDisable()
     {
         _stat.OnFuelChange -= _vehicleUI.ChangeFuelBar;
-        _stat.OnHpChange -= _vehicleUI.ChangeHpBar;
+        _stat.OnHpChange -= _hpChangeAction;
     }
 
     private void FixedUpdate()
@@ -52,15 +64,17 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         ApplyFuelUsage();
     }
+
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!collision.gameObject.TryGetComponent<IDamageable>(out var damageable))
         {
             return;
         }
-            
+
         // Debug.Log("col : "+ damageable.ToString() );
-        damageable.TakeDamage(5.0f);    
+        damageable.TakeDamage(5.0f);
     }
 
     // 차량의 가속 및 감속을 제어
@@ -79,6 +93,12 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         if (_velocityVsUp > _stat.Data.MaxSpeed && _accelerationInput > 0)
         {
+            if (_isBoost == false)
+            {
+                Vector2 clampedVelocity = _rigidbody2D.velocity.normalized * _stat.Data.MaxSpeed;
+                _rigidbody2D.velocity = Vector2.Lerp(_rigidbody2D.velocity, clampedVelocity, Time.fixedDeltaTime * 5);
+            }
+
             return;
         }
 
@@ -89,6 +109,7 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         if (_rigidbody2D.velocity.sqrMagnitude > _stat.Data.MaxSpeed * _stat.Data.MaxSpeed && _accelerationInput > 0)
         {
+
             return;
         }
 
@@ -109,7 +130,7 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         _rigidbody2D.MoveRotation(_rotationAngle);
     }
-    
+
     // 차량의 진행방향의 수직방향의 속도를 감소
     private void KillOrthogonalVelocity()
     {
@@ -134,6 +155,15 @@ public class Vehicle : MonoBehaviour, IDamageable
     public void TakeDamage(float damage)
     {
         _stat.CurrentHp -= damage;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        //if (other.gameObject.TryGetComponent(out CollectableItem item))
+        //{
+        //    _inventory.AddItemToInventory(item.ItemCode);
+        //    Destroy(item.gameObject);
+        //}
     }
 }
 

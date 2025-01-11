@@ -14,10 +14,11 @@ public enum State
     Dead
 }
 
-public class EnemyBase : MonoBehaviour
+public class EnemyBase : MonoBehaviour, IDamageable
 {
     private State _currentState = State.None;
 
+    [SerializeField] private float _health;   
     [SerializeField] private float _moveSpeed;          //Enemy의 이동 속도
     [SerializeField] private float _movementRadius;     //Enemy의 활동 반경
     [SerializeField] private float _movementCycle;      //Enemy의 활동 주기
@@ -36,11 +37,11 @@ public class EnemyBase : MonoBehaviour
     IEnemyState _enemyState;
 
     //State
-    protected EnemyIdle _enemyIdle;
-    protected EnemyMove _enemyMove;
-    protected EnemyDead _enemyDead;
-    protected EnemySkill _enemySkill;
-    protected EnemyAttack _enemyAttack;
+    protected EnemyIdle EnemyIdle;
+    protected EnemyMove EnemyMove;
+    protected EnemyDead EnemyDead;
+    protected EnemySkill EnemySkill;
+    protected EnemyAttack EnemyAttack;
 
     private Rigidbody2D _rigidbody2D;
     private CircleCollider2D _circleCollider2D;
@@ -49,6 +50,8 @@ public class EnemyBase : MonoBehaviour
     //Bullet
     [SerializeField] private GameObject _bullet;
     [SerializeField] private Transform _bulletPos;
+
+    private Transform _target;
 
 
     // Start is called before the first frame update
@@ -59,11 +62,11 @@ public class EnemyBase : MonoBehaviour
 
         _currentState = State.Move;
 
-        _enemyIdle = new EnemyIdle(this);
-        _enemyMove = new EnemyMove(this);
-        _enemyDead = new EnemyDead(this);
-        _enemySkill = new EnemySkill(this);
-        _enemyAttack = new EnemyAttack(this, _bullet);
+        EnemyIdle = new EnemyIdle(this);
+        EnemyMove = new EnemyMove(this);
+        EnemyDead = new EnemyDead(this);
+        EnemySkill = new EnemySkill(this);
+        EnemyAttack = new EnemyAttack(this, _bullet);
 }
 
     // Update is called once per frame
@@ -89,7 +92,7 @@ public class EnemyBase : MonoBehaviour
     //기본 Enemy는 스킬 없음
     protected virtual void OnSkill()
     {
-        _enemyState = _enemySkill;
+        _enemyState = EnemySkill;
         return;
     }
 
@@ -97,17 +100,14 @@ public class EnemyBase : MonoBehaviour
     {
         //animation
         Debug.Log("Can Idle");
-        _enemyState = _enemyIdle;
+        _enemyState = EnemyIdle;
         return;
     }
 
     protected virtual void OnDead()
     {
-        if (_currentState != State.Dead)
-        {
-            _currentState = State.Dead;
-        }
-        _enemyState = _enemyDead;
+        Destroy(gameObject);
+
         return;
     }
 
@@ -117,7 +117,7 @@ public class EnemyBase : MonoBehaviour
         {
             _currentState = State.Move;
         }
-        _enemyState = _enemyMove;
+        _enemyState = EnemyMove;
         return;
     }
 
@@ -132,7 +132,7 @@ public class EnemyBase : MonoBehaviour
         {
             _currentState = State.Attack;
         }
-        _enemyState = _enemyAttack;
+        _enemyState = EnemyAttack;
         Debug.Log(_enemyState);
         return;
     }
@@ -140,7 +140,8 @@ public class EnemyBase : MonoBehaviour
     public void BulletShooting()
     {
         Debug.Log("총알 발사");
-        Instantiate(_bullet, _bulletPos.position, Quaternion.identity);
+        GameObject bullet = Instantiate(_bullet, _bulletPos.position, Quaternion.identity);
+        bullet.GetComponent<Bullet>().Init(transform, _target);
     }
 
     void OnTriggerStay2D(Collider2D other)
@@ -148,6 +149,7 @@ public class EnemyBase : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _currentState = State.Attack;
+            _target = other.transform;
         }
 
     }
@@ -161,5 +163,15 @@ public class EnemyBase : MonoBehaviour
             OnMove();
         }
 
+    }
+
+
+    public void TakeDamage(float damage)
+    {
+        _health -= damage;
+        if( _health < 0 )
+        {
+            OnDead();
+        }
     }
 }
