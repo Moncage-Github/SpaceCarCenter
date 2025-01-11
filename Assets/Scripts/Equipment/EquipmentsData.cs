@@ -34,12 +34,12 @@ public enum EquipIndexNumber
 public class Pair<T1, T2>
 {
     public T1 Equipment;
-    public T2 IsLock;
+    public T2 State;
 
     public Pair(T1 first, T2 second)
     {
         Equipment = first;
-        IsLock = second;
+        State = second;
     }
 }
 
@@ -56,6 +56,13 @@ public class Equip<T1, T2>
     }
 }
 
+public enum EquipmentState
+{
+    None,
+    Lock,
+    Equip
+}
+
 
 /*
  시작 버튼 클릭 시 현재 장착된 장비 정보를 저장
@@ -67,7 +74,7 @@ public class EquipmentsData : MonoBehaviour
     
 
     private static EquipmentsData _instance = null;
-    public List<Pair<Equipment, bool>> EquipmentData;
+    public List<Pair<Equipment, EquipmentState>> EquipmentData;
 
     //TODO:: vehicle의 종류에 따른 처리가 필요
     public List<Equip<EquipIndexNumber, int>> TruckEquipData;
@@ -114,7 +121,7 @@ public class EquipmentsData : MonoBehaviour
     }
 
     //TODO:: vehicle 종류에 따른 처리
-    public void SetEquip(EquipIndexNumber equipIndexNumber, int equipId, int vehicleId = 0)
+    public void SetEquip(EquipIndexNumber equipIndexNumber, int equipId, EquipmentState state, int vehicleId = 0)
     {
         Debug.Log(equipIndexNumber.ToString() + equipId.ToString() + vehicleId.ToString());
 
@@ -122,7 +129,9 @@ public class EquipmentsData : MonoBehaviour
         {
             case 0:
                 var result = TruckEquipData.Find(equip => equip.EquipIndexNumber == equipIndexNumber);
+                var equip = EquipmentData.Find(equip => equip.Equipment.EquipmentId == equipId);
                 result.EquipmentId = equipId;
+                equip.State = state;
                 break;
             default:
                 break;

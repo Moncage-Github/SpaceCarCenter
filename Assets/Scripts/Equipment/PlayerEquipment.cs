@@ -20,7 +20,7 @@ public class PlayerEquipment : MonoBehaviour
         {
             if (data.EquipmentId == 0)
                 continue;
-            Pair<Equipment, bool> result = EquipmentsData.Instance.EquipmentData.Find(pair => pair.Equipment.EquipmentId == data.EquipmentId);
+            Pair<Equipment, EquipmentState> result = EquipmentsData.Instance.EquipmentData.Find(pair => pair.Equipment.EquipmentId == data.EquipmentId);
             
             CurrentEquip[data.EquipIndexNumber] = result.Equipment.Prefab;
 

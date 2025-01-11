@@ -21,6 +21,8 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     [SerializeField] private Text _explainText;
     [SerializeField] private Image _equipmentImage;
     private int _exquipmentId;
+    [SerializeField] private EquipmentState _isState;
+    public EquipmentState IsState { get { return _isState; } set { _isState = value; } }
 
     private void Start()
     {
@@ -35,6 +37,10 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
+        if(_isState == EquipmentState.Lock)
+        {
+            return;
+        }
         //_beginPosition = _objectItem.transform.position;
         _tempObject = Instantiate(_objectItem, _canvasTransform);
         _showImage = _tempObject.GetComponent<RectTransform>();
@@ -55,6 +61,12 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         //현재 마우스 위치에 있는 UI 오브젝트 정보를 가져옵니다.
         List<RaycastResult> result = new List<RaycastResult>();
 
+        if(IsState == EquipmentState.Equip)
+        {
+            Debug.Log("선택한 장비가 이미 장착되어 있습니다.");
+            return;
+        }
+
         //PointerEventData 설정
         _pointerEventData = new PointerEventData(_eventSystem);
         _pointerEventData.position = eventData.position;
@@ -70,11 +82,19 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             // UI 오브젝트의 이미지를 가져오는 경우
             Transform objectComponent = raycastResult.gameObject.transform;
             EquipIndex equipIndex = objectComponent.GetComponent<EquipIndex>();
+            
             if (equipIndex != null)
             {
-                RawImage imageComponent = objectComponent.GetChild(0).GetComponent<RawImage>();
-                equipIndex.SetImage(imageComponent, _tempObject, _exquipmentId);
-                EquipmentsData.Instance.SetEquip(equipIndex.EquipNumber, _exquipmentId);
+                if (equipIndex.CurrentEquipmentId != 0)
+                {
+                    EquipmentsData.Instance.SetEquip(equipIndex.EquipNumber, equipIndex.CurrentEquipmentId, EquipmentState.None);
+                    equipIndex.CurrentEquipment.SetState(EquipmentState.None);
+                }
+                SetState(EquipmentState.Equip);
+                equipIndex.CurrentEquipment = this;
+
+                equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, _exquipmentId);
+                EquipmentsData.Instance.SetEquip(equipIndex.EquipNumber, _exquipmentId, IsState);
             }
         }
     }
@@ -105,4 +125,29 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         _equipmentImage.sprite = image;
         _exquipmentId = exquipmentId;
     }
+
+    public void SetState(EquipmentState state)
+    {
+        switch (state)
+        {
+            case EquipmentState.None:
+                IsState = EquipmentState.None;
+
+                break;
+
+            case EquipmentState.Lock:
+                IsState = EquipmentState.Lock;
+
+                break;
+
+            case EquipmentState.Equip:
+                IsState = EquipmentState.Equip;
+
+                break;
+            
+            default:
+                break;
+        }
+    }
+
 }

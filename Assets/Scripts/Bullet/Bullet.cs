@@ -10,6 +10,7 @@ public class Bullet : MonoBehaviour
 
     private Transform _shooter;
 
+    
 
     private void Awake()
     {

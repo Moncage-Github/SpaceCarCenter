@@ -4,19 +4,9 @@ using UnityEngine;
 
 public class BaseEquipment : MonoBehaviour
 {
-    protected Vehicle Vehicle;
+    [SerializeField] protected Vehicle Vehicle;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     public void SetVehivle(Vehicle vehicle)
     {

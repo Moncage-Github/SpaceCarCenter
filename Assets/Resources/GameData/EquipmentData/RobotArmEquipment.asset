@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d44ffae9c1d24894db41205218486d19, type: 3}
-  m_Name: BasicGunEquipment
+  m_Name: RobotArmEquipment
   m_EditorClassIdentifier: 
-  Name: "\uB77C\uC774\uD50C"
-  Explan: "\uAE30\uBCF8 \uB77C\uC774\uD50C"
-  EquipmentId: 30
-  ImageLog: {fileID: 21300000, guid: 72a1736b15a995a49b4e64a1d3d0dc5a, type: 3}
-  Prefab: {fileID: 7080748863678244072, guid: e34cded0fc449fe42b1eb7af379421e7, type: 3}
+  Name: "\uB85C\uBD07 \uD314"
+  Explan: "\uAE30\uBCF8 \uC790\uC6D0 \uC218\uC9D1 \uB3C4\uAD6C"
+  EquipmentId: 20
+  ImageLog: {fileID: 21300000, guid: 1b48a07aa858b7d4c862489095f4c983, type: 3}
+  Prefab: {fileID: 6969695838799305486, guid: c75c6cc8f12ddba4c880500a76aa250f, type: 3}

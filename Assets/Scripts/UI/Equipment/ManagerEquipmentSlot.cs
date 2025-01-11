@@ -28,6 +28,8 @@ public class ManagerEquipmentSlot : MonoBehaviour
             Debug.Log("equipment »ý¼º");
             GameObject slot = Instantiate(_prefabEquipment);
             slot.GetComponent<EquipmentUI>().SetEquipment(equipment.Equipment.Explan, equipment.Equipment.ImageLog, equipment.Equipment.EquipmentId);
+            slot.GetComponent<EquipmentUI>().IsState = equipment.State;
+
             slot.transform.SetParent(_content.transform);
             slot.transform.localScale = Vector3.one;
         }
