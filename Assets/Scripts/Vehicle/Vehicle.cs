@@ -25,7 +25,11 @@ public class Vehicle : MonoBehaviour, IDamageable
     private float _velocityVsUp = 0;
 
     private Action _hpChangeAction;
-    
+
+    //boost 실행 여부
+    private bool _isBoost = false;
+    public bool IsBoost { set => _isBoost = value; get { return _isBoost; } }
+
 
     private void Awake()
     {
@@ -67,9 +71,9 @@ public class Vehicle : MonoBehaviour, IDamageable
         {
             return;
         }
-            
+
         // Debug.Log("col : "+ damageable.ToString() );
-        damageable.TakeDamage(5.0f);    
+        damageable.TakeDamage(5.0f);
     }
 
     // 차량의 가속 및 감속을 제어
@@ -88,6 +92,12 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         if (_velocityVsUp > _stat.Data.MaxSpeed && _accelerationInput > 0)
         {
+            if (_isBoost == false)
+            {
+                Vector2 clampedVelocity = _rigidbody2D.velocity.normalized * _stat.Data.MaxSpeed;
+                _rigidbody2D.velocity = Vector2.Lerp(_rigidbody2D.velocity, clampedVelocity, Time.fixedDeltaTime * 5);
+            }
+
             return;
         }
 
@@ -98,6 +108,7 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         if (_rigidbody2D.velocity.sqrMagnitude > _stat.Data.MaxSpeed * _stat.Data.MaxSpeed && _accelerationInput > 0)
         {
+
             return;
         }
 
@@ -118,7 +129,7 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         _rigidbody2D.MoveRotation(_rotationAngle);
     }
-    
+
     // 차량의 진행방향의 수직방향의 속도를 감소
     private void KillOrthogonalVelocity()
     {
