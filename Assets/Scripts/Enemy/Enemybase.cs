@@ -52,7 +52,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private Transform _bulletPos;
 
     private Transform _target;
-
+    [SerializeField] private float _bulletDamage;
 
     // Start is called before the first frame update
     protected virtual void Awake()
@@ -141,7 +141,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         Debug.Log("ÃÑ¾Ë ¹ß»ç");
         GameObject bullet = Instantiate(_bullet, _bulletPos.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Init(transform, _target);
+        bullet.GetComponent<Bullet>().Init(transform, _target, _bulletDamage);
     }
 
     void OnTriggerStay2D(Collider2D other)

@@ -1,5 +1,5 @@
 {
-    "name": "PlayerAction",
+    "name": "CollectionInput",
     "maps": [
         {
             "name": "PlayerAction",
@@ -60,6 +60,39 @@
                 },
                 {
                     "name": "1D Axis",
+                    "id": "1b700c52-4aec-47b6-8f1c-59b8dc13136e",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "6ea4ec73-2347-4abf-8539-5f435a36581d",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "88218a73-c16a-4dd1-a269-fbc7404cd54b",
+                    "path": "<Gamepad>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
                     "id": "2a181428-03e2-4220-bcf6-c0d7d82a8dd1",
                     "path": "1DAxis",
                     "interactions": "",
@@ -90,6 +123,39 @@
                     "action": "Turn",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "b0783748-a4e6-4ac1-bb5d-479a2dc1c739",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Turn",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "b829d8b0-b059-4c6e-8074-e92a90a8d405",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Turn",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "c6e6e4ad-d97f-49a7-8b02-7ca2b9bee1fe",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "Turn",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }
@@ -98,18 +164,7 @@
         {
             "name": "PC",
             "bindingGroup": "PC",
-            "devices": [
-                {
-                    "devicePath": "<Keyboard>",
-                    "isOptional": false,
-                    "isOR": false
-                },
-                {
-                    "devicePath": "<Mouse>",
-                    "isOptional": false,
-                    "isOR": false
-                }
-            ]
+            "devices": []
         }
     ]
 }

@@ -1,30 +1,44 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicGunEquipment : BaseEquipment
+public class LaserEquipment : BaseEquipment
 {
-    [SerializeField] private float _reloadTime;
-    private float _timer;
-    private bool _reloading = false;
-
-    [SerializeField] private GameObject _bulletPrefab;
-
     private List<Transform> _enemyList = new List<Transform>();
+    private LineRenderer _lineRenderer;
 
-    private void Update()
+    // Start is called before the first frame update
+    void Start()
     {
-        if(_reloading)
-        {
-            _timer -= Time.deltaTime;
-            if(_timer <= 0 ) 
-                _reloading = false;
-        }
-        else if(_enemyList.Count > 0)
+        _lineRenderer = GetComponent<LineRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (_enemyList.Count > 0)
         {
             Shooting(GetCloseEnemy());
-            _reloading = true;
-            _timer = _reloadTime;
+
+        }
+        else
+        {
+            _lineRenderer.positionCount = 1;
+        }
+    }
+
+    private void Shooting(Transform transform)
+    {
+        IDamageable damageable = transform.GetComponent<IDamageable>();
+        if(damageable != null )
+        {
+            _lineRenderer.SetPosition(0, Vehicle.transform.position);
+            Debug.Log("레이저 공격");
+            //TODO:: 현재 체력을 들고오려면 IDamageable을 수정해야될거 같은데
+            //damageable.TakeDamage();
+            _lineRenderer.positionCount = 2;
+            _lineRenderer.SetPosition(1, transform.position);
         }
     }
 
@@ -42,12 +56,6 @@ public class BasicGunEquipment : BaseEquipment
         {
             _enemyList.Remove(collision.transform);
         }
-    }
-
-    private void Shooting(Transform target)
-    {
-        GameObject bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Init(transform, target, Vehicle.transform, 4.0f);
     }
 
     private Transform GetCloseEnemy()
