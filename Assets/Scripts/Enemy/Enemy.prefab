@@ -358,6 +358,7 @@ MonoBehaviour:
   _attackCycle: 2
   _bullet: {fileID: 2891142839322404738, guid: be5c66b04fd0c8b43be5d621e3be0802, type: 3}
   _bulletPos: {fileID: 6801783662069847574}
+  _bulletDamage: 5
 --- !u!1 &8690218127600904315
 GameObject:
   m_ObjectHideFlags: 0

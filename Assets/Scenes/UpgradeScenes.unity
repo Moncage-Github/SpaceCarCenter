@@ -897,6 +897,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equipNumber: 4
+  _currentEquipmentId: 0
+  CurrentEquipment: {fileID: 0}
 --- !u!1 &235798237
 GameObject:
   m_ObjectHideFlags: 0
@@ -2115,6 +2117,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equipNumber: 1
+  _currentEquipmentId: 0
+  CurrentEquipment: {fileID: 0}
 --- !u!1 &714368443
 GameObject:
   m_ObjectHideFlags: 0
@@ -2223,6 +2227,16 @@ MonoBehaviour:
   - Equipment: {fileID: 11400000, guid: 02e2206fa20f17d47820c41c00f01bdd, type: 2}
     State: 0
   - Equipment: {fileID: 11400000, guid: 6676efbd8ca595349a6764d50ac1a5cc, type: 2}
+    State: 0
+  - Equipment: {fileID: 11400000, guid: 993567ec7dde271448c5596d562386c6, type: 2}
+    State: 0
+  - Equipment: {fileID: 11400000, guid: d99d90fc381ed96478c6a7ef92cb1a8d, type: 2}
+    State: 0
+  - Equipment: {fileID: 11400000, guid: 6676efbd8ca595349a6764d50ac1a5cc, type: 2}
+    State: 0
+  - Equipment: {fileID: 11400000, guid: 6b2e79241e9bfcd4b8afb1ef4456eb23, type: 2}
+    State: 0
+  - Equipment: {fileID: 11400000, guid: 97583f7d33a0d73419d9202f8f9c6a54, type: 2}
     State: 0
   - Equipment: {fileID: 11400000, guid: 993567ec7dde271448c5596d562386c6, type: 2}
     State: 0
@@ -3330,6 +3344,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equipNumber: 5
+  _currentEquipmentId: 0
+  CurrentEquipment: {fileID: 0}
 --- !u!1 &1021198526
 GameObject:
   m_ObjectHideFlags: 0
@@ -3434,6 +3450,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equipNumber: 2
+  _currentEquipmentId: 0
+  CurrentEquipment: {fileID: 0}
 --- !u!1 &1023353263
 GameObject:
   m_ObjectHideFlags: 0
@@ -3980,6 +3998,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equipNumber: 3
+  _currentEquipmentId: 0
+  CurrentEquipment: {fileID: 0}
 --- !u!1 &1259896443
 GameObject:
   m_ObjectHideFlags: 0
