@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1265575631558068000}
   - component: {fileID: 5400511472467846209}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6744042137126141256}
   - component: {fileID: 6608167221741499903}
   - component: {fileID: 8938409408095643659}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Joint1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +194,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4279211523726097378}
   - component: {fileID: 4776661855853775000}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 3384038640481918520}
   - component: {fileID: 8633904347945058084}
   - component: {fileID: 698840078058469193}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Joint2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,7 +377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224096460244453208}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RobotArm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7184077133638359639}
   - component: {fileID: 5188176741540358479}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Arm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,7 +495,7 @@ GameObject:
   - component: {fileID: 7779349367207422417}
   - component: {fileID: 525229996143967312}
   - component: {fileID: 8726749485659750883}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: RobotArmPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -535,7 +535,9 @@ MonoBehaviour:
   End: {fileID: 6448905244609486070}
   Target: []
   Threshold: 0.05
-  _rate: 20
+  _rate: 100
+  _catchRange: 0.5
+  _takeSpeed: 10
 --- !u!58 &8726749485659750883
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -582,7 +584,7 @@ GameObject:
   - component: {fileID: 7677033147786590007}
   - component: {fileID: 6968596486890537644}
   - component: {fileID: 5832204217093680563}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Joint0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -679,6 +681,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3384038640481918520}
     m_Modifications:
+    - target: {fileID: 404582404612226129, guid: d27e9d74ab4940843b0667eef9018710, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2700687312346298239, guid: d27e9d74ab4940843b0667eef9018710, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4
@@ -730,6 +736,14 @@ PrefabInstance:
     - target: {fileID: 5944936074917331194, guid: d27e9d74ab4940843b0667eef9018710, type: 3}
       propertyPath: m_Name
       value: Joint3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5944936074917331194, guid: d27e9d74ab4940843b0667eef9018710, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6482294144433116664, guid: d27e9d74ab4940843b0667eef9018710, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7471038009547555193, guid: d27e9d74ab4940843b0667eef9018710, type: 3}
       propertyPath: m_LocalPosition.x

@@ -14,6 +14,9 @@ public class RobotArmEquipment : BaseEquipment
     public float Threshold = 0.05f;
 
     [SerializeField] private float _rate = 0.5f;
+    [SerializeField] private float _catchRange;
+    [SerializeField] private float _takeSpeed;
+    private bool _isCatch = false;
 
     float CalculateSlope(JointRobotArm joint, GameObject Target)
     {
@@ -34,8 +37,13 @@ public class RobotArmEquipment : BaseEquipment
     {
         if(Target.Count == 0) return;
 
-
-        _currentTarget = GetCloseTarget();
+        GameObject closeTarget = GetCloseTarget();
+        if (_currentTarget != closeTarget)
+        {
+            _currentTarget = closeTarget;
+            _isCatch = false;
+        }
+       
 
         if (GetDistance(End.transform.position, _currentTarget.transform.position) > Threshold)
         {
@@ -43,9 +51,50 @@ public class RobotArmEquipment : BaseEquipment
             while (current != null)
             {
                 float slope = CalculateSlope(current, _currentTarget);
-                current.Rotate(slope * _rate);
+                current.Rotate(slope * _rate * 60 * Time.deltaTime);
                 current = current.Next();
-            }            
+            }
+            float distance = Vector3.Distance(End.transform.position, _currentTarget.transform.position);
+
+            if (distance < _catchRange)
+            {
+                Debug.Log("잡았다");
+                _isCatch = true;
+            }
+            else
+            {
+                Debug.Log("놓혔다");
+                _isCatch = false;
+            }
+        }
+        if(_isCatch)
+        {
+            Rigidbody2D rb = _currentTarget.GetComponent<Rigidbody2D>();
+            CollectableItem item = _currentTarget.GetComponent<CollectableItem>();
+            if (rb != null)
+            {
+                rb.velocity = Vector2.zero; // 속도 초기화 (필요하면 사용)
+
+                // 차량의 월드 위치 기준 방향 계산
+                Vector2 targetPosition = Vehicle.transform.position; // 차량의 월드 좌표
+                Vector2 currentTargetPosition = _currentTarget.transform.position;
+
+                Vector2 direction = (targetPosition - currentTargetPosition).normalized;
+
+                // 타겟 이동
+                Vector2 nextPosition = Vector2.Lerp(currentTargetPosition, targetPosition, _takeSpeed * Time.deltaTime);
+                rb.MovePosition(nextPosition);
+
+                if (Vector2.Distance(targetPosition, currentTargetPosition) < _catchRange)
+                {
+                    Vehicle.GetComponent<VehicleInventory>().AddItemToInventory(item.ItemCode);
+                    Destroy(_currentTarget);
+                }
+            }
+            else
+            {
+                Debug.Log("rigidbody 못 찾음");
+            }
         }
     }
 
