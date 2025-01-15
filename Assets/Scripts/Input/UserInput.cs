@@ -8,40 +8,40 @@ public class UserInput : MonoBehaviour
 {
     private Vehicle _carMove;
 
-    private PlayerInput _playerInput;
-    private InputAction _moveAction;
-    private InputAction _turnAction;
+    private CollectionInput _playerInput;
 
 
     private void Awake()
     {
+        _playerInput = new();
         _carMove = GetComponent<Vehicle>();
-        _playerInput = GetComponent<PlayerInput>();
-        _moveAction = _playerInput.actions["Move"];
-        _turnAction = _playerInput.actions["Turn"];
     }
 
     private void OnEnable()
     {
-        _moveAction.started += OnMove;
-        _moveAction.canceled += OnMove;
+        _playerInput.Enable();
+        _playerInput.PlayerAction.Move.started += OnMove;
+        _playerInput.PlayerAction.Move.canceled += OnMove;
 
-        _turnAction.started += OnTurn;
-        _turnAction.canceled += OnTurn;
+        _playerInput.PlayerAction.Turn.started += OnTurn;
+        _playerInput.PlayerAction.Turn.canceled += OnTurn;
     }
 
 
     private void OnDisable()
     {
-        _moveAction.started -= OnMove;
-        _moveAction.canceled -= OnMove;
+        _playerInput.Disable();
 
-        _turnAction.started -= OnTurn;
-        _turnAction.canceled -= OnTurn;
+        _playerInput.PlayerAction.Move.started -= OnMove;
+        _playerInput.PlayerAction.Move.canceled -= OnMove;
+
+        _playerInput.PlayerAction.Turn.started -= OnTurn;
+        _playerInput.PlayerAction.Turn.canceled -= OnTurn;
     }
 
     private void OnMove(InputAction.CallbackContext context)
     {
+        Debug.Log(context.ReadValue<float>());
         _carMove.AccelerationInput = context.ReadValue<float>();
     }
 
