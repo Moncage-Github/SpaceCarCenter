@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class RobotArmEquipment : BaseEquipment
 {
     public JointRobotArm Root;
 
     public JointRobotArm End;
+    private JointRobotArm _endRigid;
+
+    private GameObject _currentItem;
 
     public List<GameObject> Target = new List<GameObject>();
     private GameObject _currentTarget;
@@ -15,8 +19,14 @@ public class RobotArmEquipment : BaseEquipment
 
     [SerializeField] private float _rate = 0.5f;
     [SerializeField] private float _catchRange;
+    [SerializeField] private float _collectRange;
     [SerializeField] private float _takeSpeed;
     private bool _isCatch = false;
+
+    private void Start()
+    {
+        _endRigid = GetComponent<JointRobotArm>();
+    }
 
     float CalculateSlope(JointRobotArm joint, GameObject Target)
     {
@@ -38,63 +48,78 @@ public class RobotArmEquipment : BaseEquipment
         if(Target.Count == 0) return;
 
         GameObject closeTarget = GetCloseTarget();
-        if (_currentTarget != closeTarget)
+
+        if (!_isCatch && _currentTarget != closeTarget)
         {
             _currentTarget = closeTarget;
-            _isCatch = false;
         }
        
 
-        if (GetDistance(End.transform.position, _currentTarget.transform.position) > Threshold)
+        if (GetDistance(End.transform.position, _currentTarget.transform.position) > Threshold || _isCatch == true)
         {
             JointRobotArm current = Root;
             while (current != null)
             {
-                float slope = CalculateSlope(current, _currentTarget);
+                float slope;
+                if (!_isCatch)
+                {
+                    //아이템을 잡기 전엔 아이템으로 이동
+                    slope = CalculateSlope(current, _currentTarget);
+                }
+                else
+                {
+                    //아이템을 잡은 후엔 차량으로 이동
+                    slope = CalculateSlope(current, Vehicle.gameObject);
+                }
+                
                 current.Rotate(slope * _rate * 60 * Time.deltaTime);
                 current = current.Next();
             }
             float distance = Vector3.Distance(End.transform.position, _currentTarget.transform.position);
+            
 
-            if (distance < _catchRange)
+
+            if (distance < _catchRange && _isCatch == false)
             {
                 Debug.Log("잡았다");
+                
+                _currentTarget.transform.SetParent(End.transform);
+                _currentTarget.transform.localPosition = new Vector3(0.5f, 0, 0);
+                //_currentTarget.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+                Rigidbody2D rb = _currentTarget.GetComponent<Rigidbody2D>();
+                rb.velocity = Vector3.zero;
+                Destroy(rb);
                 _isCatch = true;
             }
-            else
-            {
-                Debug.Log("놓혔다");
-                _isCatch = false;
-            }
+            //else
+            //{
+            //    Debug.Log("놓혔다");
+            //    _isCatch = false;
+            //}
         }
         if(_isCatch)
         {
-            Rigidbody2D rb = _currentTarget.GetComponent<Rigidbody2D>();
             CollectableItem item = _currentTarget.GetComponent<CollectableItem>();
-            if (rb != null)
+            
+            //// 차량의 월드 위치 기준 방향 계산
+            Vector2 targetPosition = Vehicle.transform.position; // 차량의 월드 좌표
+            //Vector2 handArmPosition = End.transform.position;
+            Vector2 currentTargetPosition = _currentTarget.transform.position;
+
+            //Vector2 direction = (targetPosition - currentTargetPosition).normalized;
+
+            //// 타겟 이동
+            //Vector2 nextPosition = Vector2.Lerp(currentTargetPosition, targetPosition, _takeSpeed * Time.deltaTime);
+            //rb.MovePosition(nextPosition);
+
+            if (Vector2.Distance(targetPosition, currentTargetPosition) < _collectRange)
             {
-                rb.velocity = Vector2.zero; // 속도 초기화 (필요하면 사용)
-
-                // 차량의 월드 위치 기준 방향 계산
-                Vector2 targetPosition = Vehicle.transform.position; // 차량의 월드 좌표
-                Vector2 currentTargetPosition = _currentTarget.transform.position;
-
-                Vector2 direction = (targetPosition - currentTargetPosition).normalized;
-
-                // 타겟 이동
-                Vector2 nextPosition = Vector2.Lerp(currentTargetPosition, targetPosition, _takeSpeed * Time.deltaTime);
-                rb.MovePosition(nextPosition);
-
-                if (Vector2.Distance(targetPosition, currentTargetPosition) < _catchRange)
-                {
-                    Vehicle.GetComponent<VehicleInventory>().AddItemToInventory(item.ItemCode);
-                    Destroy(_currentTarget);
-                }
+                Vehicle.GetComponent<VehicleInventory>().AddItemToInventory(item.ItemCode);
+                Target.Remove(_currentTarget);
+                Destroy(_currentTarget);
+                _isCatch = false;
             }
-            else
-            {
-                Debug.Log("rigidbody 못 찾음");
-            }
+            
         }
     }
 
