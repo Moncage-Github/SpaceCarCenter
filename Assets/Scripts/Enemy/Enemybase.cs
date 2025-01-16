@@ -55,7 +55,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private float _bulletDamage;
 
     // Start is called before the first frame update
-    protected virtual void Awake()
+    public virtual void Init()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _circleCollider2D = GetComponent<CircleCollider2D>();
