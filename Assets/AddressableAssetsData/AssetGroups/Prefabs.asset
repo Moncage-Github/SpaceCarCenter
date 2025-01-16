@@ -23,6 +23,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Collection
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cba0c7c9083b9f848b5b93089f398008
+    m_Address: Assets/Scripts/Enemy/Enemy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Collection
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e55c2b48f0867d14689bc9a8dcef32ea
     m_Address: Assets/Prefab/CollectableItem.prefab
     m_ReadOnly: 0

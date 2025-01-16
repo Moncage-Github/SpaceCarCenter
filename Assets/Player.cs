@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -19,6 +20,8 @@ public class Player : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
 
+    private List<InteractionObject> _detectedObjects = new List<InteractionObject>();
+    private InteractionObject _interactionObject;
     private void Awake()
     {
         _input = new LobbyPlayerInput();
@@ -36,6 +39,16 @@ public class Player : MonoBehaviour
 
         _input.PlayerAction.Down.performed += OnDown;
         _input.PlayerAction.Down.canceled += OnDown;
+
+        _input.PlayerAction.Interaction.performed += OnInteraction;
+    }
+
+    private void OnInteraction(InputAction.CallbackContext context)
+    {
+        if (context.performed == false) return;
+        if (_interactionObject == null) return;
+
+        _interactionObject.Interaction();
     }
 
     void OnDisable()
@@ -47,6 +60,8 @@ public class Player : MonoBehaviour
 
         _input.PlayerAction.Down.performed -= OnDown;
         _input.PlayerAction.Down.canceled -= OnDown;
+
+        _input.PlayerAction.Interaction.performed -= OnInteraction;
     }
 
     private void OnMove(InputAction.CallbackContext context)
@@ -107,6 +122,8 @@ public class Player : MonoBehaviour
         Move(_moveValue);
 
         _isGround = CheckIsGround();
+
+        CheckInteraction();
     }
 
     private IEnumerator DownJump(Collider2D collider)
@@ -119,5 +136,74 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         collider.enabled = true;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        InteractionObject interactionObject = other.GetComponent<InteractionObject>();
+        if (interactionObject == null) return;
+
+        // 트리거된 물체 추가
+        if (!_detectedObjects.Contains(interactionObject))
+        {
+            _detectedObjects.Add(interactionObject);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        InteractionObject interactionObject = other.GetComponent<InteractionObject>();
+        if (interactionObject == null) return;
+
+        interactionObject.CanInteraction = false;
+
+        // 트리거된 물체 제거
+        if (_detectedObjects.Contains(interactionObject))
+        {
+            _detectedObjects.Remove(interactionObject);
+        }
+    }
+
+    private void CheckInteraction()
+    {
+        if(_detectedObjects.Count == 0)
+        {
+            _interactionObject = null;
+            return;
+        }
+
+        var closestObject = GetClosestObject();
+
+        if(_interactionObject == null)
+        {
+            _interactionObject = closestObject;
+        }
+
+        else if (_interactionObject != closestObject)
+        {
+            _interactionObject.CanInteraction = false;
+            _interactionObject = closestObject;
+        }
+
+        _interactionObject.CanInteraction = true;
+        
+    }
+
+    public InteractionObject GetClosestObject()
+    {
+        InteractionObject closestObject = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (var obj in _detectedObjects)
+        {
+            float distance = Vector2.Distance(transform.position, obj.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestObject = obj;
+            }
+        }
+
+        return closestObject;
     }
 }

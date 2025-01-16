@@ -100,6 +100,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Vehicle: {fileID: 0}
+  _reloadTime: 15
+  _attackDuration: 3
+  _damageCycle: 0.5
+  _percentDamage: 10
 --- !u!120 &4501630913047987132
 LineRenderer:
   serializedVersion: 2
