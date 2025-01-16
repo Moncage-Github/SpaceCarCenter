@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 6198997927327273176, guid: cba0c7c9083b9f848b5b93089f398008, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8853404597619482896, guid: cba0c7c9083b9f848b5b93089f398008, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -446,22 +450,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 324953884}
   m_CullTransparentMesh: 1
---- !u!4 &500693456 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-  m_PrefabInstance: {fileID: 850082847}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &500693457 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-  m_PrefabInstance: {fileID: 850082847}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1315e7f6fadb92d4bb6c3dab00ed1176, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &502349789
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,123 +948,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1001 &850082847
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 882085489}
-    m_Modifications:
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -353.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4427409863225068490, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5544275212424977781, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_Name
-      value: Sector (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: SectorOption.MeteorType
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: SectorOption.SpawnOption
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: _sectorOption.SpawnOption
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: SectorOption.MaxMeteorCount
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: _sectorOption.MaxMeteorCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: _sectorOption.SpawnMeteorType
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: SectorOption.MaxCollectableCount
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 7630277539979262722, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_Color.a
-      value: 0.34901962
-      objectReference: {fileID: 0}
-    - target: {fileID: 7630277539979262722, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_Color.b
-      value: 0.47450984
-      objectReference: {fileID: 0}
-    - target: {fileID: 7630277539979262722, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_Color.g
-      value: 0.8554745
-      objectReference: {fileID: 0}
-    - target: {fileID: 7630277539979262722, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7630277539979262722, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7630277539979262722, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
-      propertyPath: m_SortingOrder
-      value: -10
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
 --- !u!1 &882085488
 GameObject:
   m_ObjectHideFlags: 0
@@ -1107,7 +978,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2049484439}
-  - {fileID: 500693456}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &919380466
@@ -1591,7 +1461,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sectors:
   - {fileID: 2049484440}
-  - {fileID: 500693457}
   _mapSize: {x: 500, y: 1000}
   _vehicle: {fileID: 667088635}
   _meteorPrefab: {fileID: 1092564742736929322, guid: a687406ce7e54e4408a993fdffa68ed1, type: 3}
@@ -1990,11 +1859,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
       propertyPath: _sectorOption.SpawnOption
-      value: 2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
       propertyPath: SectorOption.MaxMeteorCount
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
+      propertyPath: _sectorOption.MaxEnemyCount
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
       propertyPath: _sectorOption.MaxMeteorCount
@@ -2007,6 +1880,14 @@ PrefabInstance:
     - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
       propertyPath: SectorOption.MaxCollectableCount
       value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
+      propertyPath: _sectorOption.MaxCollectableCount
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
+      propertyPath: _sectorOption.SpawnCollectableItemType
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7630277539979262722, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
       propertyPath: m_Color.a
