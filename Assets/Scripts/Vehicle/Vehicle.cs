@@ -31,6 +31,11 @@ public class Vehicle : MonoBehaviour, IDamageable
     private bool _isBoost = false;
     public bool IsBoost { set => _isBoost = value; get { return _isBoost; } }
 
+    //Barrier 여부
+    [SerializeField] private int _barrier;
+    public int Barrier { set => _barrier = value; get { return _barrier; } }
+    public Action IsTakeDamage;
+
 
     private void Awake()
     {
@@ -154,7 +159,16 @@ public class Vehicle : MonoBehaviour, IDamageable
     // IDamageable 구현
     public void TakeDamage(float damage)
     {
+        IsTakeDamage?.Invoke();
+
+        if (_barrier > 0)
+        {
+            _barrier--;
+            Debug.Log("Barrier");
+            return;
+        }
         _stat.CurrentHp -= damage;
+        Debug.Log("Player Damaged, Current HP : " + _stat.CurrentHp);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
