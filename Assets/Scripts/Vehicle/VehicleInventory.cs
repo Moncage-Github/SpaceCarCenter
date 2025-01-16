@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class VehicleInventory : MonoBehaviour
 {
-    // 임시로 SerializableDictionary로 생성 디버그용(나중에 바꿀수도)
     // [아이템 코드, 개수]
-    [SerializeField] private SerializableDictionary<int, int> _invetory;
+    [SerializeField] private Dictionary<int, int> _invetory = new();
 
     public void AddItemToInventory(int itemCode)
     {
@@ -18,5 +17,10 @@ public class VehicleInventory : MonoBehaviour
         {
             _invetory[itemCode] = 1; // 키가 없으면 새로 추가하고 값을 1로 설정
         }
+    }
+
+    public IReadOnlyDictionary<int, int> GetInventory()
+    {
+        return _invetory;
     }
 }
