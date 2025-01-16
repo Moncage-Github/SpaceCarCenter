@@ -41,6 +41,7 @@ public class UserInput : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext context)
     {
+        Debug.Log(context.ReadValue<float>());
         _carMove.AccelerationInput = context.ReadValue<float>();
     }
 
