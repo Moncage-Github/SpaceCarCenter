@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44ffae9c1d24894db41205218486d19, type: 3}
+  m_Name: BarrierEquipment
+  m_EditorClassIdentifier: 
+  Name: "\uBC29\uC5B4\uB9C9"
+  Explan: "\uACF5\uACA9\uC744 \uB9C9\uC544\uC900\uB2E4"
+  EquipmentId: 10
+  ImageLog: {fileID: 21300000, guid: 36e90302c97046b43b6c65e8ede05cd0, type: 3}
+  Prefab: {fileID: 4124783547375697379, guid: 219663e5fac49ac4b92c2f2766a948d4, type: 3}

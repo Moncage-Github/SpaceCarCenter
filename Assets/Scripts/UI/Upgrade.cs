@@ -19,6 +19,6 @@ public class Upgrade : MonoBehaviour
 
     public void StartGameButton()
     {
-        SceneManager.LoadScene("cho 1");
+        SceneManager.LoadScene("CollectionScene");
     }
 }

@@ -14,10 +14,11 @@ public enum State
     Dead
 }
 
-public class EnemyBase : MonoBehaviour, IDamageable
+public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 {
     private State _currentState = State.None;
 
+    [SerializeField] private float _currentHp;   
     [SerializeField] private float _health;   
     [SerializeField] private float _moveSpeed;          //Enemy의 이동 속도
     [SerializeField] private float _movementRadius;     //Enemy의 활동 반경
@@ -67,6 +68,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         EnemyDead = new EnemyDead(this);
         EnemySkill = new EnemySkill(this);
         EnemyAttack = new EnemyAttack(this, _bullet);
+
+        _currentHp = _health;
 }
 
     // Update is called once per frame
@@ -168,10 +171,20 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public void TakeDamage(float damage)
     {
-        _health -= damage;
-        if( _health < 0 )
+        _currentHp -= damage;
+        if( _currentHp < 0 )
         {
             OnDead();
         }
+    }
+
+    public float GetMaxHp()
+    {
+        return _health;
+    }
+
+    public float GetCurrentHp()
+    {
+        return _currentHp;
     }
 }
