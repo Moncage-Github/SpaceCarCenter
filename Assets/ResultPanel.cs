@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ResultPanel : MonoBehaviour
 {
     [SerializeField] private Text _resultText;
+    [SerializeField] private Text _timeText;
 
     private void OnEnable()
     {
@@ -14,17 +15,25 @@ public class ResultPanel : MonoBehaviour
 
     public void InitPanel()
     {
-        var invetory = GameManager.Instance.BeforeCollectionResult;
+        var collectionResult = GameManager.Instance.BeforeCollectionResult;
+
+        SetInventoryData(collectionResult);
+
+        SetTime(collectionResult);
+    }
+
+    private void SetInventoryData(CollectionResult? result)
+    {
         string message = "";
-        if (invetory.HasValue)
+        if (result.HasValue)
         {
-            if (invetory.Value.InventoryInfo.Count == 0)
+            if (result.Value.InventoryInfo.Count == 0)
             {
                 _resultText.text = "No items obtained";
                 return;
             }
 
-            foreach (var item in invetory.Value.InventoryInfo)
+            foreach (var item in result.Value.InventoryInfo)
             {
                 message += $"Code : {item.Key}, Count : {item.Value}\n";
             }
@@ -33,6 +42,15 @@ public class ResultPanel : MonoBehaviour
         else
         {
             _resultText.text = "No Result!";
+        }
+    }
+
+    private void SetTime(CollectionResult? result)
+    {
+        if (result.HasValue)
+        {
+             _timeText.text = Util.Stopwatch.FormatTimeToMinutesAndSeconds((int)result.Value.GameTime);
+
         }
     }
 }
