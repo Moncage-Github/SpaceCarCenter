@@ -1,20 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public struct CollectionResult
 {
     public float GameTime;
     public IReadOnlyDictionary<int, int> InventoryInfo;
+    public int KillCount;
 }
 
 public class CollectionManager : MonoBehaviour
 {
     private Util.Stopwatch _stopwatch = new Util.Stopwatch();
 
+    public int KillCount;
+
     private void Start()
     {
         GameStart();
+
     }
 
     public void GameStart()
@@ -27,7 +32,8 @@ public class CollectionManager : MonoBehaviour
         CollectionResult collectionGameInfo = new CollectionResult
         {
             InventoryInfo = FindObjectOfType<VehicleInventory>().GetInventory(),
-            GameTime = _stopwatch.Stop()
+            GameTime = _stopwatch.Stop(),
+            KillCount = KillCount
         };
 
         GameManager gameManager = GameManager.Instance;
