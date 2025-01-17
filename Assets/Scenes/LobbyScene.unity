@@ -6430,6 +6430,8 @@ MonoBehaviour:
     State: 0
   - Equipment: {fileID: 11400000, guid: b9279aa9c99285642b04c274746ea054, type: 2}
     State: 0
+  - Equipment: {fileID: 11400000, guid: f75f96bcfa913074f8b98c9e88fd0ca0, type: 2}
+    State: 0
   TruckEquipData: []
   Canvas: {fileID: 1858508593}
   CanvasTransform: {fileID: 1858508594}

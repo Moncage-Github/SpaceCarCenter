@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44ffae9c1d24894db41205218486d19, type: 3}
+  m_Name: NetEquipment
+  m_EditorClassIdentifier: 
+  Name: "\uADF8\uBB3C"
+  Explan: "\uC544\uC774\uD15C \uC218\uC9D1 \uADF8\uBB3C"
+  EquipmentId: 21
+  ImageLog: {fileID: 21300000, guid: a0ac3a4bb6471474e903deb92d56a510, type: 3}
+  Prefab: {fileID: 8514779396591603534, guid: ce38c33abcf7da5449cfd921a9e3e755, type: 3}

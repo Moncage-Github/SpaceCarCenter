@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*
  장착된 장비가 어떤 장비인지 구분하기 위한 코드
@@ -71,8 +72,6 @@ public enum EquipmentState
 
 public class EquipmentsData : MonoBehaviour
 {
-    
-
     private static EquipmentsData _instance = null;
     public List<Pair<Equipment, EquipmentState>> EquipmentData;
 
@@ -137,5 +136,5 @@ public class EquipmentsData : MonoBehaviour
                 break;
         }
     }
-
+    
 }
