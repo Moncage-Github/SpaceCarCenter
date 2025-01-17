@@ -371,6 +371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8120075ad97fc614d8557dfe49fe9e0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _equiptmentScriptable: {fileID: 11400000, guid: 2f3f0e6bdd5752b4280edab3b5f27c81, type: 2}
 --- !u!4 &41893361
 Transform:
   m_ObjectHideFlags: 0
@@ -851,6 +852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _resultPanel: {fileID: 0}
+  Canvas: {fileID: 1858508593}
 --- !u!4 &159634562
 Transform:
   m_ObjectHideFlags: 0
@@ -6382,74 +6384,6 @@ RectTransform:
   m_AnchoredPosition: {x: -301, y: -274}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 1}
---- !u!1 &1853983406
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1853983408}
-  - component: {fileID: 1853983407}
-  m_Layer: 0
-  m_Name: EquipmentData
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1853983407
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1853983406}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95eb74f23a2aed54b9a14041abb23c6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EquipmentData:
-  - Equipment: {fileID: 11400000, guid: 02e2206fa20f17d47820c41c00f01bdd, type: 2}
-    State: 0
-  - Equipment: {fileID: 11400000, guid: 6676efbd8ca595349a6764d50ac1a5cc, type: 2}
-    State: 0
-  - Equipment: {fileID: 11400000, guid: 993567ec7dde271448c5596d562386c6, type: 2}
-    State: 0
-  - Equipment: {fileID: 11400000, guid: d99d90fc381ed96478c6a7ef92cb1a8d, type: 2}
-    State: 0
-  - Equipment: {fileID: 11400000, guid: 6676efbd8ca595349a6764d50ac1a5cc, type: 2}
-    State: 0
-  - Equipment: {fileID: 11400000, guid: 6b2e79241e9bfcd4b8afb1ef4456eb23, type: 2}
-    State: 0
-  - Equipment: {fileID: 11400000, guid: 97583f7d33a0d73419d9202f8f9c6a54, type: 2}
-    State: 0
-  - Equipment: {fileID: 11400000, guid: 993567ec7dde271448c5596d562386c6, type: 2}
-    State: 0
-  - Equipment: {fileID: 11400000, guid: b9279aa9c99285642b04c274746ea054, type: 2}
-    State: 0
-  - Equipment: {fileID: 11400000, guid: f75f96bcfa913074f8b98c9e88fd0ca0, type: 2}
-    State: 0
-  TruckEquipData: []
-  Canvas: {fileID: 1858508593}
-  CanvasTransform: {fileID: 1858508594}
---- !u!4 &1853983408
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1853983406}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 832.812, y: 387.17816, z: 4.1978836}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1858508590
 GameObject:
   m_ObjectHideFlags: 0
@@ -7460,7 +7394,6 @@ SceneRoots:
   - {fileID: 1133750954}
   - {fileID: 967022469}
   - {fileID: 1858508594}
-  - {fileID: 1853983408}
   - {fileID: 699336092}
   - {fileID: 1266762112}
   - {fileID: 1601513251}

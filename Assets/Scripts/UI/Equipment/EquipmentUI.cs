@@ -26,14 +26,15 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     private void Start()
     {
-        _canvas = EquipmentsData.Instance.Canvas;
-        _canvasTransform = EquipmentsData.Instance.CanvasTransform;
+        _canvas = FindObjectOfType<LobbyManager>().Canvas;
+        _canvasTransform = _canvas.transform;
 
         _raycaster = _canvas.GetComponent<GraphicRaycaster>();
         _eventSystem = EventSystem.current;
         //_showImage = _objectItem.GetComponent<Image>();
         //_showImage = GameObject.Find("equipmentImage").GetComponent<Image>();
     }
+
 
     void IBeginDragHandler.OnBeginDrag(PointerEventData eventData)
     {
@@ -94,7 +95,7 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 equipIndex.CurrentEquipment = this;
 
                 equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, _exquipmentId);
-                EquipmentsData.Instance.SetEquip(equipIndex.EquipNumber, _exquipmentId, IsState);
+                GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, _exquipmentId, IsState);
             }
         }
     }

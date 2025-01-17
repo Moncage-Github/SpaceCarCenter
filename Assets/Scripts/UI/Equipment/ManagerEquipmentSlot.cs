@@ -23,7 +23,7 @@ public class ManagerEquipmentSlot : MonoBehaviour
 
     private void Init()
     {
-        foreach(var equipment in EquipmentsData.Instance.EquipmentData)
+        foreach(var equipment in GameManager.Instance.EquipmentData.EquipmentData)
         {
             Debug.Log("equipment »ý¼º");
             GameObject slot = Instantiate(_prefabEquipment);

@@ -35,7 +35,11 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    [SerializeField] EquiptmentScriptable _equiptmentScriptable;
+
     private GameState _gameState;
+
+    public EquipmentsData EquipmentData;
 
     private CollectionResult? _beforeCollectionInfo = null;
 
@@ -56,6 +60,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        EquipmentData = new EquipmentsData(_equiptmentScriptable);
     }
 
     public void LoadLobbyScene()
