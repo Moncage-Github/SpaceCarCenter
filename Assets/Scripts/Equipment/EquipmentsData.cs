@@ -32,31 +32,6 @@ public enum EquipIndexNumber
     
 }
 
-[System.Serializable]
-public class Pair<T1, T2>
-{
-    public T1 Equipment;
-    public T2 State;
-
-    public Pair(T1 first, T2 second)
-    {
-        Equipment = first;
-        State = second;
-    }
-}
-
-[System.Serializable]
-public class Equip<T1, T2>
-{
-    public T1 EquipIndexNumber;
-    public T2 EquipmentId;
-
-    public Equip(T1 first, T2 second)
-    {
-        EquipIndexNumber = first;
-        EquipmentId = second;
-    }
-}
 
 public enum EquipmentState
 {
@@ -73,11 +48,15 @@ public enum EquipmentState
 
 public class EquipmentsData
 {
+    //Pair, Equip 구조는 EquiptmentScriptable에 저장되어있음.
     private static EquipmentsData _instance = null;
     public List<Pair<Equipment, EquipmentState>> EquipmentData = new List<Pair<Equipment, EquipmentState>>();
 
     //TODO:: vehicle의 종류에 따른 처리가 필요
     public List<Equip<EquipIndexNumber, int>> TruckEquipData = new List<Equip<EquipIndexNumber, int>>();
+
+    
+
 
     public EquipmentsData(EquiptmentScriptable _equiptmentScriptable)
     {
