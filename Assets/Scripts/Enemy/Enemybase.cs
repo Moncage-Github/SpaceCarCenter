@@ -109,6 +109,9 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 
     protected virtual void OnDead()
     {
+        CollectionManager mgr = FindObjectOfType<CollectionManager>();
+        mgr.KillCount++;
+
         Destroy(gameObject);
 
         return;

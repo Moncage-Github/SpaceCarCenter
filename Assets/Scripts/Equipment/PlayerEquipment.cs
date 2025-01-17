@@ -31,11 +31,6 @@ public class PlayerEquipment : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     void TruckInit()
     {
