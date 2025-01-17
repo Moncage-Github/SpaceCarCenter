@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -70,32 +71,23 @@ public enum EquipmentState
  */
 
 
-public class EquipmentsData : MonoBehaviour
+public class EquipmentsData
 {
     private static EquipmentsData _instance = null;
-    public List<Pair<Equipment, EquipmentState>> EquipmentData;
+    public List<Pair<Equipment, EquipmentState>> EquipmentData = new List<Pair<Equipment, EquipmentState>>();
 
     //TODO:: vehicle의 종류에 따른 처리가 필요
-    public List<Equip<EquipIndexNumber, int>> TruckEquipData;
+    public List<Equip<EquipIndexNumber, int>> TruckEquipData = new List<Equip<EquipIndexNumber, int>>();
 
-
-    [SerializeField] public Canvas Canvas;
-    [SerializeField] public Transform CanvasTransform;
-
-    void Awake()
+    public EquipmentsData(EquiptmentScriptable _equiptmentScriptable)
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(gameObject); 
-        }
-        else
-        {
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-            //EquipmentData = new List<Pair<Equipment, bool>>();
-        }
-
         InitTruck();
+        InitEquipmentData(_equiptmentScriptable);
+    }
+
+    private void InitEquipmentData(EquiptmentScriptable _equiptmentScriptable)
+    {
+        EquipmentData = _equiptmentScriptable.EquipmentData;
     }
 
     public static EquipmentsData Instance

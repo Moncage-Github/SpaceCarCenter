@@ -5,6 +5,7 @@ using UnityEngine;
 public class LobbyManager : MonoBehaviour
 {
     [SerializeField] private GameObject _resultPanel;
+    public Canvas Canvas;
     
     public void ShowResultPanel()
     {

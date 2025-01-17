@@ -16,11 +16,11 @@ public class PlayerEquipment : MonoBehaviour
 
         TruckInit();
 
-        foreach (var data in EquipmentsData.Instance.TruckEquipData)
+        foreach (var data in GameManager.Instance.EquipmentData.TruckEquipData)
         {
             if (data.EquipmentId == 0)
                 continue;
-            Pair<Equipment, EquipmentState> result = EquipmentsData.Instance.EquipmentData.Find(pair => pair.Equipment.EquipmentId == data.EquipmentId);
+            Pair<Equipment, EquipmentState> result = GameManager.Instance.EquipmentData.EquipmentData.Find(pair => pair.Equipment.EquipmentId == data.EquipmentId);
             
             CurrentEquip[data.EquipIndexNumber] = result.Equipment.Prefab;
 
