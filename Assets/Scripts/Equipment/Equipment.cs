@@ -12,4 +12,5 @@ public class Equipment : ScriptableObject
     [field : SerializeField] public int EquipmentId;
     [field : SerializeField] public Sprite ImageLog;
     [field : SerializeField] public GameObject Prefab;
+    [field : SerializeField] public EquipIndexNumber EquipIndexNumber;
 }

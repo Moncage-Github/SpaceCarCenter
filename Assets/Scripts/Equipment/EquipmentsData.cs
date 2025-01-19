@@ -53,9 +53,8 @@ public class EquipmentsData
     public List<Pair<Equipment, EquipmentState>> EquipmentData = new List<Pair<Equipment, EquipmentState>>();
 
     //TODO:: vehicle의 종류에 따른 처리가 필요
+    //TODO:: Scriptable로 만들어서 EquipmentData처럼 관리해야될거 같다.
     public List<Equip<EquipIndexNumber, int>> TruckEquipData = new List<Equip<EquipIndexNumber, int>>();
-
-    
 
 
     public EquipmentsData(EquiptmentScriptable _equiptmentScriptable)
@@ -95,11 +94,14 @@ public class EquipmentsData
     {
         Debug.Log(equipIndexNumber.ToString() + equipId.ToString() + vehicleId.ToString());
 
+        //vehicleId로 차량 종류 구분
         switch (vehicleId)
         {
             case 0:
                 var result = TruckEquipData.Find(equip => equip.EquipIndexNumber == equipIndexNumber);
                 var equip = EquipmentData.Find(equip => equip.Equipment.EquipmentId == equipId);
+
+                equip.Equipment.EquipIndexNumber = result.EquipIndexNumber;
                 result.EquipmentId = equipId;
                 equip.State = state;
                 break;

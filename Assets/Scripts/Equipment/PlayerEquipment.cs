@@ -25,6 +25,7 @@ public class PlayerEquipment : MonoBehaviour
             CurrentEquip[data.EquipIndexNumber] = result.Equipment.Prefab;
 
             //TODO:: 장착 위치에 따른 장비의 생성 위치 정해야함.
+            //vehicleId가 0인걸 찾아서 각 위치에 장착
             GameObject equipmentPrefab = Instantiate(result.Equipment.Prefab);
             equipmentPrefab.transform.parent = transform;
             equipmentPrefab.GetComponent<BaseEquipment>().SetVehivle(_vehicle);

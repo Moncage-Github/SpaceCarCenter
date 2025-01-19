@@ -34,11 +34,24 @@ public class Equip<T1, T2>
     }
 }
 
+[System.Serializable]
+public class VehicleInfo
+{
+    public int VehicleId;
+    public List<Vector3> EquipmentPos;
+
+    public VehicleInfo(int first, Vector3 second)
+    {
+        VehicleId = first;
+        EquipmentPos.Add(second);
+    }
+}
+
 [CreateAssetMenu(fileName = "EquipmentScriptable", menuName = "Data/EquipmentScriptable")]
 public class EquiptmentScriptable : ScriptableObject
 {
     public List<Pair<Equipment, EquipmentState>> EquipmentData;
 
     //어떤 차량을 선택했는지, 그 차량의 아이템 장착 위치 정보
-    //public List<>
+    public List<VehicleInfo> VehicleInfos;
 }
