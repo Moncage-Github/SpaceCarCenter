@@ -30,6 +30,12 @@ public class ManagerEquipmentSlot : MonoBehaviour
             slot.GetComponent<EquipmentUI>().SetEquipment(equipment.Equipment.Explan, equipment.Equipment.ImageLog, equipment.Equipment.EquipmentId);
             slot.GetComponent<EquipmentUI>().IsState = equipment.State;
 
+            if(equipment.State == EquipmentState.Equip)
+            {
+                Equip<EquipIndexNumber, int> result = GameManager.Instance.EquipmentData.TruckEquipData.Find(equip => equip.EquipIndexNumber == equipment.Equipment.EquipIndexNumber);
+                result.EquipmentId = equipment.Equipment.EquipmentId;
+            }
+
             slot.transform.SetParent(_content.transform);
             slot.transform.localScale = Vector3.one;
         }

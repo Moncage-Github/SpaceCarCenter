@@ -21,11 +21,22 @@ public class RobotArmEquipment : BaseEquipment
     [SerializeField] private float _catchRange;
     [SerializeField] private float _collectRange;
     [SerializeField] private float _takeSpeed;
+    private List<Vector3> _defaultPos = new List<Vector3>();
+    private List<bool> _defaultRotateCompleted = new List<bool>();
     private bool _isCatch = false;
 
     private void Start()
     {
         _endRigid = GetComponent<JointRobotArm>();
+        JointRobotArm current = Root;
+
+        while (current != null)
+        {
+            
+            _defaultPos.Add(current.transform.localRotation.eulerAngles);
+            _defaultRotateCompleted.Add(false);
+            current = current.Next();
+        }
     }
 
     float CalculateSlope(JointRobotArm joint, GameObject Target)
@@ -45,7 +56,41 @@ public class RobotArmEquipment : BaseEquipment
     // Update is called once per frame
     void Update()
     {
-        if(Target.Count == 0) return;
+        //돌아오는 코드
+        if (Target.Count == 0)
+        {
+            JointRobotArm current = Root;
+            int i = 0;
+
+            while (current != null)
+            {
+                if (_defaultRotateCompleted[i])
+                {
+                    i++;
+                    current = current.Next();
+                    continue; // 이미 회전 완료한 경우 건너뜀
+                }
+
+                // 현재 회전과 목표 회전 사이를 보간
+                current.transform.localRotation = Quaternion.RotateTowards(
+                    current.transform.localRotation,
+                    Quaternion.Euler(_defaultPos[i]),
+                    _rate * Time.deltaTime
+                );
+
+                // 목표 회전에 도달했는지 확인
+                if (Quaternion.Angle(current.transform.localRotation, Quaternion.Euler(_defaultPos[i])) < 0.1f)
+                {
+                    current.transform.localRotation = Quaternion.Euler(_defaultPos[i]); // 정확히 맞춤
+                    _defaultRotateCompleted[i] = true; // 회전 완료 표시
+                }
+
+                current = current.Next();
+                i++;
+            }
+
+            return;
+        }
 
         GameObject closeTarget = GetCloseTarget();
 
@@ -58,6 +103,7 @@ public class RobotArmEquipment : BaseEquipment
         if (GetDistance(End.transform.position, _currentTarget.transform.position) > Threshold || _isCatch == true)
         {
             JointRobotArm current = Root;
+            int i = 0;
             while (current != null)
             {
                 float slope;
@@ -74,6 +120,8 @@ public class RobotArmEquipment : BaseEquipment
                 
                 current.Rotate(slope * _rate * 60 * Time.deltaTime);
                 current = current.Next();
+                _defaultRotateCompleted[i] = false;
+                i++;
             }
             float distance = Vector3.Distance(End.transform.position, _currentTarget.transform.position);
             
@@ -84,7 +132,7 @@ public class RobotArmEquipment : BaseEquipment
                 Debug.Log("잡았다");
                 
                 _currentTarget.transform.SetParent(End.transform);
-                _currentTarget.transform.localPosition = new Vector3(0.5f, 0, 0);
+                _currentTarget.transform.localPosition = new Vector3(-0.5f, 0, 0);
                 //_currentTarget.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
                 Rigidbody2D rb = _currentTarget.GetComponent<Rigidbody2D>();
                 rb.velocity = Vector3.zero;
