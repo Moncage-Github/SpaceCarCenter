@@ -148,7 +148,11 @@ public class Vehicle : MonoBehaviour, IDamageable
     // 연료 사용을 처리
     private void ApplyFuelUsage()
     {
-        if (_accelerationInput == 0 || _stat.IsFuelEmpty())
+        if(_stat.IsFuelEmpty())
+        {
+            CollectionManager.Instance.GameOver(GameOverType.OutOfFuel);
+        }
+        if (_accelerationInput == 0)
         {
             return;
         }
@@ -161,6 +165,8 @@ public class Vehicle : MonoBehaviour, IDamageable
     {
         IsTakeDamage?.Invoke();
 
+        FindObjectOfType<CollectionManager>().ShakeCamera(0.2f, 0.15f);
+
         if (_barrier > 0)
         {
             _barrier--;
@@ -169,6 +175,11 @@ public class Vehicle : MonoBehaviour, IDamageable
         }
         _stat.CurrentHp -= damage;
         Debug.Log("Player Damaged, Current HP : " + _stat.CurrentHp);
+
+        if(_stat.CurrentHp <= 0)
+        {
+            CollectionManager.Instance.GameOver(GameOverType.Dead);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)

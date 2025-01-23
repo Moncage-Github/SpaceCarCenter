@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 public class VehicleInventory : MonoBehaviour
 {
     // [아이템 코드, 개수]
-    [SerializeField] private Dictionary<int, int> _invetory = new();
+    [SerializeField] private SerializableDictionary<int, int> _invetory = new();
 
     public void AddItemToInventory(int itemCode)
     {
@@ -19,8 +20,9 @@ public class VehicleInventory : MonoBehaviour
         }
     }
 
-    public IReadOnlyDictionary<int, int> GetInventory()
+    public SerializableDictionary<int, int> GetInventory()
     {
+
         return _invetory;
     }
 }
