@@ -38,12 +38,25 @@ public class Equip<T1, T2>
 public class VehicleInfo
 {
     public int VehicleId;
-    public List<Vector3> EquipmentPos;
+    public List<VehicleEquipmentInfo> EquipmentPos;
 
-    public VehicleInfo(int first, Vector3 second)
+    public VehicleInfo(int first, VehicleEquipmentInfo second)
     {
         VehicleId = first;
         EquipmentPos.Add(second);
+    }
+}
+
+[System.Serializable]
+public class VehicleEquipmentInfo
+{
+    public int VehicleId;
+    public Vector3 EquipmentPos;
+
+    public VehicleEquipmentInfo(int first, Vector3 second)
+    {
+        VehicleId = first;
+        EquipmentPos = second;
     }
 }
 
@@ -54,4 +67,5 @@ public class EquiptmentScriptable : ScriptableObject
 
     //어떤 차량을 선택했는지, 그 차량의 아이템 장착 위치 정보
     public List<VehicleInfo> VehicleInfos;
+
 }
