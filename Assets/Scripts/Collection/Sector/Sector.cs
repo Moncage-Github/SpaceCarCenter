@@ -151,43 +151,22 @@ public class Sector : MonoBehaviour
 
     private void CreateCollectableItem()
     {
+        if(!_sectorOption.SpawnOption.HasFlag(MapObjectType.COLLECTABLE)) { return; }
+
         CollectableItemType spawnOption = _sectorOption.SpawnCollectableItemType;
 
         if (spawnOption == CollectableItemType.None) return;
 
         GameObject prefab = CollectionAssetManager.Instance.GetPrefabWithName("CollectableItem");
 
-
-        //List<MeteorData> meteorData = new();
-        //var activeFlags = GetActiveFlags(spawnOption);
-
-        //var meteorspawnRates = CollectionAssetManager.Instance.MeteorSpawnRate;
-
-        //float totalSpawnRate = 0;
-
-        //foreach (var flag in activeFlags)
-        //{
-        //    totalSpawnRate += meteorspawnRates[flag];
-        //}
-
         List<Vector2> positions = MapObjectPositions[MapObjectType.COLLECTABLE];
 
         foreach (var position in positions)
         {
-            //float randomValue = UnityEngine.Random.Range(0, totalSpawnRate);
-            //float currentRate  = 0;
             CollectableItem item = null;
 
-            //foreach (var data in meteorspawnRates)
-            //{
-            //    currentRate += data.Value;
-            //    if (randomValue < currentRate)
-            //    {
             item = Instantiate(prefab).GetComponent<CollectableItem>();
             item.Init();
-            //        break;
-            //    }
-            //}
 
             item.transform.parent = transform;
             item.transform.position = position + Center;
@@ -199,6 +178,9 @@ public class Sector : MonoBehaviour
         //CollectableItemType spawnOption = _sectorOption.SpawnCollectableItemType;
 
         //if (spawnOption == CollectableItemType.None) return;
+
+        if (!_sectorOption.SpawnOption.HasFlag(MapObjectType.ENEMY)) { return; }
+
 
         GameObject prefab = CollectionAssetManager.Instance.GetPrefabWithName("Enemy");
 

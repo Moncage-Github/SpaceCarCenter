@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private GameObject _targetObject;
@@ -20,8 +21,6 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         _camera = GetComponent<Camera>();
-
-
     }
 
     public void Init(Vector2 mapSize)

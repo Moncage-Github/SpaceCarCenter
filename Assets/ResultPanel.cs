@@ -1,21 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ResultPanel : MonoBehaviour
 {
-    [SerializeField] private Text _resultText;
-    [SerializeField] private Text _timeText;
-
-    private void OnEnable()
-    {
-        InitPanel();
-    }
+    [SerializeField] private TextMeshProUGUI _gameOverTypeText;
+    [SerializeField] private ResultOreScrollRect _oreScrollRect;
+    [SerializeField] private TextMeshProUGUI _timeText;
 
     public void InitPanel()
     {
         var collectionResult = GameManager.Instance.BeforeCollectionResult;
+        
+        string message = string.Empty;
+        switch(collectionResult.Value.GameOverType)
+        {
+            case GameOverType.Dead:
+                message = "ªÁ∏¡";
+                break;
+            case GameOverType.OutOfFuel:
+                message = "∞ﬂ¿Œ";
+                break;
+            case GameOverType.Survived:
+                message = "∫π±Õ";
+                break;
+        }
 
         SetInventoryData(collectionResult);
 
@@ -24,24 +35,13 @@ public class ResultPanel : MonoBehaviour
 
     private void SetInventoryData(CollectionResult? result)
     {
-        string message = "";
-        if (result.HasValue)
-        {
-            if (result.Value.InventoryInfo.Count == 0)
-            {
-                _resultText.text = "No items obtained";
-                return;
-            }
+        if (!result.HasValue) return;
 
-            foreach (var item in result.Value.InventoryInfo)
-            {
-                message += $"Code : {item.Key}, Count : {item.Value}\n";
-            }
-            _resultText.text = message;
-        }
-        else
+        if (result.Value.InventoryInfo.Count == 0) return; 
+
+        foreach (var item in result.Value.InventoryInfo)
         {
-            _resultText.text = "No Result!";
+            _oreScrollRect.AddItem();
         }
     }
 
