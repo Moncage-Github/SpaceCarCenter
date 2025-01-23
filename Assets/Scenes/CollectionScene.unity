@@ -151,6 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0722999f4f865747ad7a2210ef08aa5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  KillCount: 0
+  ShakeTime: 0.15
+  ShakeAmount: 0.2
 --- !u!4 &29495932
 Transform:
   m_ObjectHideFlags: 0
@@ -1843,7 +1846,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
       propertyPath: _sectorOption.SpawnOption
-      value: -1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6004082808137257275, guid: f1bca9243ffbe5848b721a0ece5df414, type: 3}
       propertyPath: SectorOption.MaxMeteorCount
@@ -1986,7 +1989,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 29495931}
         m_TargetAssemblyTypeName: CollectionManager, Assembly-CSharp
-        m_MethodName: GameStart
+        m_MethodName: ShakeCamera
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
