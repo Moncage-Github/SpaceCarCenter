@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -27,6 +29,7 @@ public class GameManager : MonoBehaviour
                 {
                     GameObject singleton = new GameObject(typeof(GameManager).ToString());
                     _instance = singleton.AddComponent<GameManager>();
+                    _instance._sceneLoader = singleton.AddComponent<SceneLoader>();
                     DontDestroyOnLoad(singleton);
                 }
             }
@@ -35,9 +38,15 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    private SceneLoader _sceneLoader;
+
     [SerializeField] EquiptmentScriptable _equiptmentScriptable;
 
+    private GameState _beforeState;
+    public GameState BeforeState { get => _beforeState; }
+
     private GameState _gameState;
+    public GameState GameState { get => _gameState; }
 
     public EquipmentsData EquipmentData;
 
@@ -62,10 +71,19 @@ public class GameManager : MonoBehaviour
         }
 
         EquipmentData = new EquipmentsData(_equiptmentScriptable);
+        _sceneLoader = gameObject.AddComponent<SceneLoader>();
     }
 
-    public void LoadLobbyScene()
+    public void LoadCollectionScene(Action onComplete = null)
     {
+        _beforeState = _gameState;
+        _gameState = GameState.Collection;
+        SceneManager.LoadScene("CollectionScene");
+    }
+
+    public void LoadLobbyScene(Action onComplete = null)
+    {
+        _beforeState = _gameState;
         _gameState = GameState.Lobby;
         SceneManager.LoadScene("LobbyScene");
     }
