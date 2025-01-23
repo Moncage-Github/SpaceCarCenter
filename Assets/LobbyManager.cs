@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class LobbyManager : MonoBehaviour
 {
-    [SerializeField] private GameObject _resultPanel;
+    [SerializeField] private ResultPanel _resultPanel;
     public Canvas Canvas;
-    
+
+    private void Start()
+    {
+        _resultPanel.InitPanel();
+
+        if(GameManager.Instance.BeforeState == GameState.Collection)
+        {
+            ShowResultPanel();
+        }
+    }
+
     public void ShowResultPanel()
     {
-        _resultPanel.SetActive(true);
+        _resultPanel.gameObject.SetActive(true);
     }
 
 }
