@@ -86,13 +86,17 @@ public class Meteor : MapObject, IDamageable
 
     private void DestoryEvent()
     {
+        CollectionManager.Instance.DestroyedMeteorCount++;
+
         int rand = Random.Range(_data.ItemDropMin, _data.ItemDropMax);
         for(int  i = 0; i < rand; i++)
         {
             CollectableItem item = Instantiate(_collectablePrefab).GetComponent<CollectableItem>();
             item.transform.position = transform.position;
             item.transform.parent = transform.parent;
-            item.Init();
+
+            item.Init((CollectableItemType)Mathf.Pow(2, Random.Range(0, 8)));
+
             item.MoveInRandomDirection();
         }
     }

@@ -45,7 +45,8 @@ public class Sector : MonoBehaviour
 
     private void SetMapObject()
     {
-        foreach(MapObjectType type in AllTMapObjectType)
+        DrawSector();
+        foreach (MapObjectType type in AllTMapObjectType)
         {
             uint maxCount = 0;
             if (!_sectorOption.IsSpawnOptionSelected(type)) continue;
@@ -166,7 +167,7 @@ public class Sector : MonoBehaviour
             CollectableItem item = null;
 
             item = Instantiate(prefab).GetComponent<CollectableItem>();
-            item.Init();
+            item.Init(Util.FlagEnumUtility.GetRandomFlag(_sectorOption.SpawnCollectableItemType));
 
             item.transform.parent = transform;
             item.transform.position = position + Center;
