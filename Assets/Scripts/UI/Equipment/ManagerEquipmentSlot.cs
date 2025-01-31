@@ -12,7 +12,7 @@ public class ManagerEquipmentSlot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Init();
+        //Init();
     }
 
     // Update is called once per frame
@@ -21,24 +21,24 @@ public class ManagerEquipmentSlot : MonoBehaviour
         
     }
 
-    private void Init()
-    {
-        foreach(var equipment in GameManager.Instance.EquipmentData.EquipmentData.EquipmentData)
-        {
-            Debug.Log("equipment 积己");
-            GameObject slot = Instantiate(_prefabEquipment);
-            slot.GetComponent<EquipmentUI>().SetEquipment(equipment.Equipment.Explan, equipment.Equipment.ImageLog, equipment.Equipment.EquipmentId);
-            slot.GetComponent<EquipmentUI>().IsState = equipment.State;
+    //private void Init()
+    //{
+    //    foreach(var equipment in GameManager.Instance.EquipmentData.EquipmentData.EquipmentData)
+    //    {
+    //        Debug.Log("equipment 积己");
+    //        GameObject slot = Instantiate(_prefabEquipment);
+    //        slot.GetComponent<EquipmentUI>().SetEquipment(equipment.Equipment.Explan, equipment.Equipment.ImageLog, equipment.Equipment.EquipmentId);
+    //        slot.GetComponent<EquipmentUI>().IsState = equipment.State;
 
-            if(equipment.State == EquipmentState.Equip)
-            {
-                Equip<EquipIndexNumber, int> result = GameManager.Instance.EquipmentData.TruckEquipData.Find(equip => equip.EquipIndexNumber == equipment.Equipment.EquipIndexNumber);
-                result.EquipmentId = equipment.Equipment.EquipmentId;
-                //TODO:: 抗寇贸府
-            }
+    //        if(equipment.State == EquipmentState.Equip)
+    //        {
+    //            Equip<EquipIndexNumber, int> result = GameManager.Instance.EquipmentData.TruckEquipData.Find(equip => equip.EquipIndexNumber == equipment.Equipment.EquipIndexNumber);
+    //            result.EquipmentId = equipment.Equipment.EquipmentId;
+    //            //TODO:: 抗寇贸府
+    //        }
 
-            slot.transform.SetParent(_content.transform);
-            slot.transform.localScale = Vector3.one;
-        }
-    }
+    //        slot.transform.SetParent(_content.transform);
+    //        slot.transform.localScale = Vector3.one;
+    //    }
+    //}
 }

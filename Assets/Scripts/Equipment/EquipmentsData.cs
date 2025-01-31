@@ -86,24 +86,24 @@ public class EquipmentsData
     //}
 
     //TODO:: vehicle 종류에 따른 처리
-    public void SetEquip(EquipIndexNumber equipIndexNumber, int equipId, EquipmentState state, int vehicleId = 0)
-    {
-        Debug.Log(equipIndexNumber.ToString() + equipId.ToString() + vehicleId.ToString());
+    //public void SetEquip(EquipIndexNumber equipIndexNumber, int equipId, EquipmentState state, int vehicleId = 0)
+    //{
+    //    Debug.Log(equipIndexNumber.ToString() + equipId.ToString() + vehicleId.ToString());
 
-        //vehicleId로 차량 종류 구분
-        switch (vehicleId)
-        {
-            case 0:
-                var result = TruckEquipData.Find(equip => equip.EquipIndexNumber == equipIndexNumber);
-                var equip = EquipmentData.Find(equip => equip.Equipment.EquipmentId == equipId);
+    //    //vehicleId로 차량 종류 구분
+    //    switch (vehicleId)
+    //    {
+    //        case 0:
+    //            var result = TruckEquipData.Find(equip => equip.EquipIndexNumber == equipIndexNumber);
+    //            var equip = EquipmentData.Find(equip => equip.Equipment.EquipmentId == equipId);
 
-                equip.Equipment.EquipIndexNumber = result.EquipIndexNumber;
-                result.EquipmentId = equipId;
-                equip.State = state;
-                break;
-            default:
-                break;
-        }
-    }
+    //            equip.Equipment.EquipIndexNumber = result.EquipIndexNumber;
+    //            result.EquipmentId = equipId;
+    //            equip.State = state;
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
     
 }

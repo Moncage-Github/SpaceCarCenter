@@ -76,28 +76,28 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         _raycaster.Raycast(_pointerEventData, result);
 
         //레이캐스트 결과 처리
-        foreach (RaycastResult raycastResult in result)
-        {
-            //Debug.Log("Hit: " + raycastResult.gameObject.name); // 마우스 아래에 있는 UI 오브젝트의 이름 출력
+        //foreach (RaycastResult raycastResult in result)
+        //{
+        //    //Debug.Log("Hit: " + raycastResult.gameObject.name); // 마우스 아래에 있는 UI 오브젝트의 이름 출력
 
-            // UI 오브젝트의 이미지를 가져오는 경우
-            Transform objectComponent = raycastResult.gameObject.transform;
-            EquipIndex equipIndex = objectComponent.GetComponent<EquipIndex>();
+        //    // UI 오브젝트의 이미지를 가져오는 경우
+        //    Transform objectComponent = raycastResult.gameObject.transform;
+        //    EquipIndex equipIndex = objectComponent.GetComponent<EquipIndex>();
             
-            if (equipIndex != null)
-            {
-                if (equipIndex.CurrentEquipmentId != 0)
-                {
-                    EquipmentsData.Instance.SetEquip(equipIndex.EquipNumber, equipIndex.CurrentEquipmentId, EquipmentState.None);
-                    equipIndex.CurrentEquipment.SetState(EquipmentState.None);
-                }
-                SetState(EquipmentState.Equip);
-                equipIndex.CurrentEquipment = this;
+        //    if (equipIndex != null)
+        //    {
+        //        if (equipIndex.CurrentEquipmentId != 0)
+        //        {
+        //            EquipmentsData.Instance.SetEquip(equipIndex.EquipNumber, equipIndex.CurrentEquipmentId, EquipmentState.None);
+        //            equipIndex.CurrentEquipment.SetState(EquipmentState.None);
+        //        }
+        //        SetState(EquipmentState.Equip);
+        //        equipIndex.CurrentEquipment = this;
 
-                equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, _exquipmentId);
-                GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, _exquipmentId, IsState);
-            }
-        }
+        //        equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, _exquipmentId);
+        //        GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, _exquipmentId, IsState);
+        //    }
+        //}
     }
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
