@@ -14,7 +14,7 @@ public struct CollectionResult
 {
     public GameOverType GameOverType;
     public float GameTime;
-    public SerializableDictionary<int, int> InventoryInfo;
+    public SerializableDictionary<CollectableItemType, int> InventoryInfo;
     public int KillCount;
     public float ReceivedDamage;
     public float InflictedDamage;
@@ -40,10 +40,9 @@ public class CollectionManager : MonoBehaviour
     private Util.Stopwatch _stopwatch = new Util.Stopwatch();
 
     public int KillCount;
-
-    public float ShakeTime;
-    public float ShakeAmount;
-
+    public int DestroyedMeteorCount;
+    public float ReceivedDamage;
+    public float InflictedDamage;
 
     private void Start()
     {
@@ -56,6 +55,13 @@ public class CollectionManager : MonoBehaviour
         _stopwatch.Start();
     }
 
+    [VisibleEnum(typeof(GameOverType))]
+    public void GameOver(int type)
+    {
+        GameOverType gameOverType = (GameOverType)type;
+        GameOver(gameOverType);
+    }
+
     public void GameOver(GameOverType type)
     {
         CollectionResult collectionGameInfo = new CollectionResult
@@ -63,18 +69,16 @@ public class CollectionManager : MonoBehaviour
             GameOverType = type,
             InventoryInfo = FindObjectOfType<VehicleInventory>().GetInventory(),
             GameTime = _stopwatch.Stop(),
-            KillCount = KillCount
+            KillCount = KillCount,
+            DestroyedMeteorCount = DestroyedMeteorCount,
+            ReceivedDamage = ReceivedDamage,
+            InflictedDamage = InflictedDamage
         };
 
         GameManager gameManager = GameManager.Instance;
 
         gameManager.BeforeCollectionResult = collectionGameInfo;
         gameManager.LoadLobbyScene();
-    }
-
-    public void ShakeCamera()
-    {
-        StartCoroutine(ShakeRoutine(ShakeAmount, ShakeTime));
     }
 
     public void ShakeCamera(float shakeAmount, float shakeTime)

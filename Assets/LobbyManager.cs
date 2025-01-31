@@ -19,6 +19,8 @@ public class LobbyManager : MonoBehaviour
 
     public void ShowResultPanel()
     {
+        if(!GameManager.Instance.BeforeCollectionResult.HasValue) { return; }
+
         _resultPanel.gameObject.SetActive(true);
     }
 

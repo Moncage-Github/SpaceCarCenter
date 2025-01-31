@@ -18,6 +18,7 @@ public class Vehicle : MonoBehaviour, IDamageable
     // User Input Value
     private float _accelerationInput = 0;
     private float _steeringInput = 0;
+    private float _currentSteering;
     public float AccelerationInput { set => _accelerationInput = value; }
     public float SteeringInput { set => _steeringInput = value; }
 
@@ -36,11 +37,15 @@ public class Vehicle : MonoBehaviour, IDamageable
     public int Barrier { set => _barrier = value; get { return _barrier; } }
     public Action IsTakeDamage;
 
+    //Animation
+    [SerializeField] private GameObject _image;
+    private Animator _animator;
 
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _inventory = GetComponent<VehicleInventory>();
+        _animator = _image.GetComponent<Animator>();
 
         //VehicleData data = DataManager.Instance.GetVehicleData("Test");
         _stat = new VehicleStat(_data);
@@ -133,7 +138,32 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         _rotationAngle -= _stat.Data.RotationForce * _steeringInput * minSpeedBeforeAllowTuring;
 
+
         _rigidbody2D.MoveRotation(_rotationAngle);
+
+        if (_currentSteering == _steeringInput) return;
+
+        _currentSteering = _steeringInput;
+
+        //애니메이션
+        //좌회전
+        if (_steeringInput == -1)
+        {
+            Debug.Log("좌");
+            _animator.SetTrigger("LeftSteering");
+        }
+        //우회전
+        else if (_steeringInput == 1)
+        {
+            Debug.Log("좌");
+            _animator.SetTrigger("RightSteering");
+        }
+        //전진
+        else
+        {
+            Debug.Log("좌");
+            _animator.SetTrigger("FowardSteering");
+        }
     }
 
     // 차량의 진행방향의 수직방향의 속도를 감소
@@ -158,6 +188,8 @@ public class Vehicle : MonoBehaviour, IDamageable
         }
         float speedRatio = _rigidbody2D.velocity.magnitude / _stat.Data.MaxSpeed;
         _stat.CurrentFuelAmount -= Mathf.Lerp(0, _stat.FUEL_USE_AMOUNT, speedRatio) * Time.fixedDeltaTime;
+
+        
     }
 
     // IDamageable 구현
@@ -173,7 +205,10 @@ public class Vehicle : MonoBehaviour, IDamageable
             Debug.Log("Barrier");
             return;
         }
+
         _stat.CurrentHp -= damage;
+        CollectionManager.Instance.ReceivedDamage += damage;
+
         Debug.Log("Player Damaged, Current HP : " + _stat.CurrentHp);
 
         if(_stat.CurrentHp <= 0)
