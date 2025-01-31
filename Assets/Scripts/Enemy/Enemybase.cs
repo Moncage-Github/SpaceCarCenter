@@ -87,8 +87,6 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 
     private void Excute()
     {
-        Debug.Log("Excute");
-        Debug.Log(_enemyState);
         _enemyState.Update(this);
     }
 
