@@ -6,9 +6,9 @@ using UnityEngine;
 public class VehicleInventory : MonoBehaviour
 {
     // [아이템 코드, 개수]
-    [SerializeField] private SerializableDictionary<int, int> _invetory = new();
+    [SerializeField] private SerializableDictionary<CollectableItemType, int> _invetory = new();
 
-    public void AddItemToInventory(int itemCode)
+    public void AddItemToInventory(CollectableItemType itemCode)
     {
         if (_invetory.ContainsKey(itemCode))
         {
@@ -20,7 +20,7 @@ public class VehicleInventory : MonoBehaviour
         }
     }
 
-    public SerializableDictionary<int, int> GetInventory()
+    public SerializableDictionary<CollectableItemType, int> GetInventory()
     {
 
         return _invetory;

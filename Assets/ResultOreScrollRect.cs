@@ -5,17 +5,15 @@ using UnityEngine.UI;
 
 public class ResultOreScrollRect : MonoBehaviour
 {
-    private ScrollRect _scrollRect;
+    [SerializeField] private ScrollRect _scrollRect;
     [SerializeField] private GameObject _prefab;
 
-    private void Awake()
+    public void AddItem(CollectableItemType itemCode, int count)
     {
-        _scrollRect = GetComponent<ScrollRect>();
-    }
+        var item = Instantiate(_prefab, _scrollRect.content.transform).GetComponent<ResultOreScrollItem>();
 
-    public void AddItem()
-    {
-        var item = Instantiate(_prefab, _scrollRect.content.transform);
-        //item.SetData("±¤¼®1", 10, 1);
+
+
+        item.SetData($"{itemCode.ToString()}", count, 1.5f * count);
     }
 }

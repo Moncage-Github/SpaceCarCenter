@@ -173,7 +173,10 @@ public class Vehicle : MonoBehaviour, IDamageable
             Debug.Log("Barrier");
             return;
         }
+
         _stat.CurrentHp -= damage;
+        CollectionManager.Instance.ReceivedDamage += damage;
+
         Debug.Log("Player Damaged, Current HP : " + _stat.CurrentHp);
 
         if(_stat.CurrentHp <= 0)
