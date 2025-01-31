@@ -18,14 +18,15 @@ public enum CollectableItemType
 
 public class CollectableItem : MapObject
 {
-    [SerializeField] private int _itemCode;
+    [SerializeField] private CollectableItemType _itemType;
     [SerializeField] private string _itemName;
     [SerializeField] private Rigidbody2D _rigidbody;
 
-    public int ItemCode { get => _itemCode; }
+    public CollectableItemType ItemCode { get => _itemType; }
 
-    public void Init()
+    public void Init(CollectableItemType itemCode)
     {
+        _itemType = itemCode;
         ObjectType = MapObjectType.COLLECTABLE;
     }
 

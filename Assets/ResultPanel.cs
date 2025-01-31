@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,15 +8,33 @@ using UnityEngine.UI;
 public class ResultPanel : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _gameOverTypeText;
-    [SerializeField] private ResultOreScrollRect _oreScrollRect;
+
     [SerializeField] private TextMeshProUGUI _timeText;
+    [SerializeField] private TextMeshProUGUI _killCountText;
+    [SerializeField] private TextMeshProUGUI _destroyedMeteorCountText;
+    [SerializeField] private TextMeshProUGUI _collectOreCountText;
+    [SerializeField] private TextMeshProUGUI _inflictedDamageText;
+    [SerializeField] private TextMeshProUGUI _receivedDamageText;
+
+    [SerializeField] private ResultOreScrollRect _oreScrollRect;
 
     public void InitPanel()
     {
         var collectionResult = GameManager.Instance.BeforeCollectionResult;
-        
+
+        SetGameOverText(collectionResult);
+
+        SetInventoryData(collectionResult);
+
+        SetPlayInfos(collectionResult);
+    }
+
+    private void SetGameOverText(CollectionResult? result)
+    {
+        if (!result.HasValue) return;
+
         string message = string.Empty;
-        switch(collectionResult.Value.GameOverType)
+        switch (result.Value.GameOverType)
         {
             case GameOverType.Dead:
                 message = "»ç¸Á";
@@ -28,29 +47,43 @@ public class ResultPanel : MonoBehaviour
                 break;
         }
 
-        SetInventoryData(collectionResult);
-
-        SetTime(collectionResult);
+        _gameOverTypeText.text = message;
     }
 
     private void SetInventoryData(CollectionResult? result)
     {
         if (!result.HasValue) return;
 
-        if (result.Value.InventoryInfo.Count == 0) return; 
+        if (result.Value.InventoryInfo.Count == 0) return;
 
-        foreach (var item in result.Value.InventoryInfo)
+        var sortInventory = result.Value.InventoryInfo.OrderBy(kvp => kvp.Key).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+        foreach (var item in sortInventory)
         {
-            _oreScrollRect.AddItem();
+            _oreScrollRect.AddItem(item.Key, item.Value);
         }
     }
 
-    private void SetTime(CollectionResult? result)
+    private void SetPlayInfos(CollectionResult? result)
     {
-        if (result.HasValue)
-        {
-             _timeText.text = Util.Stopwatch.FormatTimeToMinutesAndSeconds((int)result.Value.GameTime);
+        if (!result.HasValue) return;
+       
+        var info = result.Value;
 
+        _timeText.text = Util.Stopwatch.FormatTimeToMinutesAndSeconds((int)info.GameTime);
+        _killCountText.text = 0.ToString();
+        _destroyedMeteorCountText.text = info.DestroyedMeteorCount.ToString();
+
+        int oreCount = 0;
+        foreach (var count in info.InventoryInfo.Values)
+        {
+            oreCount += count;
         }
+
+        _collectOreCountText.text = oreCount.ToString();
+
+        _inflictedDamageText.text = $"{info.InflictedDamage:N0}";
+        _receivedDamageText.text = $"{info.ReceivedDamage:N0}";
     }
+
 }

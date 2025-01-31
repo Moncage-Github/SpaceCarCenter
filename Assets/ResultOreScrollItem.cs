@@ -9,10 +9,10 @@ public class ResultOreScrollItem : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _count;
     [SerializeField] private TextMeshProUGUI _weight;
 
-    public void SetData(string name, int count, int weight)
+    public void SetData(string name, int count, float weight)
     {
         _name.text = name;
         _count.text = count.ToString();
-        _weight.text = $"{weight}kg";
+        _weight.text = $"{weight:N2}kg";
     }
 }
