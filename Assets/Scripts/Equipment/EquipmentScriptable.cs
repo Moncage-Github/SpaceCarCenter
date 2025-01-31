@@ -40,31 +40,30 @@ public class VehicleInfo
     public int VehicleId;
     public List<VehicleEquipmentInfo> EquipmentPos;
 
-    public VehicleInfo(int first, VehicleEquipmentInfo second)
-    {
-        VehicleId = first;
-        EquipmentPos.Add(second);
-    }
 }
 
 [System.Serializable]
 public class VehicleEquipmentInfo
 {
-    public int VehicleId;
-    public Vector3 EquipmentPos;
+    public int ItemId;
+    public EquipIndexNumber EquipmectPositionType;
+    public Vector3 EquipmentPosition;
 
-    public VehicleEquipmentInfo(int first, Vector3 second)
-    {
-        VehicleId = first;
-        EquipmentPos = second;
-    }
 }
 
 [CreateAssetMenu(fileName = "EquipmentScriptable", menuName = "Data/EquipmentScriptable")]
-public class EquiptmentScriptable : ScriptableObject
+public class EquipmenScriptable : ScriptableObject
 {
+
+    [Header("현재 선택된 차량 ID")]
+    public int CurrentSelectVehicle;
+
+    [Space(10)]
+    [Header("아이템 목록(일반, 장착 중, 잠금)")]
     public List<Pair<Equipment, EquipmentState>> EquipmentData;
 
+    [Space(10)]
+    [Header("특정 차량 ID 및 해당 차량의 아이템 장착 위치와 아이템 ID")]
     //어떤 차량을 선택했는지, 그 차량의 아이템 장착 위치 정보
     public List<VehicleInfo> VehicleInfos;
 

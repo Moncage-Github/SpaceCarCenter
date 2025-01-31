@@ -23,7 +23,7 @@ public class ManagerEquipmentSlot : MonoBehaviour
 
     private void Init()
     {
-        foreach(var equipment in GameManager.Instance.EquipmentData.EquipmentData)
+        foreach(var equipment in GameManager.Instance.EquipmentData.EquipmentData.EquipmentData)
         {
             Debug.Log("equipment 积己");
             GameObject slot = Instantiate(_prefabEquipment);
@@ -34,6 +34,7 @@ public class ManagerEquipmentSlot : MonoBehaviour
             {
                 Equip<EquipIndexNumber, int> result = GameManager.Instance.EquipmentData.TruckEquipData.Find(equip => equip.EquipIndexNumber == equipment.Equipment.EquipIndexNumber);
                 result.EquipmentId = equipment.Equipment.EquipmentId;
+                //TODO:: 抗寇贸府
             }
 
             slot.transform.SetParent(_content.transform);

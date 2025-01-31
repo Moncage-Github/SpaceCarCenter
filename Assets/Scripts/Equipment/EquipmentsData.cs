@@ -50,22 +50,18 @@ public class EquipmentsData
 {
     //Pair, Equip 구조는 EquiptmentScriptable에 저장되어있음.
     private static EquipmentsData _instance = null;
-    public List<Pair<Equipment, EquipmentState>> EquipmentData = new List<Pair<Equipment, EquipmentState>>();
 
-    //TODO:: vehicle의 종류에 따른 처리가 필요
-    //TODO:: Scriptable로 만들어서 EquipmentData처럼 관리해야될거 같다.
-    public List<Equip<EquipIndexNumber, int>> TruckEquipData = new List<Equip<EquipIndexNumber, int>>();
+    public EquipmenScriptable EquipmentScriptable;
 
 
-    public EquipmentsData(EquiptmentScriptable _equiptmentScriptable)
+    public EquipmentsData(EquipmenScriptable _equiptmentScriptable)
     {
-        InitTruck();
         InitEquipmentData(_equiptmentScriptable);
     }
 
-    private void InitEquipmentData(EquiptmentScriptable _equiptmentScriptable)
+    private void InitEquipmentData(EquipmenScriptable _equiptmentScriptable)
     {
-        EquipmentData = _equiptmentScriptable.EquipmentData;
+        EquipmentScriptable = _equiptmentScriptable;
     }
 
     public static EquipmentsData Instance
@@ -80,14 +76,14 @@ public class EquipmentsData
         }
     }
 
-    private void InitTruck()
-    {
-        TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Top, 0));
-        TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Left, 0));
-        TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Right, 0));
-        TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Centor, 0));
-        TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Bottom, 0));
-    }
+    //private void InitTruck()
+    //{
+    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Top, 0));
+    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Left, 0));
+    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Right, 0));
+    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Centor, 0));
+    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Bottom, 0));
+    //}
 
     //TODO:: vehicle 종류에 따른 처리
     public void SetEquip(EquipIndexNumber equipIndexNumber, int equipId, EquipmentState state, int vehicleId = 0)
