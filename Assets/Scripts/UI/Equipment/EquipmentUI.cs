@@ -20,9 +20,12 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     //SetExplain, SetImage를 위해
     [SerializeField] private Text _explainText;
     [SerializeField] private Image _equipmentImage;
-    private int _exquipmentId;
+    private int _equipmentId;
     [SerializeField] private EquipmentState _isState;
     public EquipmentState IsState { get { return _isState; } set { _isState = value; } }
+
+    //현재 차량에 대한 정보
+    //TODO:: 차량 전환 시 바꾸어주어야함.
 
     private void Start()
     {
@@ -83,19 +86,35 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             // UI 오브젝트의 이미지를 가져오는 경우
             Transform objectComponent = raycastResult.gameObject.transform;
             EquipIndex equipIndex = objectComponent.GetComponent<EquipIndex>();
-            
+
+            //raycast중 EquipIndex를 가지고 있으면 - EquipSlot이면
             if (equipIndex != null)
             {
+                //equipSlot에 아이템이 None이 아니면 - 아이템이 들어 있으면
                 if (equipIndex.CurrentEquipmentId != 0)
                 {
-                    EquipmentsData.Instance.SetEquip(equipIndex.EquipNumber, equipIndex.CurrentEquipmentId, EquipmentState.None);
+                    //기존 아이템을 None으로 처리한다 - 아이템을 빼준다.
+                    GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, equipIndex.CurrentEquipmentId, EquipmentState.None, GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle);
                     equipIndex.CurrentEquipment.SetState(EquipmentState.None);
+
+                    //이전에 장착된 장비를 None으로 변경
+                    Pair<Equipment, EquipmentState> prevEquipment = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == equipIndex.CurrentEquipmentId);
+
+                    prevEquipment.State = EquipmentState.None;
+
+                    //TODO:: vehicle 정보는 현재 차량 정보이니 어딘가에 저장해놓기
+                    //현재 매번 찾고 있는데 비효율
+
+
                 }
+
                 SetState(EquipmentState.Equip);
                 equipIndex.CurrentEquipment = this;
 
-                equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, _exquipmentId);
-                GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, _exquipmentId, IsState);
+                equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, _equipmentId);
+
+                //TODO::ㅅㅂ
+                GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, _equipmentId, IsState, GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle);
             }
         }
     }
@@ -124,7 +143,7 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         _explainText.text = explain;
         _equipmentImage.sprite = image;
-        _exquipmentId = exquipmentId;
+        _equipmentId = exquipmentId;
     }
 
     public void SetState(EquipmentState state)

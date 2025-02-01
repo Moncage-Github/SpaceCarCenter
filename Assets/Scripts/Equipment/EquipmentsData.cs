@@ -48,12 +48,9 @@ public enum EquipmentState
 
 public class EquipmentsData
 {
-    //Pair, Equip 구조는 EquiptmentScriptable에 저장되어있음.
-    private static EquipmentsData _instance = null;
-
     public EquipmenScriptable EquipmentScriptable;
 
-
+    public int CurrentVehicleId;
     public EquipmentsData(EquipmenScriptable _equiptmentScriptable)
     {
         InitEquipmentData(_equiptmentScriptable);
@@ -62,18 +59,6 @@ public class EquipmentsData
     private void InitEquipmentData(EquipmenScriptable _equiptmentScriptable)
     {
         EquipmentScriptable = _equiptmentScriptable;
-    }
-
-    public static EquipmentsData Instance
-    {
-        get
-        {
-            if (null == _instance)
-            {
-                return null;
-            }
-            return _instance;
-        }
     }
 
     //private void InitTruck()
@@ -90,20 +75,18 @@ public class EquipmentsData
     {
         Debug.Log(equipIndexNumber.ToString() + equipId.ToString() + vehicleId.ToString());
 
-        //vehicleId로 차량 종류 구분
-        switch (vehicleId)
+        if (state == EquipmentState.Equip)
         {
-            case 0:
-                var result = TruckEquipData.Find(equip => equip.EquipIndexNumber == equipIndexNumber);
-                var equip = EquipmentData.Find(equip => equip.Equipment.EquipmentId == equipId);
+            var vehicle = GameManager.Instance.EquipmentData.EquipmentScriptable.VehicleInfos.Find(vehicle => vehicle.VehicleId == vehicleId);
 
-                equip.Equipment.EquipIndexNumber = result.EquipIndexNumber;
-                result.EquipmentId = equipId;
-                equip.State = state;
-                break;
-            default:
-                break;
+            VehicleEquipmentInfo equipInfo = vehicle.EquipmentPos.Find(position => position.EquipmentPositionType == equipIndexNumber);
+
+            equipInfo.ItemId = equipId;
         }
+
+        var equip = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == equipId);
+
+        equip.State = state;
     }
-    
+
 }
