@@ -6,7 +6,6 @@ using UnityEngine.Events;
 public class InteractionObject : MonoBehaviour
 {
     public UnityEvent InteractionEvent;
-    public bool Test;
 
     private InteractionOutline _outline;
 
