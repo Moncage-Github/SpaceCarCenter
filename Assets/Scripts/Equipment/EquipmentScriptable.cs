@@ -46,7 +46,7 @@ public class VehicleInfo
 public class VehicleEquipmentInfo
 {
     public int ItemId;
-    public EquipIndexNumber EquipmectPositionType;
+    public EquipIndexNumber EquipmentPositionType;
     public Vector3 EquipmentPosition;
 
 }
