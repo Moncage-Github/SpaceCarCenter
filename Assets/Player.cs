@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     private bool _isGround;
     private bool _isDownPressed;
     private bool _isDownJump;
+    [SerializeField] private bool _canInteractionOnlyClosestObject;
 
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpForce;
@@ -41,6 +42,8 @@ public class Player : MonoBehaviour
         _input.PlayerAction.Down.canceled += OnDown;
 
         _input.PlayerAction.Interaction.performed += OnInteraction;
+
+        _input.PlayerAction.Click.performed += Click;
     }
 
     private void OnInteraction(InputAction.CallbackContext context)
@@ -62,6 +65,9 @@ public class Player : MonoBehaviour
         _input.PlayerAction.Down.canceled -= OnDown;
 
         _input.PlayerAction.Interaction.performed -= OnInteraction;
+
+        _input.PlayerAction.Click.performed -= Click;
+
     }
 
     private void OnMove(InputAction.CallbackContext context)
@@ -106,6 +112,25 @@ public class Player : MonoBehaviour
         transform.localPosition = position;
     }
 
+    private void Click(InputAction.CallbackContext context)
+    {
+
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+
+        int layerMask = LayerMask.GetMask("Platform");
+
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
+
+        if(hit.collider == null) return;
+        
+        InteractionObject interaction = hit.collider.gameObject.GetComponent<InteractionObject>();
+        if(interaction == null || interaction.CanInteraction == false) return;
+
+        interaction.InteractionEvent.Invoke();
+        Debug.Log($"Interaction {interaction.name}");
+    }
+
     private bool CheckIsGround()
     {
         if(_rigidbody.velocity.y > 0) return false;
@@ -142,7 +167,8 @@ public class Player : MonoBehaviour
     {
         InteractionObject interactionObject = other.GetComponent<InteractionObject>();
         if (interactionObject == null) return;
-
+        interactionObject.CanInteraction = true;
+        //Debug.Log(other.name);
         // 트리거된 물체 추가
         if (!_detectedObjects.Contains(interactionObject))
         {
@@ -181,12 +207,13 @@ public class Player : MonoBehaviour
 
         else if (_interactionObject != closestObject)
         {
-            _interactionObject.CanInteraction = false;
+            if(_canInteractionOnlyClosestObject) 
+                _interactionObject.CanInteraction = false;
             _interactionObject = closestObject;
         }
 
-        _interactionObject.CanInteraction = true;
-        
+        if (_canInteractionOnlyClosestObject)
+            _interactionObject.CanInteraction = true;
     }
 
     public InteractionObject GetClosestObject()
