@@ -21,7 +21,7 @@ public class PlayerEquipment : MonoBehaviour
         //    if (data.EquipmentId == 0)
         //        continue;
         //    Pair<Equipment, EquipmentState> result = GameManager.Instance.EquipmentData.EquipmentData.Find(pair => pair.Equipment.EquipmentId == data.EquipmentId);
-            
+
         //    CurrentEquip[data.EquipIndexNumber] = result.Equipment.Prefab;
 
         //    //TODO:: 장착 위치에 따른 장비의 생성 위치 정해야함.
