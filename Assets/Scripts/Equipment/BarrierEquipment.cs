@@ -16,6 +16,8 @@ public class BarrierEquipment : BaseEquipment
         Vehicle.Barrier = _defenseCount;
         Vehicle.IsTakeDamage += Defense;
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        transform.localPosition = new Vector3(0, -0.65f, 0);
     }
     // Update is called once per frame
     void Update()

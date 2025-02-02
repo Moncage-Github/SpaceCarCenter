@@ -51,6 +51,7 @@ public class EquipmentsData
     public EquipmenScriptable EquipmentScriptable;
 
     public int CurrentVehicleId;
+    public VehicleInfo CurrentVehicle;
     public EquipmentsData(EquipmenScriptable _equiptmentScriptable)
     {
         InitEquipmentData(_equiptmentScriptable);

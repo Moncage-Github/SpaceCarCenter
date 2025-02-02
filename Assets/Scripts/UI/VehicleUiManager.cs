@@ -1,10 +1,12 @@
                 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class VehicleUiManager : MonoBehaviour
 {
+    //TODO:: 왠지 VegicleInfos를 바로 넣어도 될거 같음
     [SerializeField] private List<GameObject> _vehicleInfo = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
@@ -59,6 +61,14 @@ public class VehicleUiManager : MonoBehaviour
                 if (info != null)
                 {
                     child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 200, 0);
+
+                    var equip = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == info.ItemId);
+
+                    if(equip != null)
+                    {
+                        child.transform.GetChild(0).GetComponent<RawImage>().texture = equip.Equipment.ImageLog.texture;
+                    }
+                    
                 }
             }
         }

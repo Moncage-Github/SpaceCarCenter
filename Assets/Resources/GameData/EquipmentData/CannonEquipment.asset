@@ -16,5 +16,6 @@ MonoBehaviour:
   Explan: "\uB192\uC740 \uACF5\uACA9\uB825\uACFC \uBE60\uB978 \uC18D\uB3C4, \uB290\uB9B0
     \uC7A5\uC804"
   EquipmentId: 32
-  ImageLog: {fileID: 21300000, guid: 9a7dd256f0495eb4d97cd403223ca653, type: 3}
+  ImageLog: {fileID: 21300000, guid: 8cb2afa150502e740b4028c25ccb7a56, type: 3}
   Prefab: {fileID: 4341668182974840739, guid: f0ceaa43448af454f89ccec10cb7f902, type: 3}
+  EquipIndexNumber: 0
