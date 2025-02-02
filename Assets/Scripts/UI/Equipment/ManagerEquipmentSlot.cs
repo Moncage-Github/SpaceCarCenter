@@ -39,6 +39,8 @@ public class ManagerEquipmentSlot : MonoBehaviour
 
         VehicleInfo vehicleInfo = GameManager.Instance.EquipmentData.EquipmentScriptable.VehicleInfos.Find(equip => equip.VehicleId == GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle);
 
+        GameManager.Instance.EquipmentData.CurrentVehicle = vehicleInfo;
+
         foreach (var equipment in GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData)
         {
             Debug.Log("equipment »ý¼º");
