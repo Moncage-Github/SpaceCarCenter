@@ -23,7 +23,7 @@ public class InteractionObject : MonoBehaviour
         }
     }
 
-    public void Interaction()
+    virtual public void Interaction()
     {
         if (_canInteraction)
         {
@@ -31,7 +31,7 @@ public class InteractionObject : MonoBehaviour
         }
     }
 
-    public void Awake()
+    public virtual void Awake()
     {
         _outline = GetComponent<InteractionOutline>();
     }
