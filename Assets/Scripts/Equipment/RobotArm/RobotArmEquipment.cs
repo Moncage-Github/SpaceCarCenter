@@ -164,6 +164,8 @@ public class RobotArmEquipment : BaseEquipment
             {
                 Vehicle.GetComponent<VehicleInventory>().AddItemToInventory(item.ItemCode);
                 Target.Remove(_currentTarget);
+                Vehicle.GetRegen?.Invoke();
+
                 Destroy(_currentTarget);
                 _isCatch = false;
             }

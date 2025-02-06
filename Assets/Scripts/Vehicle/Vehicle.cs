@@ -41,6 +41,11 @@ public class Vehicle : MonoBehaviour, IDamageable
     [SerializeField] private GameObject _image;
     private Animator _animator;
 
+    //아이템 획득 시 작동
+    public delegate void GetHealthRegen();
+    public GetHealthRegen GetRegen;
+    public float RegenValue = 0;
+
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -215,6 +220,12 @@ public class Vehicle : MonoBehaviour, IDamageable
         {
             CollectionManager.Instance.GameOver(GameOverType.Dead);
         }
+    }
+
+    public void HealthRegen()
+    {
+        _stat.CurrentHp += RegenValue;
+        Debug.Log("체력회복" + _stat.CurrentHp.ToString());
     }
 
     private void OnTriggerEnter2D(Collider2D other)
