@@ -23,7 +23,11 @@ public class NetEquipment : BaseEquipment
         if (collision.CompareTag("item"))
         {
             Debug.Log("그물 걸림");
-            _inventory.AddItemToInventory(collision.GetComponent<CollectableItem>().ItemCode);
+            CollectableItemType itemCode = collision.GetComponent<CollectableItem>().ItemCode;
+            _inventory.AddItemToInventory(itemCode);
+
+            Vehicle.GetRegen?.Invoke();
+
             Destroy(collision.gameObject);
         }
     }

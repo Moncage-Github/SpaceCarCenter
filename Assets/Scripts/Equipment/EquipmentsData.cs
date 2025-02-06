@@ -48,16 +48,16 @@ public enum EquipmentState
 
 public class EquipmentsData
 {
-    public EquipmenScriptable EquipmentScriptable;
+    public EquipmentScriptable EquipmentScriptable;
 
     public int CurrentVehicleId;
     public VehicleInfo CurrentVehicle;
-    public EquipmentsData(EquipmenScriptable _equiptmentScriptable)
+    public EquipmentsData(EquipmentScriptable _equiptmentScriptable)
     {
         InitEquipmentData(_equiptmentScriptable);
     }
 
-    private void InitEquipmentData(EquipmenScriptable _equiptmentScriptable)
+    private void InitEquipmentData(EquipmentScriptable _equiptmentScriptable)
     {
         EquipmentScriptable = _equiptmentScriptable;
     }

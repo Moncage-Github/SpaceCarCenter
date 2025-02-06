@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
 
     private SceneLoader _sceneLoader;
 
-    [SerializeField] EquipmenScriptable _equiptmentScriptable;
+    [SerializeField] EquipmentScriptable _equiptmentScriptable;
 
     private GameState _beforeState;
     public GameState BeforeState { get => _beforeState; }
