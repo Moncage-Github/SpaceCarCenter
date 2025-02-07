@@ -64,9 +64,18 @@ public partial class @LobbyPlayerInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Click"",
+                    ""name"": ""LeftClick"",
                     ""type"": ""Button"",
                     ""id"": ""bb7a3e0f-5145-481e-ab9f-ce45a97cd06c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""90155d4d-59b2-40e7-9ba5-1ae8e0c11bc3"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -257,7 +266,18 @@ public partial class @LobbyPlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Click"",
+                    ""action"": ""LeftClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eb4dac5d-1c72-40e0-bb91-6d1b294c2b57"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightClick"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -284,7 +304,8 @@ public partial class @LobbyPlayerInput: IInputActionCollection2, IDisposable
         m_PlayerAction_Jump = m_PlayerAction.FindAction("Jump", throwIfNotFound: true);
         m_PlayerAction_Down = m_PlayerAction.FindAction("Down", throwIfNotFound: true);
         m_PlayerAction_Interaction = m_PlayerAction.FindAction("Interaction", throwIfNotFound: true);
-        m_PlayerAction_Click = m_PlayerAction.FindAction("Click", throwIfNotFound: true);
+        m_PlayerAction_LeftClick = m_PlayerAction.FindAction("LeftClick", throwIfNotFound: true);
+        m_PlayerAction_RightClick = m_PlayerAction.FindAction("RightClick", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -350,7 +371,8 @@ public partial class @LobbyPlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerAction_Jump;
     private readonly InputAction m_PlayerAction_Down;
     private readonly InputAction m_PlayerAction_Interaction;
-    private readonly InputAction m_PlayerAction_Click;
+    private readonly InputAction m_PlayerAction_LeftClick;
+    private readonly InputAction m_PlayerAction_RightClick;
     public struct PlayerActionActions
     {
         private @LobbyPlayerInput m_Wrapper;
@@ -359,7 +381,8 @@ public partial class @LobbyPlayerInput: IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerAction_Jump;
         public InputAction @Down => m_Wrapper.m_PlayerAction_Down;
         public InputAction @Interaction => m_Wrapper.m_PlayerAction_Interaction;
-        public InputAction @Click => m_Wrapper.m_PlayerAction_Click;
+        public InputAction @LeftClick => m_Wrapper.m_PlayerAction_LeftClick;
+        public InputAction @RightClick => m_Wrapper.m_PlayerAction_RightClick;
         public InputActionMap Get() { return m_Wrapper.m_PlayerAction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -381,9 +404,12 @@ public partial class @LobbyPlayerInput: IInputActionCollection2, IDisposable
             @Interaction.started += instance.OnInteraction;
             @Interaction.performed += instance.OnInteraction;
             @Interaction.canceled += instance.OnInteraction;
-            @Click.started += instance.OnClick;
-            @Click.performed += instance.OnClick;
-            @Click.canceled += instance.OnClick;
+            @LeftClick.started += instance.OnLeftClick;
+            @LeftClick.performed += instance.OnLeftClick;
+            @LeftClick.canceled += instance.OnLeftClick;
+            @RightClick.started += instance.OnRightClick;
+            @RightClick.performed += instance.OnRightClick;
+            @RightClick.canceled += instance.OnRightClick;
         }
 
         private void UnregisterCallbacks(IPlayerActionActions instance)
@@ -400,9 +426,12 @@ public partial class @LobbyPlayerInput: IInputActionCollection2, IDisposable
             @Interaction.started -= instance.OnInteraction;
             @Interaction.performed -= instance.OnInteraction;
             @Interaction.canceled -= instance.OnInteraction;
-            @Click.started -= instance.OnClick;
-            @Click.performed -= instance.OnClick;
-            @Click.canceled -= instance.OnClick;
+            @LeftClick.started -= instance.OnLeftClick;
+            @LeftClick.performed -= instance.OnLeftClick;
+            @LeftClick.canceled -= instance.OnLeftClick;
+            @RightClick.started -= instance.OnRightClick;
+            @RightClick.performed -= instance.OnRightClick;
+            @RightClick.canceled -= instance.OnRightClick;
         }
 
         public void RemoveCallbacks(IPlayerActionActions instance)
@@ -435,6 +464,7 @@ public partial class @LobbyPlayerInput: IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnDown(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
-        void OnClick(InputAction.CallbackContext context);
+        void OnLeftClick(InputAction.CallbackContext context);
+        void OnRightClick(InputAction.CallbackContext context);
     }
 }
