@@ -6,7 +6,11 @@ using static UnityEngine.GraphicsBuffer;
 
 public class TuningParts : InteractionObject
 {
-    public enum State { Dropped, PickUped, Composed };
+    public enum State { Dropped, PickUped, Composed, ScrewComposed };
+    public bool NeedsScrewTightening;
+
+    private readonly int _maxScrewTightenCount = 4;
+    private int _curScrewTightenCount = 0;
 
     public ETuningPartsType Type;
 
@@ -24,6 +28,19 @@ public class TuningParts : InteractionObject
         base.Awake();
         _renderer = GetComponent<SpriteRenderer>();
         _rigidbody = GetComponent<Rigidbody2D>();
+    }
+
+    public void Init()
+    {
+        if(NeedsScrewTightening)
+        {
+            CurState = State.ScrewComposed;
+            _curScrewTightenCount = _maxScrewTightenCount;
+        }
+        else 
+        {
+            CurState = State.Composed;
+        }
     }
 
     public void Drop()
@@ -55,6 +72,28 @@ public class TuningParts : InteractionObject
         CurState = State.Composed;
         SetSlot(slot);
     }
+
+    public void TryTightenScrew()
+    {
+        CurState = State.ScrewComposed;
+
+        _curScrewTightenCount++;
+        if(_curScrewTightenCount >= _maxScrewTightenCount)
+        {
+            _curScrewTightenCount = _maxScrewTightenCount;
+            Debug.Log("Screw Tighten Finish");
+        }
+    }
+
+    public void UnSrcew()
+    {
+        _curScrewTightenCount--;
+        if(_curScrewTightenCount <= 0)
+        {
+            CurState = State.Composed;
+        }
+    }
+
 
     private void SetSlot(TuningSlot slot)
     {

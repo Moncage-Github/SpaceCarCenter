@@ -32,6 +32,7 @@ public class TuningSlot : InteractionObject
         if (_parts == null) return;
 
         TryCompositionParts(_parts);
+        _parts.Init();
     }
 
     public bool IsEmpty() => _parts == null;

@@ -52,7 +52,7 @@ public class TuningPlayer : Player
         return true;
     }
 
-    public override void Click(InputAction.CallbackContext context)
+    public override void LeftClick(InputAction.CallbackContext context)
     {
         Vector2 mousePos = Mouse.current.position.ReadValue();
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
@@ -116,17 +116,47 @@ public class TuningPlayer : Player
                 {
                     Debug.Log("Try DeComposite Parts");
                     interactionParts.DeCompositeFromSlot();
+                    PickupParts(interactionParts);
                 }
                 //¹Ù´Ú¿¡ ÀÖ´Â ÆÄÃ÷ ÁÝ±â
                 else if (interactionParts.CurState == TuningParts.State.Dropped)
                 {
                     Debug.Log("Try PickUp Parts");
                     interactionParts.Pickup();
+                    PickupParts(interactionParts);
                 }
+                else if (interactionParts.CurState == TuningParts.State.ScrewComposed)
+                {
+                    Debug.Log("Unscrewing");
+                    interactionParts.UnSrcew();
 
-                PickupParts(interactionParts);
+                }
             }
         }
         return;
+    }
+
+    public override void RightClick(InputAction.CallbackContext context)
+    {
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+
+        int layerMask = LayerMask.GetMask("TuningInteraction");
+
+        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
+
+        if (hit.collider == null) return;
+
+        float dist = Vector2.Distance(transform.position, hit.collider.transform.position);
+        if (dist > 3.0f) return;
+
+        TuningParts parts = hit.collider.gameObject.GetComponent<TuningParts>();
+        if (parts == null) return;
+        if (parts.NeedsScrewTightening == false) return;
+        if (parts.CurState == TuningParts.State.Composed || parts.CurState == TuningParts.State.ScrewComposed)
+        {
+            Debug.Log("Try TightenScew");
+            parts.TryTightenScrew();
+        }
     }
 }

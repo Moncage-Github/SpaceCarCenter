@@ -43,16 +43,10 @@ public class Player : MonoBehaviour
 
         _input.PlayerAction.Interaction.performed += OnInteraction;
 
-        _input.PlayerAction.Click.performed += Click;
+        _input.PlayerAction.LeftClick.performed += LeftClick;
+        _input.PlayerAction.RightClick.performed += RightClick;
     }
 
-    private void OnInteraction(InputAction.CallbackContext context)
-    {
-        if (context.performed == false) return;
-        if (_interactionObject == null) return;
-
-        _interactionObject.Interaction();
-    }
 
     void OnDisable()
     {
@@ -66,9 +60,18 @@ public class Player : MonoBehaviour
 
         _input.PlayerAction.Interaction.performed -= OnInteraction;
 
-        _input.PlayerAction.Click.performed -= Click;
-
+        _input.PlayerAction.LeftClick.performed -= LeftClick;
+        _input.PlayerAction.RightClick.performed -= RightClick;
     }
+
+    private void OnInteraction(InputAction.CallbackContext context)
+    {
+        if (context.performed == false) return;
+        if (_interactionObject == null) return;
+
+        _interactionObject.Interaction();
+    }
+
 
     private void OnMove(InputAction.CallbackContext context)
     {
@@ -112,7 +115,7 @@ public class Player : MonoBehaviour
         transform.localPosition = position;
     }
 
-    virtual public void Click(InputAction.CallbackContext context)
+    virtual public void LeftClick(InputAction.CallbackContext context)
     {
         Vector2 mousePos = Mouse.current.position.ReadValue();
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
@@ -130,6 +133,11 @@ public class Player : MonoBehaviour
         Debug.Log($"Interaction {interaction.name}");
 
         return;
+    }
+
+    public virtual void RightClick(InputAction.CallbackContext context)
+    {
+
     }
 
     private bool CheckIsGround()
