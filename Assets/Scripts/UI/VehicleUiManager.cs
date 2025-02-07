@@ -60,15 +60,27 @@ public class VehicleUiManager : MonoBehaviour
 
                 if (info != null)
                 {
-                    child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 200, 0);
+                    child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 150, 0);
 
-                    //TODO:: 이미지 크기를 받아와서 UIObject 크기 맞게 조절
+                    //TODO:: 마스크를 제거해야될거 같음.
 
                     var equip = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == info.ItemId);
 
+
+                    //TODO:: 크기 바뀌는 것도 포함해 함수화, 마스크의 alpha 값 1로 설정
                     if(equip != null)
                     {
-                        child.transform.GetChild(0).GetComponent<RawImage>().texture = equip.Equipment.ImageLog.texture;
+                        Transform rawImage = child.transform.GetChild(0);
+                        rawImage.GetComponent<RawImage>().texture = equip.Equipment.ImageLog.texture;
+
+                        child.transform.GetComponent<RectTransform>().sizeDelta = new Vector3(equip.Equipment.ImageLog.rect.width * 0.07f, equip.Equipment.ImageLog.rect.height * 0.07f);
+
+                        Image image = child.transform.GetComponent<Image>();
+                        Color color = image.color;
+                        color.a = 0x000001 / 255.0f;
+                        image.color = color;
+
+                        rawImage.GetComponent<RectTransform>().sizeDelta = new Vector3(equip.Equipment.ImageLog.rect.width * 0.07f, equip.Equipment.ImageLog.rect.height * 0.07f);
                     }
                     
                 }
