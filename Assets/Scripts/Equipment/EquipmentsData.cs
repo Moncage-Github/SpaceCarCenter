@@ -62,16 +62,6 @@ public class EquipmentsData
         EquipmentScriptable = _equiptmentScriptable;
     }
 
-    //private void InitTruck()
-    //{
-    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Top, 0));
-    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Left, 0));
-    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Right, 0));
-    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Centor, 0));
-    //    TruckEquipData.Add(new Equip<EquipIndexNumber, int>(EquipIndexNumber.Bottom, 0));
-    //}
-
-    //TODO:: vehicle 종류에 따른 처리
     public void SetEquip(EquipIndexNumber equipIndexNumber, int equipId, EquipmentState state, int vehicleId = 0)
     {
         Debug.Log(equipIndexNumber.ToString() + equipId.ToString() + vehicleId.ToString());

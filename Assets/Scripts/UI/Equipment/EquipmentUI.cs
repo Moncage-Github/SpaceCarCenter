@@ -25,7 +25,6 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     public EquipmentState IsState { get { return _isState; } set { _isState = value; } }
 
     //현재 차량에 대한 정보
-    //TODO:: 차량 전환 시 바꾸어주어야함.
 
     private void Start()
     {
@@ -113,7 +112,6 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
                 equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, _equipmentId);
 
-                //TODO::ㅅㅂ
                 GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, _equipmentId, IsState, GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle);
             }
         }
