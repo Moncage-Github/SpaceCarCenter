@@ -51,7 +51,7 @@ public class VehicleUiManager : MonoBehaviour
         VehicleInfo vehicleInfo = GameManager.Instance.EquipmentData.EquipmentScriptable.VehicleInfos.Find(equip => equip.VehicleId == vehicleId);
 
 
-        //EquipIndex를 VehicleInfos에 맞춰서 배치해준다. 비율은 X : 100, Y : 200
+        //EquipIndex를 VehicleInfos에 맞춰서 배치해준다. 배율은 X : 100, Y : 200
         foreach (Transform child in _vehicleInfo[vehicleId].transform)
         {
             if (child.GetComponent<EquipIndex>())
@@ -61,6 +61,8 @@ public class VehicleUiManager : MonoBehaviour
                 if (info != null)
                 {
                     child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 200, 0);
+
+                    //TODO:: 이미지 크기를 받아와서 UIObject 크기 맞게 조절
 
                     var equip = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == info.ItemId);
 

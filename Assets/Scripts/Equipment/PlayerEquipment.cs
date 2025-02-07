@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
-    //TODO:: 다른 vehicle일 경우 어떻게 처리할지
     [SerializeField] public Dictionary<EquipIndexNumber, GameObject> CurrentEquip = new Dictionary<EquipIndexNumber, GameObject>();
 
     private Vehicle _vehicle;
