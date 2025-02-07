@@ -18,12 +18,12 @@ public class Player : MonoBehaviour
     private bool _isDownJump;
     [SerializeField] private bool _canInteractionOnlyClosestObject;
 
-    [SerializeField] private float _speed;
-    [SerializeField] private float _jumpForce;
+    [SerializeField] protected float Speed;
+    [SerializeField] protected float JumpForce;
 
     private List<InteractionObject> _detectedObjects = new List<InteractionObject>();
     private InteractionObject _interactionObject;
-    private void Awake()
+    virtual public void Awake()
     {
         _input = new LobbyPlayerInput();
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -43,16 +43,10 @@ public class Player : MonoBehaviour
 
         _input.PlayerAction.Interaction.performed += OnInteraction;
 
-        _input.PlayerAction.Click.performed += Click;
+        _input.PlayerAction.LeftClick.performed += LeftClick;
+        _input.PlayerAction.RightClick.performed += RightClick;
     }
 
-    private void OnInteraction(InputAction.CallbackContext context)
-    {
-        if (context.performed == false) return;
-        if (_interactionObject == null) return;
-
-        _interactionObject.Interaction();
-    }
 
     void OnDisable()
     {
@@ -66,9 +60,18 @@ public class Player : MonoBehaviour
 
         _input.PlayerAction.Interaction.performed -= OnInteraction;
 
-        _input.PlayerAction.Click.performed -= Click;
-
+        _input.PlayerAction.LeftClick.performed -= LeftClick;
+        _input.PlayerAction.RightClick.performed -= RightClick;
     }
+
+    private void OnInteraction(InputAction.CallbackContext context)
+    {
+        if (context.performed == false) return;
+        if (_interactionObject == null) return;
+
+        _interactionObject.Interaction();
+    }
+
 
     private void OnMove(InputAction.CallbackContext context)
     {
@@ -101,20 +104,19 @@ public class Player : MonoBehaviour
         }
         else
         {
-            _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, _jumpForce);
+            _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, JumpForce);
         }
     }
     private void Move(float value)
     {
         Vector3 position = transform.localPosition;
-        position.x += value * _speed * Time.deltaTime;
+        position.x += value * Speed * Time.deltaTime;
 
         transform.localPosition = position;
     }
 
-    private void Click(InputAction.CallbackContext context)
+    virtual public void LeftClick(InputAction.CallbackContext context)
     {
-
         Vector2 mousePos = Mouse.current.position.ReadValue();
         mousePos = Camera.main.ScreenToWorldPoint(mousePos);
 
@@ -127,8 +129,15 @@ public class Player : MonoBehaviour
         InteractionObject interaction = hit.collider.gameObject.GetComponent<InteractionObject>();
         if(interaction == null || interaction.CanInteraction == false) return;
 
-        interaction.InteractionEvent.Invoke();
+        interaction.Interaction();
         Debug.Log($"Interaction {interaction.name}");
+
+        return;
+    }
+
+    public virtual void RightClick(InputAction.CallbackContext context)
+    {
+
     }
 
     private bool CheckIsGround()
@@ -156,7 +165,7 @@ public class Player : MonoBehaviour
         collider.enabled = false;
         _isDownJump = true;
 
-        _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, -_jumpForce / 2.0f);
+        _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, -JumpForce / 2.0f);
 
         yield return new WaitForSeconds(0.2f);
 

@@ -15,5 +15,6 @@ MonoBehaviour:
   Name: "\uADF8\uBB3C"
   Explan: "\uC544\uC774\uD15C \uC218\uC9D1 \uADF8\uBB3C"
   EquipmentId: 21
-  ImageLog: {fileID: 21300000, guid: a0ac3a4bb6471474e903deb92d56a510, type: 3}
+  ImageLog: {fileID: 21300000, guid: 1630165af8aec7a4ab2688d3f6148e24, type: 3}
   Prefab: {fileID: 8514779396591603534, guid: ce38c33abcf7da5449cfd921a9e3e755, type: 3}
+  EquipIndexNumber: 0

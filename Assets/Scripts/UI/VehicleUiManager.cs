@@ -1,10 +1,12 @@
                 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class VehicleUiManager : MonoBehaviour
 {
+    //TODO:: 왠지 VegicleInfos를 바로 넣어도 될거 같음
     [SerializeField] private List<GameObject> _vehicleInfo = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
@@ -49,7 +51,7 @@ public class VehicleUiManager : MonoBehaviour
         VehicleInfo vehicleInfo = GameManager.Instance.EquipmentData.EquipmentScriptable.VehicleInfos.Find(equip => equip.VehicleId == vehicleId);
 
 
-        //EquipIndex를 VehicleInfos에 맞춰서 배치해준다. 비율은 X : 100, Y : 200
+        //EquipIndex를 VehicleInfos에 맞춰서 배치해준다. 배율은 X : 100, Y : 200
         foreach (Transform child in _vehicleInfo[vehicleId].transform)
         {
             if (child.GetComponent<EquipIndex>())
@@ -59,6 +61,16 @@ public class VehicleUiManager : MonoBehaviour
                 if (info != null)
                 {
                     child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 200, 0);
+
+                    //TODO:: 이미지 크기를 받아와서 UIObject 크기 맞게 조절
+
+                    var equip = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == info.ItemId);
+
+                    if(equip != null)
+                    {
+                        child.transform.GetChild(0).GetComponent<RawImage>().texture = equip.Equipment.ImageLog.texture;
+                    }
+                    
                 }
             }
         }

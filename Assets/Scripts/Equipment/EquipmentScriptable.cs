@@ -52,7 +52,7 @@ public class VehicleEquipmentInfo
 }
 
 [CreateAssetMenu(fileName = "EquipmentScriptable", menuName = "Data/EquipmentScriptable")]
-public class EquipmenScriptable : ScriptableObject
+public class EquipmentScriptable : ScriptableObject
 {
 
     [Header("현재 선택된 차량 ID")]
