@@ -19,6 +19,8 @@ public class TuningParts : InteractionObject
 
     private TuningSlot _slot;
 
+    [SerializeField] private GameObject _screw;
+
     //States
     public State CurState;
 
@@ -91,6 +93,9 @@ public class TuningParts : InteractionObject
         if(_curScrewTightenCount <= 0)
         {
             CurState = State.Composed;
+            GameObject obj = Instantiate(_screw);
+            obj.transform.position = transform.position;
+            obj.transform.parent = transform.parent;
         }
     }
 

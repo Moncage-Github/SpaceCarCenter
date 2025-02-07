@@ -7,7 +7,7 @@ public class TuningPlayer : Player
 {
     public static TuningPlayer Instance;
 
-    private TuningParts _parts;
+    private TuningParts _back;
     private bool _isItemPickUped = false;
 
     private float _defaultSpeed;
@@ -33,9 +33,9 @@ public class TuningPlayer : Player
         _isItemPickUped = true;
         Speed *= 0.5f;
         JumpForce *= 0.8f;
-        _parts = parts;
-        _parts.transform.parent = transform;
-        _parts.transform.localPosition = Vector3.zero;
+        _back = parts;
+        _back.transform.parent = transform;
+        _back.transform.localPosition = Vector3.zero;
 
         return true;
     }
@@ -47,7 +47,7 @@ public class TuningPlayer : Player
         Speed = _defaultSpeed;
         JumpForce = _defaultJumpforce;
 
-        _parts = null;  
+        _back = null;  
 
         return true;
     }
@@ -67,7 +67,7 @@ public class TuningPlayer : Player
             if(_isItemPickUped == true)
             {
                 Debug.Log("Drop Parts");
-                _parts.Drop();
+                _back.Drop();
                 DropItem();
                 return;
             }
@@ -88,19 +88,20 @@ public class TuningPlayer : Player
                 var slot = interaction as TuningSlot;
                 Debug.Log("Try Composite Parts");
                 if (!slot.IsEmpty())
+       
                 {
                     Debug.Log("The parts is already installed");
                     return;
                 }
 
-                bool result = slot.TryCompositionParts(_parts);
+                bool result = slot.TryCompositionParts(_back);
                 if (!result) return;
                 DropItem();
             }
             else
             {
                 Debug.Log("Drop Parts");
-                _parts.Drop();
+                _back.Drop();
                 DropItem();
                 return;
             }
@@ -153,10 +154,21 @@ public class TuningPlayer : Player
         TuningParts parts = hit.collider.gameObject.GetComponent<TuningParts>();
         if (parts == null) return;
         if (parts.NeedsScrewTightening == false) return;
-        if (parts.CurState == TuningParts.State.Composed || parts.CurState == TuningParts.State.ScrewComposed)
+        if (parts.CurState == TuningParts.State.Composed)
         {
+            if (_back.Type != ETuningPartsType.Screw || _back == null) return;
+            Debug.Log("Try TightenScew");
+            Destroy(_back.gameObject);
+            DropItem();
+            parts.TryTightenScrew();
+            return;
+        }
+        else if(parts.CurState == TuningParts.State.ScrewComposed)
+        {
+            if (_back != null) return;
             Debug.Log("Try TightenScew");
             parts.TryTightenScrew();
+            return;
         }
     }
 }
