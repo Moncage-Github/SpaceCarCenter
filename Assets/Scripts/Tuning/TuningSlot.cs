@@ -14,6 +14,7 @@ public enum ETuningPartsType
     Wheel,
     Custom,
     Exhaust,
+    Screw,
 }
 
 public class TuningSlot : InteractionObject

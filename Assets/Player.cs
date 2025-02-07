@@ -230,8 +230,15 @@ public class Player : MonoBehaviour
         InteractionObject closestObject = null;
         float closestDistance = Mathf.Infinity;
 
+        List<InteractionObject> reserveDelete = new();
+
         foreach (var obj in _detectedObjects)
         {
+            if (obj == null)
+            {
+                reserveDelete.Add(obj);
+                continue;
+            }
             float distance = Vector2.Distance(transform.position, obj.transform.position);
             if (distance < closestDistance)
             {
@@ -240,6 +247,11 @@ public class Player : MonoBehaviour
             }
         }
 
+        foreach (var obj in reserveDelete)
+        {
+            _detectedObjects.Remove(obj);
+        }
+        reserveDelete.Clear();
         return closestObject;
     }
 }
