@@ -971,12 +971,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 155155830}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7b0125921b90bd449e466aa127f5deb, type: 3}
+  m_Script: {fileID: 11500000, guid: 57850db19d793024d9235166cd0727d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canInteractionOnlyClosestObject: 0
-  _speed: 8
-  _jumpForce: 16
+  _rigidbody: {fileID: 155155831}
+  Speed: 8
+  JumpForce: 22
 --- !u!58 &155155836
 CircleCollider2D:
   m_ObjectHideFlags: 0

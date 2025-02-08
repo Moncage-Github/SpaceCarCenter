@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.XR;
 using static UnityEngine.GraphicsBuffer;
 
-public class TuningParts : InteractionObject
+public class TuningParts : MonoBehaviour
 {
     public enum State { Dropped, PickUped, Composed, ScrewComposed };
     public bool NeedsScrewTightening;
@@ -25,9 +25,8 @@ public class TuningParts : InteractionObject
     public State CurState;
 
     // Start is called before the first frame update
-    public override void Awake()
+    public void Awake()
     {
-        base.Awake();
         _renderer = GetComponent<SpriteRenderer>();
         _rigidbody = GetComponent<Rigidbody2D>();
     }

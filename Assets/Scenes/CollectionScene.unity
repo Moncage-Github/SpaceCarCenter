@@ -562,6 +562,7 @@ MonoBehaviour:
   _data: {fileID: 11400000, guid: 10e1177b0a21fe445b9444fcecd2f1f4, type: 2}
   _barrier: 0
   _image: {fileID: 1303638831}
+  RegenValue: 0
 --- !u!114 &432207890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -821,7 +822,7 @@ MonoBehaviour:
       - m_Target: {fileID: 583170063}
         m_TargetAssemblyTypeName: CollectionManager, Assembly-CSharp
         m_MethodName: GameOver
-        m_Mode: 1
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
