@@ -20,9 +20,10 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     //SetExplain, SetImage를 위해
     [SerializeField] private Text _explainText;
     [SerializeField] private Image _equipmentImage;
-    private int _equipmentId;
+    public int EquipmentId;
     [SerializeField] private EquipmentState _isState;
     public EquipmentState IsState { get { return _isState; } set { _isState = value; } }
+
 
     //현재 차량에 대한 정보
 
@@ -94,7 +95,8 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 {
                     //기존 아이템을 None으로 처리한다 - 아이템을 빼준다.
                     GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, equipIndex.CurrentEquipmentId, EquipmentState.None, GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle);
-                    equipIndex.CurrentEquipment.SetState(EquipmentState.None);
+                    
+                    equipIndex.CurrentEquipment.IsState = EquipmentState.None;
 
                     //이전에 장착된 장비를 None으로 변경
                     Pair<Equipment, EquipmentState> prevEquipment = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == equipIndex.CurrentEquipmentId);
@@ -110,9 +112,11 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 SetState(EquipmentState.Equip);
                 equipIndex.CurrentEquipment = this;
 
-                equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, _equipmentId);
+                equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, EquipmentId);
 
-                GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, _equipmentId, IsState, GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle);
+                GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, EquipmentId, IsState, GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle);
+
+                ManagerEquipmentSlot.Instance.VehicleUiManager.EquipIndexInit();
             }
         }
     }
@@ -141,7 +145,7 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         _explainText.text = explain;
         _equipmentImage.sprite = image;
-        _equipmentId = exquipmentId;
+        EquipmentId = exquipmentId;
     }
 
     public void SetState(EquipmentState state)

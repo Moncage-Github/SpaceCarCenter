@@ -47,7 +47,7 @@ public class PlayerEquipment : MonoBehaviour
                 CurrentEquip.Add(EquipIndexNumber.Top, null);
                 CurrentEquip.Add(EquipIndexNumber.Left, null);
                 CurrentEquip.Add(EquipIndexNumber.Right, null);
-                CurrentEquip.Add(EquipIndexNumber.Centor, null);
+                CurrentEquip.Add(EquipIndexNumber.Center, null);
                 CurrentEquip.Add(EquipIndexNumber.Bottom, null);
                 break;
             default:

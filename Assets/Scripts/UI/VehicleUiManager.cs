@@ -6,8 +6,34 @@ using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class VehicleUiManager : MonoBehaviour
 {
+    public static VehicleUiManager Instance { get; private set; }
+
     //TODO:: 왠지 VegicleInfos를 바로 넣어도 될거 같음
     [SerializeField] private List<GameObject> _vehicleInfo = new List<GameObject>();
+    public List<GameObject> VehicleInfo { get { return _vehicleInfo; } }
+
+    private void Awake()
+    {
+        // 기존 인스턴스가 있으면 새로 생성된 객체를 파괴
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+    }
+
+    private void OnDestroy()
+    {
+        // 인스턴스 해제
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,24 +80,23 @@ public class VehicleUiManager : MonoBehaviour
         //EquipIndex를 VehicleInfos에 맞춰서 배치해준다. 배율은 X : 100, Y : 200
         foreach (Transform child in _vehicleInfo[vehicleId].transform)
         {
-            if (child.GetComponent<EquipIndex>())
+            EquipIndex childIndex = child.GetComponent<EquipIndex>();
+            if (childIndex)
             {
-                VehicleEquipmentInfo info = vehicleInfo.EquipmentPos.Find(info => info.EquipmentPositionType == child.GetComponent<EquipIndex>().EquipNumber);
+                VehicleEquipmentInfo info = vehicleInfo.EquipmentPos.Find(info => info.EquipmentPositionType == childIndex.EquipNumber);
 
                 if (info != null)
                 {
-                    child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 150, 0);
+                    child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 175, 0);
 
-                    //TODO:: 마스크를 제거해야될거 같음.
 
                     var equip = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == info.ItemId);
 
 
-                    //TODO:: 크기 바뀌는 것도 포함해 함수화, 마스크의 alpha 값 1로 설정
-                    if(equip != null)
+                    if (equip != null)
                     {
                         Transform rawImage = child.transform.GetChild(0);
-                        rawImage.GetComponent<RawImage>().texture = equip.Equipment.ImageLog.texture;
+                        rawImage.GetComponent<Image>().sprite = equip.Equipment.ImageLog;
 
                         child.transform.GetComponent<RectTransform>().sizeDelta = new Vector3(equip.Equipment.ImageLog.rect.width * 0.07f, equip.Equipment.ImageLog.rect.height * 0.07f);
 
@@ -81,6 +106,10 @@ public class VehicleUiManager : MonoBehaviour
                         image.color = color;
 
                         rawImage.GetComponent<RectTransform>().sizeDelta = new Vector3(equip.Equipment.ImageLog.rect.width * 0.07f, equip.Equipment.ImageLog.rect.height * 0.07f);
+
+                        image.enabled = false;
+
+                        //TODO:: 아이템 별로 필요한 옵션 적용
                     }
                     
                 }
@@ -88,4 +117,6 @@ public class VehicleUiManager : MonoBehaviour
         }
 
     }
+
+
 }
