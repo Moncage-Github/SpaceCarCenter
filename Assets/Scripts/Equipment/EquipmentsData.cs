@@ -27,7 +27,7 @@ public enum EquipIndexNumber
     Top,
     Left,
     Right,
-    Centor,
+    Center,
     Bottom
     
 }
