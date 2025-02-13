@@ -10,9 +10,11 @@ namespace Tuning
         private readonly int _maxScrewTightenCount = 4;
         private int _curScrewTightenCount = 0;
 
-        public PartsType Type;
+        [SerializeField] private PartsType _type;
+        public PartsType Type { get => _type; private set => _type = value; }
 
         private PartsSlot _slot;
+
 
         private int _quality;
         public int Quality
@@ -66,10 +68,10 @@ namespace Tuning
             SetSlot(null);
             Pickup();
         }
-
+            
         public void CompositeToSlot(PartsSlot slot)
         {
-            Renderer.sortingOrder = 0;
+            Renderer.sortingOrder = slot.LayerOrder - 1;
             CurState = State.Composed;
             SetSlot(slot);
         }

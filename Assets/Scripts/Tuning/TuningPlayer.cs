@@ -233,26 +233,32 @@ namespace Tuning
 
             int layerMask = LayerMask.GetMask("TuningInteraction");
 
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
+            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
 
-            // 등에 파츠 있는 파츠 떨어뜨리기
-            if (hit.collider == null)
+            if(hits.Length == 0)
             {
                 if (!_isItemPickUped) return;
                 if (_inven.CurTool.ToolType != TuningTool.Type.Hand) return;
                 DropParts();
-                return;
+                return; 
             }
 
-            float dist = Vector2.Distance(transform.position, hit.collider.transform.position);
-            if (dist > 5.0f) return;
+            float dist = Vector2.Distance(transform.position, mousePos);
+            if (dist > 4.0f) return;
 
             if (_isItemPickUped)
             {
-                PartsSlot slot = hit.collider.GetComponent<PartsSlot>();
-                if (slot == null) return;
-                CompositionParts(slot);
-                return;
+                foreach (RaycastHit2D hit in hits)
+                {
+                    var slot = hit.collider.GetComponent<PartsSlot>();
+
+                    if (slot == null) continue;
+
+                    if (CompositionParts(slot))
+                    {
+                        return;
+                    }
+                }
             }
 
             var toolType = _inven.CurTool.ToolType;
@@ -264,50 +270,61 @@ namespace Tuning
 
             if(toolType == TuningTool.Type.Hand)
             {
-                // 등에 아무것도 없고 파츠 클릭
-                Parts parts = hit.collider.GetComponent<Parts>();
-                if (parts == null)
+                foreach (RaycastHit2D hit in hits)
                 {
-                    Screw screw = hit.collider.GetComponent<Screw>();
-                    if (screw == null) return;
-                    PickupParts(screw);
-                    return;
-                }
+                    if(_isItemPickUped) break; 
 
-                //조립되어 있는 파츠 분리 후 줍기
-                if (parts.CurState == Parts.State.Composed)
-                {
-                    DecompositionParts(parts);
-                    return;
-                }
-                //바닥에 있는 파츠 줍기
-                else if (parts.CurState == Parts.State.Dropped)
-                {
-                    PickupParts(parts);
-                    return; 
+                    // 등에 아무것도 없고 파츠 클릭
+                    Parts parts = hit.collider.GetComponent<Parts>();
+                    if (parts == null)
+                    {
+                        Screw screw = hit.collider.GetComponent<Screw>();
+                        if (screw == null) continue;
+                        PickupParts(screw);
+                        return;
+                    }
+
+                    //조립되어 있는 파츠 분리 후 줍기
+                    if (parts.CurState == Parts.State.Composed)
+                    {
+                        DecompositionParts(parts);
+                        return;
+                    }
+                    //바닥에 있는 파츠 줍기
+                    else if (parts.CurState == Parts.State.Dropped)
+                    {
+                        PickupParts(parts);
+                        return;
+                    }
                 }
             }
 
             else if (_inven.CurTool.ToolType == TuningTool.Type.Driver)
             {
-                Parts parts = hit.collider.GetComponent<Parts>();
-                if(parts == null) return;
-                if (parts.CurState == Parts.State.ScrewComposed)
+                foreach (RaycastHit2D hit in hits)
                 {
-                    UnSrewParts(parts);
+                    Parts parts = hit.collider.GetComponent<Parts>();
+                    if (parts == null) continue;
+                    if (parts.CurState == Parts.State.ScrewComposed)
+                    {
+                        UnSrewParts(parts);
 
-                    return;
+                        return;
+                    }
                 }
             }
             else if (_inven.CurTool.ToolType == TuningTool.Type.Hammer)
             {
-                Parts parts = hit.collider.GetComponent<Parts>();
-                if (parts == null) return;
-
-                if (parts.Quality < 100)
+                foreach (RaycastHit2D hit in hits)
                 {
-                    StartHammerGame(parts);
-                    return;
+                    Parts parts = hit.collider.GetComponent<Parts>();
+                    if (parts == null) return;
+
+                    if (parts.Quality < 100)
+                    {
+                        StartHammerGame(parts);
+                        return;
+                    }
                 }
             }
         }
@@ -323,8 +340,8 @@ namespace Tuning
 
             if (hit.collider == null) return;
 
-            float dist = Vector2.Distance(transform.position, hit.collider.transform.position);
-            if (dist > 3.0f) return;
+            float dist = Vector2.Distance(transform.position, mousePos);
+            if (dist > 4.0f) return;
 
             if (_inven.CurTool.ToolType == TuningTool.Type.Driver)
             {
@@ -355,27 +372,28 @@ namespace Tuning
             EquipParts(parts);
         }
         private void DropParts()
-        {
+        {       
             Debug.Log("Drop Parts");
             _back.Drop();
             UnequipParts();
         }
 
-        private void CompositionParts(PartsSlot slot)
+        private bool CompositionParts(PartsSlot slot)
         {
             if (!slot.IsEmpty())
             {
                 Debug.Log("The parts is already installed");
-                return;
+                return false;
             }
 
             var parts = _back as Parts;
-            if (parts == null) return;
+            if (parts == null) return false;
 
             bool isSuccess = slot.TryCompositionParts(parts);
-            if (!isSuccess) return;
+            if (!isSuccess) return false;
 
-            UnequipParts();
+            return UnequipParts();
+
         }
 
         private void DecompositionParts(Parts parts)

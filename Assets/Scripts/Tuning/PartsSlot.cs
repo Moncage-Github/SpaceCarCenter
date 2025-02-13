@@ -23,6 +23,8 @@ namespace Tuning
 
         private Collider2D _collider;
 
+        [SerializeField] private int _layerOrder;
+        public int LayerOrder { get => _layerOrder; }
 
         private void Start()
         {
@@ -43,10 +45,11 @@ namespace Tuning
                 Debug.Log("Mismatched Part Types");
                 return false;
             }
+            _parts = parts;
             _collider.enabled = false;
-            parts.transform.SetParent(transform.parent, true);
-            parts.transform.localPosition = Vector3.zero;
-            parts.CompositeToSlot(this);
+            _parts.transform.SetParent(transform.parent, true);
+            _parts.transform.localPosition = Vector3.zero;
+            _parts.CompositeToSlot(this);
             return true;
         }
 
