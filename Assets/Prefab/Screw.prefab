@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2707435514606976115}
   - component: {fileID: 1434385881131803338}
   - component: {fileID: 4855630590043375920}
-  - component: {fileID: 7160887070438961205}
+  - component: {fileID: -8715081061101013348}
   m_Layer: 12
   m_Name: Screw
   m_TagString: Untagged
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2730109526279967129}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.75, y: 7.5, z: 90}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -149,7 +149,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &7160887070438961205
+--- !u!114 &-8715081061101013348
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -158,13 +158,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2730109526279967129}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fad78306509bc124a9c2be30f6813707, type: 3}
+  m_Script: {fileID: 11500000, guid: f4b5fd00ac40b8a46a76e53486f553c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InteractionEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  NeedsScrewTightening: 0
-  Type: 9
-  _screw: {fileID: 0}
-  CurState: 0
