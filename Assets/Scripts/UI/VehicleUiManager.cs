@@ -1,5 +1,7 @@
-                using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
@@ -10,6 +12,7 @@ public class VehicleUiManager : MonoBehaviour
 
     //TODO:: 왠지 VegicleInfos를 바로 넣어도 될거 같음
     [SerializeField] private List<GameObject> _vehicleInfo = new List<GameObject>();
+    [SerializeField] private Transform _imageTransform;
     public List<GameObject> VehicleInfo { get { return _vehicleInfo; } }
 
     private void Awake()
@@ -85,6 +88,26 @@ public class VehicleUiManager : MonoBehaviour
             {
                 VehicleEquipmentInfo info = vehicleInfo.EquipmentPos.Find(info => info.EquipmentPositionType == childIndex.EquipNumber);
 
+
+                //TODO:: 장비가 장착되지 않은 슬롯에 대한 처리
+                if (childIndex.CurrentEquipmentId == 0)
+                {
+                    
+                    child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 175, 0);
+
+                    Transform image = child.transform.GetChild(0);
+                    image.GetComponent<Image>().enabled = false;
+
+                    Image temp = child.transform.GetComponent<Image>();
+                    Color color = temp.color;
+                    color.a = 255.0f;
+                    temp.color = color;
+
+                    child.transform.GetComponent<RectTransform>().sizeDelta = new Vector3(50.0f, 50.0f);
+                    //return;
+                }
+
+
                 if (info != null)
                 {
                     child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 175, 0);
@@ -95,21 +118,23 @@ public class VehicleUiManager : MonoBehaviour
 
                     if (equip != null)
                     {
-                        Transform rawImage = child.transform.GetChild(0);
-                        rawImage.GetComponent<Image>().sprite = equip.Equipment.ImageLog;
+                        Transform image = child.transform.GetChild(0);
+                        image.GetComponent<Image>().enabled = true;
+                        image.GetComponent<Image>().sprite = equip.Equipment.ImageLog;
+                        image.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 
                         child.transform.GetComponent<RectTransform>().sizeDelta = new Vector3(equip.Equipment.ImageLog.rect.width * 0.07f, equip.Equipment.ImageLog.rect.height * 0.07f);
 
-                        Image image = child.transform.GetComponent<Image>();
-                        Color color = image.color;
+                        Image temp = child.transform.GetComponent<Image>();
+                        Color color = temp.color;
                         color.a = 0x000001 / 255.0f;
-                        image.color = color;
+                        temp.color = color;
 
-                        rawImage.GetComponent<RectTransform>().sizeDelta = new Vector3(equip.Equipment.ImageLog.rect.width * 0.07f, equip.Equipment.ImageLog.rect.height * 0.07f);
+                        image.GetComponent<RectTransform>().sizeDelta = new Vector3(equip.Equipment.ImageLog.rect.width * 0.07f, equip.Equipment.ImageLog.rect.height * 0.07f);
 
-                        image.enabled = false;
+                        //image.enabled = false;
 
-                        //TODO:: 아이템 별로 필요한 옵션 적용
+                        SettingItemImage(equip.Equipment.EquipmentId, image);
                     }
                     
                 }
@@ -119,4 +144,57 @@ public class VehicleUiManager : MonoBehaviour
     }
 
 
+    private void SettingItemImage(int itemId, Transform image)
+    {
+        RectTransform imageRect = image.GetComponent<RectTransform>();
+        
+
+        switch (itemId)
+        {
+            case 10:
+                imageRect.sizeDelta = new Vector2(image.GetComponent<RectTransform>().sizeDelta.x * 2f, image.GetComponent<RectTransform>().sizeDelta.y * 2f);
+
+                imageRect.position = _imageTransform.GetComponent<RectTransform>().position;
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    /*
+     장착된 장비가 어떤 장비인지 구분하기 위한 코드
+
+    ----------------------------------------------
+    None : 0
+    부스트 : 1, 조향 : 2
+    방어막 : 10, 체젠 : 11
+    기본 : 20, 그물 : 21, 드릴 : 22, 확장 :23
+    총 : 30, 작살 : 31, 대포 : 32, 레이저 : 33
+    ----------------------------------------------
+
+    장착 슬롯의 번호
+    ----------------------------------------------
+    Enum으로 구분
+    ----------------------------------------------
+     */
+
+    public void OnReset()
+    {
+        foreach (Transform child in _vehicleInfo[GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle].transform)
+        {
+            EquipIndex childIndex = child.GetComponent<EquipIndex>();
+            if (childIndex)
+            {
+                GameManager.Instance.EquipmentData.SetEquip(childIndex.EquipNumber, childIndex.CurrentEquipmentId, EquipmentState.None, GameManager.Instance.EquipmentData.CurrentVehicleId);
+
+                ManagerEquipmentSlot.Instance.SlotReset();
+
+                childIndex.CurrentEquipmentId = 0;
+                childIndex.CurrentEquipment = null;
+            }
+        }
+
+        EquipIndexInit();
+    }
 }

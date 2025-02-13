@@ -112,7 +112,7 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                 SetState(EquipmentState.Equip);
                 equipIndex.CurrentEquipment = this;
 
-                equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<RawImage>(), _tempObject, EquipmentId);
+                equipIndex.SetImage(objectComponent.GetChild(0).GetComponent<Image>(), _tempObject, EquipmentId);
 
                 GameManager.Instance.EquipmentData.SetEquip(equipIndex.EquipNumber, EquipmentId, IsState, GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle);
 
@@ -123,8 +123,12 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
-        //_objectColor = _objectItem.color;
-        //_objectItem.color = _objectItem.color - new Color32(0, 0, 0, 50);
+        // 마우스 우클릭인지 확인
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            Debug.Log("마우스 우클릭 발생!");
+            
+        }
     }
 
     void IPointerUpHandler.OnPointerUp(PointerEventData eventData)
@@ -170,6 +174,11 @@ public class EquipmentUI : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             default:
                 break;
         }
+    }
+
+    public void RemoveEquip()
+    {
+
     }
 
 }

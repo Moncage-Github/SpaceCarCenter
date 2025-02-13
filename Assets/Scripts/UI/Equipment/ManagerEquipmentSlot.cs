@@ -36,6 +36,8 @@ public class ManagerEquipmentSlot : MonoBehaviour
 
     [SerializeField] private GameObject _prefabEquipment;
     [SerializeField] private Transform _content;
+    [SerializeField] private List<EquipmentUI> _slotPool;
+    public List<EquipmentUI> SlotPool { get { return _slotPool; } } 
 
     // Start is called before the first frame update
     void Start()
@@ -44,14 +46,10 @@ public class ManagerEquipmentSlot : MonoBehaviour
         Init();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void Init()
     {
+        _slotPool = new List<EquipmentUI>();
+
         foreach (Transform child in _content.transform)
         {
             Destroy(child.gameObject);
@@ -66,6 +64,8 @@ public class ManagerEquipmentSlot : MonoBehaviour
             
             GameObject slot = Instantiate(_prefabEquipment);
             EquipmentUI equipmentUi = slot.GetComponent<EquipmentUI>();
+
+            _slotPool.Add(equipmentUi);
 
             equipmentUi.SetEquipment(equipment.Equipment.Explan, equipment.Equipment.ImageLog, equipment.Equipment.EquipmentId);
 
@@ -110,11 +110,20 @@ public class ManagerEquipmentSlot : MonoBehaviour
             EquipIndex childIndex = child.GetComponent<EquipIndex>();
             if (childIndex)
             {
-                //TODO:: equipmentMaskCenter의 currentEquipmentId가 0으로 들어옴.
-                //값을 한개씩 이상한 값(0)을 들고 옴
+
                 if(childIndex.CurrentEquipmentId == slot.EquipmentId)
                     childIndex.CurrentEquipment = slot;
             }
         }
+    }
+
+    public void SlotReset()
+    {
+        foreach (var slot in _slotPool)
+        {
+            if(slot.IsState != EquipmentState.Lock)
+                slot.SetState(EquipmentState.None);
+        }
+        
     }
 }

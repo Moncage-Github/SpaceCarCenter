@@ -15,19 +15,19 @@ MonoBehaviour:
   CurrentSelectVehicle: 0
   EquipmentData:
   - Equipment: {fileID: 11400000, guid: b9279aa9c99285642b04c274746ea054, type: 2}
-    State: 2
+    State: 0
   - Equipment: {fileID: 11400000, guid: 6676efbd8ca595349a6764d50ac1a5cc, type: 2}
     State: 0
   - Equipment: {fileID: 11400000, guid: 02e2206fa20f17d47820c41c00f01bdd, type: 2}
-    State: 2
+    State: 0
   - Equipment: {fileID: 11400000, guid: 6b2e79241e9bfcd4b8afb1ef4456eb23, type: 2}
-    State: 2
+    State: 0
   - Equipment: {fileID: 11400000, guid: d99d90fc381ed96478c6a7ef92cb1a8d, type: 2}
-    State: 2
+    State: 0
   - Equipment: {fileID: 11400000, guid: 97583f7d33a0d73419d9202f8f9c6a54, type: 2}
     State: 0
   - Equipment: {fileID: 11400000, guid: f75f96bcfa913074f8b98c9e88fd0ca0, type: 2}
-    State: 2
+    State: 0
   - Equipment: {fileID: 11400000, guid: 993567ec7dde271448c5596d562386c6, type: 2}
     State: 0
   - Equipment: {fileID: 11400000, guid: 1c752683b7a4d1f4fbae0f36c844f429, type: 2}
@@ -38,19 +38,19 @@ MonoBehaviour:
     - ItemId: 0
       EquipmentPositionType: 0
       EquipmentPosition: {x: 0, y: -1.2, z: 0}
-    - ItemId: 32
+    - ItemId: 0
       EquipmentPositionType: 1
       EquipmentPosition: {x: 0, y: 0, z: 0}
-    - ItemId: 31
+    - ItemId: 0
       EquipmentPositionType: 2
       EquipmentPosition: {x: -0.6, y: -1.1, z: 0}
-    - ItemId: 1
+    - ItemId: 0
       EquipmentPositionType: 3
       EquipmentPosition: {x: 0.6, y: -1.1, z: 0}
-    - ItemId: 10
+    - ItemId: 0
       EquipmentPositionType: 4
       EquipmentPosition: {x: 0, y: -0.9, z: 0}
-    - ItemId: 21
+    - ItemId: 0
       EquipmentPositionType: 5
       EquipmentPosition: {x: 0, y: -1.2, z: 0}
   - VehicleId: 1
