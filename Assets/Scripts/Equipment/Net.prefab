@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1602555641927866726}
   - component: {fileID: 5355673812582781684}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 8888829444496309969}
   - component: {fileID: 4904434313808762024}
   - component: {fileID: -1685790279841873874}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Net
   m_TagString: Untagged
   m_Icon: {fileID: 0}

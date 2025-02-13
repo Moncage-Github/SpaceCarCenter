@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7259154572429006156}
   - component: {fileID: 5840272779577138973}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Iamge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8794853030421952603}
   - component: {fileID: 6073496597381137673}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: HealthRegen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
