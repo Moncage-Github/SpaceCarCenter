@@ -2,9 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class EquipIndex : MonoBehaviour
+public class EquipIndex : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField] 
     private             EquipIndexNumber _equipNumber;
@@ -41,9 +42,36 @@ public class EquipIndex : MonoBehaviour
 
     }
 
-    public void SetImage(RawImage rawImage, GameObject TempObject, int ExquipmentId)
+    public void SetImage(Image Image, GameObject TempObject, int ExquipmentId)
     {
-        rawImage.texture = TempObject.GetComponent<Image>().sprite.texture;
+        Image.sprite = TempObject.GetComponent<Image>().sprite;
         _currentEquipmentId = ExquipmentId;
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        // 마우스 우클릭인지 확인
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            Debug.Log("마우스 우클릭 발생!");
+
+            //장착 정보에서 제거
+            GameManager.Instance.EquipmentData.SetEquip(EquipNumber, CurrentEquipmentId, EquipmentState.None, GameManager.Instance.EquipmentData.CurrentVehicleId);
+
+            //TODO:: EquipmentData에서 None으로 설정 : id 값을 이용
+            Pair<Equipment, EquipmentState> prevEquipment = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == CurrentEquipmentId);
+
+            prevEquipment.State = EquipmentState.None;
+
+            //TODO:: EquipmentUI에서 Noned로 설정 : 매니저equipslot에 pool을 이용
+            EquipmentUI equipmentUI = ManagerEquipmentSlot.Instance.SlotPool.Find(equip => equip.EquipmentId == CurrentEquipmentId);
+
+            equipmentUI.SetState(EquipmentState.None);
+
+            CurrentEquipmentId = 0;
+            CurrentEquipment = null;
+
+            VehicleUiManager.Instance.EquipIndexInit();
+        }
     }
 }

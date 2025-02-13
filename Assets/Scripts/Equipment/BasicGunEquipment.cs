@@ -7,6 +7,7 @@ public class BasicGunEquipment : BaseEquipment
     [SerializeField] private float _reloadTime;
     private float _timer;
     private bool _reloading = false;
+    [SerializeField] private float _damage;
 
     [SerializeField] private GameObject _bulletPrefab;
 
@@ -47,7 +48,7 @@ public class BasicGunEquipment : BaseEquipment
     private void Shooting(Transform target)
     {
         GameObject bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Init(transform, target, Vehicle.transform, 4.0f);
+        bullet.GetComponent<Bullet>().Init(transform, target, Vehicle.transform, _damage);
     }
 
     private Transform GetCloseEnemy()
