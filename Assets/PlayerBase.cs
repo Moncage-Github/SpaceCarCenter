@@ -10,6 +10,7 @@ public abstract class PlayerBase : MonoBehaviour
     private float _moveValue;
 
     [SerializeField] private Rigidbody2D _rigidbody;
+    [SerializeField] private Collider2D _collider;
 
     private bool _isGround;
     private bool _isDownPressed;
@@ -18,9 +19,12 @@ public abstract class PlayerBase : MonoBehaviour
     [SerializeField] protected float Speed;
     [SerializeField] protected float JumpForce;
 
+    private bool _canMove = true;
+    public bool CanMove { get => _canMove; protected set => _canMove = value; }
+
     protected void OnMove(InputAction.CallbackContext context)
     {
-        // ¿‘∑¬∞™¿ª ¿–æÓº≠ moveValueø° ¿˙¿Â
+        // ÏûÖÎ†•Í∞íÏùÑ ÏùΩÏñ¥ÏÑú moveValueÏóê Ï†ÄÏû•
         _moveValue = context.ReadValue<float>();
     }
 
@@ -36,6 +40,7 @@ public abstract class PlayerBase : MonoBehaviour
 
     private void Jump()
     {
+        if (!CanMove) return;
         if (!_isGround || _isDownJump) return;
 
         if (_isDownPressed)
@@ -44,7 +49,7 @@ public abstract class PlayerBase : MonoBehaviour
             if (rayHit.collider == null) return; 
             if(rayHit.collider.GetComponent<PlatformEffector2D>() != null)
             {
-                StartCoroutine(DownJump(rayHit.collider));
+                StartCoroutine(DownJump());
             }
         }
         else
@@ -52,8 +57,9 @@ public abstract class PlayerBase : MonoBehaviour
             _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, JumpForce);
         }
     }
-    private void Move(float value)
+    public virtual void Move(float value)
     {
+        if (!CanMove) return;
         Vector3 position = transform.localPosition;
         position.x += value * Speed * Time.deltaTime;
 
@@ -79,16 +85,16 @@ public abstract class PlayerBase : MonoBehaviour
 
     }
 
-    private IEnumerator DownJump(Collider2D collider)
+    private IEnumerator DownJump()
     {
-        collider.enabled = false;
+        _collider.enabled = false;
         _isDownJump = true;
 
         _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, -JumpForce / 2.0f);
 
         yield return new WaitForSeconds(0.2f);
 
-        collider.enabled = true;
+        _collider.enabled = true;
     }
 
 }

@@ -975,6 +975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 155155831}
+  _collider: {fileID: 155155832}
   Speed: 8
   JumpForce: 22
 --- !u!58 &155155836

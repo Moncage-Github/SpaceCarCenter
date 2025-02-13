@@ -293,6 +293,17 @@ public partial class @TuningPlayerInput: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""cd6933e6-dd11-451c-88d6-23c364351123"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inven"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""1D Axis"",
                     ""id"": ""204960b6-3b7a-4b97-84b3-fc9c9a6c38cd"",
                     ""path"": ""1DAxis"",
