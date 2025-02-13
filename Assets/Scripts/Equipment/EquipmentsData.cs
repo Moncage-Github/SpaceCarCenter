@@ -27,7 +27,7 @@ public enum EquipIndexNumber
     Top,
     Left,
     Right,
-    Centor,
+    Center,
     Bottom
     
 }
@@ -64,15 +64,25 @@ public class EquipmentsData
 
     public void SetEquip(EquipIndexNumber equipIndexNumber, int equipId, EquipmentState state, int vehicleId = 0)
     {
+        if(equipId == 0)
+        {
+            Debug.Log(equipIndexNumber.ToString() + ("는 비어있음"));
+            return;
+        }
+
         Debug.Log(equipIndexNumber.ToString() + equipId.ToString() + vehicleId.ToString());
+
+        var vehicle = GameManager.Instance.EquipmentData.EquipmentScriptable.VehicleInfos.Find(vehicle => vehicle.VehicleId == vehicleId);
+
+        VehicleEquipmentInfo equipInfo = vehicle.EquipmentPos.Find(position => position.EquipmentPositionType == equipIndexNumber);
 
         if (state == EquipmentState.Equip)
         {
-            var vehicle = GameManager.Instance.EquipmentData.EquipmentScriptable.VehicleInfos.Find(vehicle => vehicle.VehicleId == vehicleId);
-
-            VehicleEquipmentInfo equipInfo = vehicle.EquipmentPos.Find(position => position.EquipmentPositionType == equipIndexNumber);
-
             equipInfo.ItemId = equipId;
+        }
+        else if (state == EquipmentState.None)
+        {
+            equipInfo.ItemId = 0;
         }
 
         var equip = GameManager.Instance.EquipmentData.EquipmentScriptable.EquipmentData.Find(equip => equip.Equipment.EquipmentId == equipId);

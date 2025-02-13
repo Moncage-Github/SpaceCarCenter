@@ -132,6 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Vehicle: {fileID: 0}
   _reloadTime: 1
+  _damage: 4
   _bulletPrefab: {fileID: 2891142839322404738, guid: be5c66b04fd0c8b43be5d621e3be0802, type: 3}
 --- !u!58 &8662564599313321896
 CircleCollider2D:
