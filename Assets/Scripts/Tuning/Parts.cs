@@ -2,8 +2,25 @@ using UnityEngine;
 
 namespace Tuning
 {
+    public class PartsStat 
+    {
+        public int Stat1;
+        public int Stat2;
+        public int Stat3;
+        public int Stat4;
+
+        public PartsStat(int stat1, int stat2, int stat3, int stat4)
+        {
+            Stat1 = stat1;
+            Stat2 = stat2;
+            Stat3 = stat3;
+            Stat4 = stat4;
+        }
+    }
+
     public class Parts : PartsBase
     {
+        public readonly PartsStat Stat = new(10, 5, 3, 4);
         public enum State { Dropped, PickUped, Composed, ScrewComposed };
         public bool NeedsScrewTightening;
 
@@ -31,11 +48,13 @@ namespace Tuning
         //States
         public State CurState;
 
+        private void Start()
+        {
+            Quality = Random.Range(0, 80);
+        }
 
         public void Init()
         {
-            Quality = Random.Range(0, 80);
-
             if (NeedsScrewTightening)
             {
                 CurState = State.ScrewComposed;

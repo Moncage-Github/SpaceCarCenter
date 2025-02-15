@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Tuning
@@ -15,7 +16,8 @@ namespace Tuning
         Exhaust,
     }
 
-    public class PartsSlot : InteractionObject
+    [Serializable]
+    public class PartsSlot : MonoBehaviour
     {
         [SerializeField] private PartsType _type;
 
@@ -58,5 +60,7 @@ namespace Tuning
             _parts = null;
             _collider.enabled = true;
         }
+
+
     }
 }

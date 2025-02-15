@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -20,20 +21,6 @@ namespace Tuning
         private float _defaultSpeed;
         private float _defaultJumpforce;
 
-        private int _invenNum = 1;
-        public int InvenNum
-        {
-            get => _invenNum;
-            set
-            {
-                int id = value;
-                if (Mathf.Clamp(id, 1, (int)TuningTool.Type.None) != value) return;
-                _invenNum = id;
-                ChangeTool(id);
-                //Debug.Log(InvenNum);
-            }
-        }
-
         [Space(3.0f)]
         [Header("Inventory")]
         [SerializeField] private ToolInventory _inven;
@@ -48,7 +35,7 @@ namespace Tuning
             _input = new TuningPlayerInput();
             _defaultJumpforce = JumpForce;
             _defaultSpeed = Speed;
-            _inven.ChangeTool(TuningTool.Type.Hand);
+            //_inven.ChangeTool(TuningTool.Type.Hand);
 
             _cameraX = Camera.main.orthographicSize * Screen.width / Screen.height - transform.lossyScale.x / 2;
             }
@@ -90,13 +77,13 @@ namespace Tuning
             Instance = null;
         }
 
-
         public override void Move(float value)
         {
             if (!CanMove) return;
             Vector3 position = transform.localPosition;
             position.x += value * Speed * Time.deltaTime;
             position.x = Mathf.Clamp(position.x, -_cameraX, _cameraX);
+
 
             transform.localPosition = position;
         }
@@ -129,18 +116,13 @@ namespace Tuning
         }
 
 
-        public void ChangeTool(int invenNum)
-        {
-            TuningTool.Type type = (TuningTool.Type)invenNum;
-            _inven.ChangeTool(type);
-        }
-
         public void OnInvenKey(InputAction.CallbackContext context)
         {
             string name =context.control.name;
+
             if (int.TryParse(name, out int invenNum))
             {
-                InvenNum = invenNum;
+                _inven.SlotNum = invenNum;
             }
             else
             {
@@ -148,7 +130,7 @@ namespace Tuning
                 if (Mathf.Abs(value) == 120)
                 {
                     value = Mathf.Clamp(value / 120, -1, 1);
-                    InvenNum += value;
+                    _inven.SlotNum += value;
                 }
             }
         }
@@ -238,7 +220,7 @@ namespace Tuning
             if(hits.Length == 0)
             {
                 if (!_isItemPickUped) return;
-                if (_inven.CurTool.ToolType != TuningTool.Type.Hand) return;
+                if (_inven.CurTool != ToolType.Hand) return;
                 DropParts();
                 return; 
             }
@@ -261,14 +243,8 @@ namespace Tuning
                 }
             }
 
-            var toolType = _inven.CurTool.ToolType;
-            if(toolType == TuningTool.Type.None)
-            {
-                Debug.LogError("Invalid Tool Type");
-                return;
-            }
-
-            if(toolType == TuningTool.Type.Hand)
+            var toolType = _inven.CurTool;
+            if(toolType == ToolType.Hand)
             {
                 foreach (RaycastHit2D hit in hits)
                 {
@@ -299,7 +275,7 @@ namespace Tuning
                 }
             }
 
-            else if (_inven.CurTool.ToolType == TuningTool.Type.Driver)
+            else if (_inven.CurTool == ToolType.ScrewDriver)
             {
                 foreach (RaycastHit2D hit in hits)
                 {
@@ -313,7 +289,7 @@ namespace Tuning
                     }
                 }
             }
-            else if (_inven.CurTool.ToolType == TuningTool.Type.Hammer)
+            else if (_inven.CurTool == ToolType.Hammer)
             {
                 foreach (RaycastHit2D hit in hits)
                 {
@@ -343,7 +319,7 @@ namespace Tuning
             float dist = Vector2.Distance(transform.position, mousePos);
             if (dist > 4.0f) return;
 
-            if (_inven.CurTool.ToolType == TuningTool.Type.Driver)
+            if (_inven.CurTool == ToolType.ScrewDriver)
             {
                 Parts parts = hit.collider.gameObject.GetComponent<Parts>();
 
