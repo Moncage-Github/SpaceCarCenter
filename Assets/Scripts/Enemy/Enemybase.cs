@@ -16,7 +16,7 @@ public enum State
 
 public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 {
-    private State _currentState = State.None;
+    protected State _currentState = State.None;
 
     [SerializeField] private float _currentHp;   
     [SerializeField] private float _health;   
@@ -56,6 +56,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     [SerializeField] private float _bulletDamage;
 
     // Start is called before the first frame update
+
+    private void Start()
+    {
+        Init();
+    }
+
     public virtual void Init()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -70,7 +76,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
         EnemyAttack = new EnemyAttack(this, _bullet);
 
         _currentHp = _health;
-}
+    }
 
     // Update is called once per frame
     protected virtual void Update()
@@ -85,7 +91,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
         Excute();
     }
 
-    private void Excute()
+    protected void Excute()
     {
         _enemyState.Update(this);
     }

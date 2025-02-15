@@ -28,7 +28,7 @@ public class PlayerEquipment : MonoBehaviour
             CurrentEquip[data.EquipmentPositionType] = result.Equipment.Prefab;
 
             //각 부위별 장비 위치에 장비 생성
-            Vector3 position = new Vector3(data.EquipmentPosition.x, data.EquipmentPosition.y * 2, 0);
+            Vector3 position = new Vector3(data.EquipmentPosition.x, data.EquipmentPosition.y * 1.5f, 0);
             GameObject equipmentPrefab = Instantiate(result.Equipment.Prefab, position, Quaternion.identity);
 
             //해당 장비를 Player의 자식 관계로 설정

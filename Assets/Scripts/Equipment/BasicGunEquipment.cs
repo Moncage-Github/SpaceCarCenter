@@ -8,6 +8,8 @@ public class BasicGunEquipment : BaseEquipment
     private float _timer;
     private bool _reloading = false;
     [SerializeField] private float _damage;
+    [SerializeField] private float _recoilForce;
+    [SerializeField] private float _rotationSpeed;
 
     [SerializeField] private GameObject _bulletPrefab;
 
@@ -21,11 +23,9 @@ public class BasicGunEquipment : BaseEquipment
             if(_timer <= 0 ) 
                 _reloading = false;
         }
-        else if(_enemyList.Count > 0)
+        if(_enemyList.Count > 0)
         {
             Shooting(GetCloseEnemy());
-            _reloading = true;
-            _timer = _reloadTime;
         }
     }
 
@@ -47,9 +47,32 @@ public class BasicGunEquipment : BaseEquipment
 
     private void Shooting(Transform target)
     {
+        if(RotateTowardsTarget(target.position, 0.01f, _rotationSpeed) == false)
+        {
+            return;
+        }
+
+
+        if (_reloading)
+            return;
+
+        //총알 생성
         GameObject bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
+        //총알 초기화 - (발사위치, 타겟위치, 발사한 객체, 데미지)
         bullet.GetComponent<Bullet>().Init(transform, target, Vehicle.transform, _damage);
+
+        //반동을 위한 현재 총의 반대 방향 벡터
+        
+        Debug.Log(transform.up.normalized.ToString());
+        //총 반대 방향 벡터와 반동량 계산 후 차량에 반동 적용
+        Vehicle.GetComponent<Rigidbody2D>().velocity += -(Vector2)transform.up.normalized * _recoilForce;
+
+        _reloading = true;
+        _timer = _reloadTime;
     }
+
+    
+    
 
     private Transform GetCloseEnemy()
     {
@@ -68,4 +91,5 @@ public class BasicGunEquipment : BaseEquipment
 
         return closestEnemy;
     }
+
 }
