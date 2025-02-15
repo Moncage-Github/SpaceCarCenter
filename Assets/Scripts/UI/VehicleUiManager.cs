@@ -156,6 +156,10 @@ public class VehicleUiManager : MonoBehaviour
 
                 imageRect.position = _imageTransform.GetComponent<RectTransform>().position;
                 break;
+            case 21:
+                RectTransform standardImageRec = _imageTransform.GetComponent<RectTransform>();
+                imageRect.position = new Vector3(standardImageRec.position.x, standardImageRec.position.y - standardImageRec.sizeDelta.y * 0.8f, standardImageRec.position.y);
+                break;
             default:
                 break;
         }

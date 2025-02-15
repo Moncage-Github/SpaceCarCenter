@@ -21,6 +21,7 @@ public class MapGenerator : MonoBehaviour
     public void Start()
     {
         CollectionAssetManager.Instance.StartLoadAsset();
+
     }
 
     public void GenerateMap()
@@ -34,7 +35,7 @@ public class MapGenerator : MonoBehaviour
 
     public void SetPlayerPosition()
     {
-        Vector3 vehiclePos = new Vector3(0, -_mapSize.y / 2.0f + _vehicle.transform.localScale.y / 2.0f);
+        Vector3 vehiclePos = new Vector3(0, -_mapSize.y / 2.0f + _vehicle.transform.localScale.y / 2.0f + 5.0f);
         Vector3 cameraPos = vehiclePos;
         cameraPos.z = -10.0f;
 

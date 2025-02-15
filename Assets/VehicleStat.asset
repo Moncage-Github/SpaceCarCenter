@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: VehicleStat
   m_EditorClassIdentifier: 
   <Name>k__BackingField: 
-  <MaxHp>k__BackingField: 9999
-  <MaxFuelAmount>k__BackingField: 9999
+  <MaxHp>k__BackingField: 100
+  <MaxFuelAmount>k__BackingField: 50
   <AcclerationForce>k__BackingField: 4
   <MaxSpeed>k__BackingField: 12
   <RotationForce>k__BackingField: 3

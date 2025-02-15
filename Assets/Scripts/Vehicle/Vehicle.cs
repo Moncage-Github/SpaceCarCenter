@@ -55,6 +55,7 @@ public class Vehicle : MonoBehaviour, IDamageable
         //VehicleData data = DataManager.Instance.GetVehicleData("Test");
         _stat = new VehicleStat(_data);
         _hpChangeAction = () => { _vehicleUI.ChangeHpBar(_stat.CurrentHp / _stat.Data.MaxHp); };
+
     }
 
     private void OnEnable()
@@ -160,13 +161,13 @@ public class Vehicle : MonoBehaviour, IDamageable
         //우회전
         else if (_steeringInput == 1)
         {
-            Debug.Log("좌");
+            Debug.Log("우");
             _animator.SetTrigger("RightSteering");
         }
         //전진
         else
         {
-            Debug.Log("좌");
+            Debug.Log("전진");
             _animator.SetTrigger("FowardSteering");
         }
     }
