@@ -90,9 +90,9 @@ public abstract class PlayerBase : MonoBehaviour
         _collider.enabled = false;
         _isDownJump = true;
 
-        _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, -JumpForce / 2.0f);
+        _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, -JumpForce);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
 
         _collider.enabled = true;
     }

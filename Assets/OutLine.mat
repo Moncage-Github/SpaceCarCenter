@@ -14,8 +14,8 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _OUTLINEMODE_SOLID
-  - _OUTLINEPOSITION_INSIDE_UNDER_SPRITE
-  - _OUTLINESHAPE_CONTOUR
+  - _OUTLINEPOSITION_OUTSIDE
+  - _OUTLINESHAPE_FRAME
   - _TILEMODE_STRETCH
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -70,7 +70,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaThreshold: 0
-    - _Angle: 45
+    - _Angle: 30
     - _BumpScale: 1
     - _ConnectedAlpha: 0
     - _Cutoff: 0.5
@@ -84,8 +84,8 @@ Material:
     - _OcclusionStrength: 1
     - _OutlineEnabled: 0
     - _OutlineMode: 0
-    - _OutlinePosition: 0
-    - _OutlineShape: 0
+    - _OutlinePosition: 2
+    - _OutlineShape: 1
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -93,13 +93,13 @@ Material:
     - _Thickness: 10
     - _TileMode: 0
     - _UVSec: 0
-    - _Weight: 0.5
+    - _Weight: 0.3
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GradientOutline1: {r: 1, g: 1, b: 1, a: 1}
-    - _GradientOutline2: {r: 1, g: 1, b: 1, a: 1}
-    - _ImageOutline: {r: 1, g: 1, b: 1, a: 1}
-    - _SolidOutline: {r: 1, g: 1, b: 1, a: 1}
+    - _GradientOutline1: {r: 0, g: 0, b: 0, a: 1}
+    - _GradientOutline2: {r: 0, g: 0, b: 0, a: 1}
+    - _ImageOutline: {r: 0, g: 0, b: 0, a: 1}
+    - _SolidOutline: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

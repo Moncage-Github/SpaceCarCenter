@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/StartScene.unity
+    guid: 773bddf61384373448fd95f3f10ea0d7
+  - enabled: 1
     path: Assets/Scenes/UpgradeScenes.unity
     guid: ba84445bef5859b418899fd814bfdaa3
   - enabled: 1
@@ -17,5 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CollectionScene.unity
     guid: 27f7640b4a31fed4d890d5ccdd8d0af7
+  - enabled: 1
+    path: Assets/Scenes/TuningScene.unity
+    guid: adaebf32eb5411749b179fcd82994fee
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 1385741e96f4e7841b5e9019bfa7533e, type: 2}
