@@ -75,7 +75,8 @@ public class Meteor : MapObject, IDamageable
 
     public void TakeDamage(float damage)
     {
-        HP = 0;
+        HP -= damage;
+        Debug.Log(HP.ToString());
         if(HP <= 0)
         {
             HP = 0;

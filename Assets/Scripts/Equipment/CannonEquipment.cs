@@ -10,6 +10,7 @@ public class CannonEquipment : BaseEquipment
 
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private float _damage;
+    [SerializeField] private float _rotationSpeed;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +21,7 @@ public class CannonEquipment : BaseEquipment
     // Update is called once per frame
     void Update()
     {
+        Vector3 mousePos = GetMousePos();
         if (_reloading)
         {
             _timer -= Time.deltaTime;
@@ -32,11 +34,14 @@ public class CannonEquipment : BaseEquipment
 
             //TODO:: 발사 전에 발사 각도로 대포를 돌리고 쏘면 좋을거 같음
 
-            Vector3 mousePos = GetMousePos();
+            
             Shooting(mousePos);
             _reloading = true;
             _timer = _reloadTime;
         }
+
+        //BaseEquipment의 함수
+        RotateTowardsTarget(mousePos, 0.01f, _rotationSpeed);
     }
 
     private void Shooting(Vector3 target)

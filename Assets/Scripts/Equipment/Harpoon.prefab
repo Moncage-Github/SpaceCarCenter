@@ -49,6 +49,7 @@ MonoBehaviour:
   _reloadTime: 1
   _bulletPrefab: {fileID: 8822676721237237457, guid: ffb08f1bd2ca11f40ae801eb3b833f2e, type: 3}
   _damage: 6
+  _rotationSpeed: 1000
 --- !u!1 &7347466515944521482
 GameObject:
   m_ObjectHideFlags: 0

@@ -32,6 +32,8 @@ MonoBehaviour:
     State: 0
   - Equipment: {fileID: 11400000, guid: 1c752683b7a4d1f4fbae0f36c844f429, type: 2}
     State: 0
+  - Equipment: {fileID: 11400000, guid: 34016cbcd2cad074fa833b702bfefd2d, type: 2}
+    State: 0
   VehicleInfos:
   - VehicleId: 0
     EquipmentPos:
