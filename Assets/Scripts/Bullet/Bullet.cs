@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     private float _bulletDamage;
 
     private Transform _shooter;
+    private int _shooterEquipmentId;
 
     private float _timer;
     
@@ -25,7 +26,7 @@ public class Bullet : MonoBehaviour
         if( _timer < 0 )
             Destroy(gameObject);
     }
-
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(_shooter != collision.transform)
@@ -34,8 +35,14 @@ public class Bullet : MonoBehaviour
             if (damageable != null)
             {
                 damageable.TakeDamage(_bulletDamage);
+
                 Destroy(gameObject);
 
+                Vehicle vehicle = _shooter.GetComponent<Vehicle>();
+                if(vehicle != null && _shooterEquipmentId != 0)
+                {
+                    CollectionManager.Instance.AddWeaponDamage(_shooterEquipmentId, _bulletDamage);
+                }
             }
         }
 
@@ -45,9 +52,10 @@ public class Bullet : MonoBehaviour
     /// 총알을 쏜 객체와 타깃을 계산해 방향을 구하고 발사해주는 함수.
     /// from : 발사한 객체의 Transform, to : 타겟 객체의 Transform, Damage : 총알 데미지
     /// </summary>
-    public void Init(Transform from, Transform to, float Damage)
+    public void Init(Transform from, Transform to, float Damage, int EquipmentId)
     {
         _shooter = from;
+        _shooterEquipmentId = EquipmentId;
 
         _bulletDamage = Damage;
 
@@ -62,9 +70,10 @@ public class Bullet : MonoBehaviour
     /// 총알을 발사하는 위치와 쏜 객체가 다를 경우 쏜 객체가 해당 총알에 맞지 않게 설정해줌.
     /// from : 발사할 위치, to : 타겟 객체의 Transform, shooter : 발사한 객체, Damage : 총알 데미지
     /// </summary>
-    public void Init(Transform from, Transform to, Transform shooter, float Damage)
+    public void Init(Transform from, Transform to, Transform shooter, float Damage, int EquipmentId)
     {
         _shooter = shooter;
+        _shooterEquipmentId = EquipmentId;
 
         _bulletDamage = Damage;
 
@@ -75,13 +84,24 @@ public class Bullet : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, rot + 90);
     }
 
+
     /// <summary>
     /// 두 좌표를 가지고 총알을 발사할 때 Vector3로 form과 to를 설정해줌.
-    /// from : 발사할 위치, to : 타겟 객체의 Transform, shooter : 발사한 객체, Damage : 총알 데미지
     /// </summary>
-    public void Init(Vector3 from, Vector3 to, Transform shooter, float Damage)
+    /// <param name="from"> 발사할 위치 </param> 
+    /// <param name="to"> 타겟 객체의 Transform </param> 
+    /// <param name="shooter"> 발사한 객체 </param> 
+    /// <param name="Damage"> 총알 데미지 </param> 
+    /// <param name="EquipmentId"> 발사한 무기의 Id </param> 
+    /// <returns> 반환 값 없음 </returns>
+    /// <remarks>
+    /// 이 메서드는 두 점 사이의 거리를 계산합니다. 
+    /// 유효하지 않은 좌표가 입력될 경우 예외를 던질 수 있습니다.
+    /// </remarks>
+    public void Init(Vector3 from, Vector3 to, Transform shooter, float Damage, int EquipmentId)
     {
         _shooter = shooter;
+        _shooterEquipmentId = EquipmentId;
 
         _bulletDamage = Damage;
 

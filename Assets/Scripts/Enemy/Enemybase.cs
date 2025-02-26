@@ -151,7 +151,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     {
         Debug.Log("ÃÑ¾Ë ¹ß»ç");
         GameObject bullet = Instantiate(_bullet, _bulletPos.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Init(transform, _target, _bulletDamage);
+        bullet.GetComponent<Bullet>().Init(transform, _target, _bulletDamage, 0);
     }
 
     void OnTriggerStay2D(Collider2D other)

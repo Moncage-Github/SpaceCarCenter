@@ -47,6 +47,6 @@ public class HarpoonEquipment : BaseEquipment
     private void Shooting(Vector3 target)
     {
         GameObject bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Init(transform.position, target, Vehicle.transform, _damage);
+        bullet.GetComponent<Bullet>().Init(transform.position, target, Vehicle.transform, _damage, ItemId);
     }
 }

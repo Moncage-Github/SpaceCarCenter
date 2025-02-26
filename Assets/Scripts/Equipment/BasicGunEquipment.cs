@@ -59,7 +59,7 @@ public class BasicGunEquipment : BaseEquipment
         //총알 생성
         GameObject bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
         //총알 초기화 - (발사위치, 타겟위치, 발사한 객체, 데미지)
-        bullet.GetComponent<Bullet>().Init(transform, target, Vehicle.transform, _damage);
+        bullet.GetComponent<Bullet>().Init(transform, target, Vehicle.transform, _damage, ItemId);
 
         //반동을 위한 현재 총의 반대 방향 벡터
         
