@@ -56,15 +56,7 @@ public class PartsInfoUI : MonoBehaviour
     {
         _partsPanel.SetActive(true);
 
-        _nameLabel.text = parts.name;
-
-
-        _stat1Label.text = $"Stat1\n{parts.Stat.Stat1}";
-        _stat2Label.text = $"Stat2\n{parts.Stat.Stat2}";
-        _stat3Label.text = $"Stat3\n{parts.Stat.Stat3}";
-        _stat4Label.text = $"Stat4\n{parts.Stat.Stat4}";
-
-        _barImage.fillAmount = parts.Quality / 100.0f;
+        SetPartsPanelInfo(parts);
     }
 
     public void DeInit()
@@ -83,5 +75,18 @@ public class PartsInfoUI : MonoBehaviour
     {
         _slots[_slotsCount - 1].gameObject.SetActive(false);
         _slotsCount--;
+    }
+
+    private void SetPartsPanelInfo(Parts parts)
+    {
+        _nameLabel.text = parts.name;
+
+
+        _stat1Label.text = $"Stat1\n{parts.Stat.Stat1}";
+        _stat2Label.text = $"Stat2\n{parts.Stat.Stat2}";
+        _stat3Label.text = $"Stat3\n{parts.Stat.Stat3}";
+        _stat4Label.text = $"Stat4\n{parts.Stat.Stat4}";
+
+        _barImage.fillAmount = parts.Quality / 100.0f;
     }
 }
