@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerEquipment : MonoBehaviour
 {
-    [SerializeField] public Dictionary<EquipIndexNumber, GameObject> CurrentEquip = new Dictionary<EquipIndexNumber, GameObject>();
+    public Dictionary<EquipIndexNumber, GameObject> CurrentEquip = new Dictionary<EquipIndexNumber, GameObject>();
 
     private Vehicle _vehicle;
 
@@ -34,7 +34,7 @@ public class PlayerEquipment : MonoBehaviour
             //해당 장비를 Player의 자식 관계로 설정
             equipmentPrefab.transform.parent = transform;
             //장비 초기화
-            equipmentPrefab.GetComponent<BaseEquipment>().SetVehivle(_vehicle);
+            equipmentPrefab.GetComponent<BaseEquipment>().SetVehivle(_vehicle, data.ItemId);
         }
     }
 

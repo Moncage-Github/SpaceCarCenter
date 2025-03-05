@@ -6,11 +6,12 @@ public class BaseEquipment : MonoBehaviour
 {
     [SerializeField] protected Vehicle Vehicle;
 
-    
+    public int ItemId;
 
-    public void SetVehivle(Vehicle vehicle)
+    public void SetVehivle(Vehicle vehicle, int itemId)
     {
         Vehicle = vehicle;
+        ItemId = itemId;
     }
 
     public Vector3 GetMousePos()

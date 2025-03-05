@@ -44,10 +44,16 @@ public class CollectionManager : MonoBehaviour
     public float ReceivedDamage;
     public float InflictedDamage;
 
+    /// <summary>
+    /// 무기별 가한 데미지 체크
+    /// </summary>
+    /// <param name="weaponId"> 무기 Id </param>
+    /// <param name="damage"> 무기 Damage </param>
+    public Dictionary<int, float> EquipmentDamage = new Dictionary<int, float>();
+
     private void Start()
     {
         GameStart();
-
     }
 
     public void GameStart()
@@ -99,5 +105,27 @@ public class CollectionManager : MonoBehaviour
             yield return null;
         }
         Camera.main.transform.position = position;
+    }
+
+    /// <summary>
+    /// 무기 ID와 데미지를 매개변수로 받으며 이를 CollectionManager의 딕셔너리에 저장한다.
+    /// </summary>
+    /// <param name="weaponId"> 데미지를 준 무기의 Id </param>
+    /// <param name="damage"> 가한 데미지 량 </param>
+    /// <returns> 성공 시 true, 아이템 Id를 찾지 못하면 false </returns>
+    public bool AddWeaponDamage(int weaponId,  float damage)
+    {
+        if(EquipmentDamage.ContainsKey(weaponId))
+        {
+            EquipmentDamage[weaponId] += damage;
+        }
+        else
+        {
+            EquipmentDamage.Add(weaponId, damage);
+        }
+
+        Debug.Log(weaponId.ToString() + " : " + EquipmentDamage[weaponId].ToString());
+
+        return true;
     }
 }

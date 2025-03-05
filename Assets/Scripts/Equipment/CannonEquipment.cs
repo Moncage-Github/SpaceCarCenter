@@ -12,13 +12,7 @@ public class CannonEquipment : BaseEquipment
     [SerializeField] private float _damage;
     [SerializeField] private float _rotationSpeed;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
+    
     void Update()
     {
         Vector3 mousePos = GetMousePos();
@@ -47,6 +41,6 @@ public class CannonEquipment : BaseEquipment
     private void Shooting(Vector3 target)
     {
         GameObject bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Init(transform.position, target, Vehicle.transform, _damage);
+        bullet.GetComponent<Bullet>().Init(transform.position, target, Vehicle.transform, _damage, ItemId);
     }
 }
