@@ -10,10 +10,12 @@ namespace Tuning
     {
         public static PartsPool Instance;
 
+        private PartsBase _selectedParts = null;
         [SerializeField] private List<PartsBase> _partsList = new List<PartsBase>();
-        [SerializeField] private List<PartsBase> _overlapParts = new List<PartsBase>();
+        [SerializeField] private List<PartsBase> _overlapPartsList = new List<PartsBase>();
 
-        public int OverlapPartsCount => _overlapParts.Count;
+        public int OverlapPartsCount => _overlapPartsList.Count;
+
 
         [SerializeField] private PartsInfoUI _infoUI;
 
@@ -35,33 +37,44 @@ namespace Tuning
 
         public void AddOverlapedParts(PartsBase parts)
         {
-            if (_overlapParts.Contains(parts)) return;
+            if (_overlapPartsList.Contains(parts)) return;
 
-            parts.Select = true;
 
-            _overlapParts.Add(parts);
-            _infoUI.AddPartsInfo(parts);
-
-            if (OverlapPartsCount == 1)
+            if (OverlapPartsCount == 0)
             {
-                _infoUI.ShowPanel(parts);   
+                _infoUI.ShowPanel(parts);
+                parts.Select = true;
+                _selectedParts = parts;
             }
+
+            _overlapPartsList.Add(parts);
+            _infoUI.AddPartsInfo(parts);
         }
 
         public void RemoveOverlapedParts(PartsBase parts)
         {
-            if (!_overlapParts.Contains(parts)) return;
+            if (!_overlapPartsList.Contains(parts)) return;
 
             parts.Select = false;
 
-            _overlapParts.Remove(parts);
+            _overlapPartsList.Remove(parts);
             _infoUI.RemovePartsInfo(parts);
 
-            if(OverlapPartsCount == 0)
+            if(parts == _selectedParts)
             {
-                _infoUI.DeInit();
+                _selectedParts = null;
+
+                if (OverlapPartsCount == 0)
+                {
+                    _infoUI.DeInit();
+                    parts.Select = false;
+                }
+                else
+                {
+                    _selectedParts = _overlapPartsList[0];
+                    _selectedParts.Select = true;
+                }
             }
-            
         }
 
         private void Update()

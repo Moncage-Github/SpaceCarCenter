@@ -20,7 +20,7 @@ namespace Tuning
         {
             if(transform.position.x < -26.0)
             {
-                SceneManager.LoadScene("StartScene");
+                SceneManager.LoadScene("StartScene");               
             }
         }
     }
