@@ -21,6 +21,11 @@ namespace Tuning
                 if (_select == false)
                 {
                     Renderer.color = Color.white;
+                    Renderer.sortingOrder = 0;
+                }
+                else
+                {
+                    Renderer.sortingOrder = 1;
                 }
             }
         }
@@ -36,11 +41,11 @@ namespace Tuning
 
         private void OnEnable()
         {
-            PartsPool.Instance.AddParts(this);
+            PartsPool.Instance.AddPartsAtPool(this);
         }
         private void OnDisable()
         {
-            PartsPool.Instance?.RemoveParts(this);
+            PartsPool.Instance?.RemovePartsAtPool(this);
         }
 
         public virtual void Drop()

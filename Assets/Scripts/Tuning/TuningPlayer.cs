@@ -130,7 +130,7 @@ namespace Tuning
                 if (Mathf.Abs(value) == 120)
                 {
                     value = Mathf.Clamp(value / 120, -1, 1);
-                    _inven.SlotNum += value;
+                    PartsPool.Instance.WheelInput(value);
                 }
             }
         }

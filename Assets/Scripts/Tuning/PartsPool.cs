@@ -10,26 +10,25 @@ namespace Tuning
     {
         public static PartsPool Instance;
 
-        private PartsBase _selectedParts = null;
         [SerializeField] private List<PartsBase> _partsList = new List<PartsBase>();
-        [SerializeField] private List<PartsBase> _overlapPartsList = new List<PartsBase>();
-
-        public int OverlapPartsCount => _overlapPartsList.Count;
-
 
         [SerializeField] private PartsInfoUI _infoUI;
+
+        public PartsBase SelectedParts => _infoUI.GetSelectedParts();
+
+        public bool PickUped;
 
         private void Awake()
         {
             Instance = this;
         }
 
-        public void AddParts(PartsBase parts)
+        public void AddPartsAtPool(PartsBase parts)
         {
             _partsList.Add(parts);
         }
 
-        public void RemoveParts(PartsBase parts)
+        public void RemovePartsAtPool(PartsBase parts)
         {
             if (_partsList.Contains(parts))
                 _partsList.Remove(parts);
@@ -37,44 +36,17 @@ namespace Tuning
 
         public void AddOverlapedParts(PartsBase parts)
         {
-            if (_overlapPartsList.Contains(parts)) return;
-
-
-            if (OverlapPartsCount == 0)
-            {
-                _infoUI.ShowPanel(parts);
-                parts.Select = true;
-                _selectedParts = parts;
-            }
-
-            _overlapPartsList.Add(parts);
             _infoUI.AddPartsInfo(parts);
         }
 
         public void RemoveOverlapedParts(PartsBase parts)
         {
-            if (!_overlapPartsList.Contains(parts)) return;
-
-            parts.Select = false;
-
-            _overlapPartsList.Remove(parts);
             _infoUI.RemovePartsInfo(parts);
+        }
 
-            if(parts == _selectedParts)
-            {
-                _selectedParts = null;
-
-                if (OverlapPartsCount == 0)
-                {
-                    _infoUI.DeInit();
-                    parts.Select = false;
-                }
-                else
-                {
-                    _selectedParts = _overlapPartsList[0];
-                    _selectedParts.Select = true;
-                }
-            }
+        public void WheelInput(int input)
+        {
+            _infoUI.WheelInput(-input);
         }
 
         private void Update()
@@ -100,6 +72,7 @@ namespace Tuning
                 }
             }
         }
+
 
         private void OnDestroy()
         {

@@ -31,32 +31,25 @@ public class PartsInfoUI : MonoBehaviour
 
     [Space(3.0f)]
     [Header("Slot")]
-    [SerializeField] private List<Image> _slots;
+    [SerializeField] private Transform _slotLayout;
+    [SerializeField] private List<InfoSlotUI> _slots;
+    [SerializeField] private GameObject _slotsPrefab;
 
-    int _slotsCount;
+    private int _selectedPartsIndex;
+
+
+    public PartsBase GetSelectedParts()
+    {
+        if( _selectedPartsIndex > _slots.Count - 1)
+            return null;
+
+        return _slots [_selectedPartsIndex].Parts;
+    }
 
     public void ShowPanel(PartsBase parts)
     {
-        _partsPanel.SetActive(false);
-        _screwPanel.SetActive(false);
-
-        if(parts is  Parts)
-            ShowPanel(parts as Parts);
-
-        else if (parts is Screw)
-            ShowPanel(parts as Screw);
-    }
-
-    public void ShowPanel(Screw screw)
-    {
-        _screwPanel.SetActive(true);
-    }
-
-    public void ShowPanel(Parts parts)
-    {
-        _partsPanel.SetActive(true);
-
-        SetPartsPanelInfo(parts);
+        _selectedPartsIndex = 0;
+        SetPartsInfo(parts);
     }
 
     public void DeInit()
@@ -67,26 +60,94 @@ public class PartsInfoUI : MonoBehaviour
 
     public void AddPartsInfo(PartsBase parts)
     {
-        _slotsCount++;
-        _slots[_slotsCount - 1].gameObject.SetActive(true) ; 
+        for (int i = 0; i < _slots.Count; i++)
+        {
+            if (_slots[i].Parts == parts)
+            {
+                return;
+            }
+        }
+
+        var slot = Instantiate(_slotsPrefab, _slotLayout).GetComponent<InfoSlotUI>();
+        _slots.Add(slot);
+
+        slot.Init(parts);
+
+        if (_slots.Count == 1)
+        {
+            _selectedPartsIndex = 0;
+            _slots[_selectedPartsIndex].Selected = true;
+
+            ShowPanel(parts);
+        }
     }
 
     public void RemovePartsInfo(PartsBase parts)
     {
-        _slots[_slotsCount - 1].gameObject.SetActive(false);
-        _slotsCount--;
+        for (int i = 0; i < _slots.Count; i++)
+        {
+            if( _slots[i].Parts == parts) 
+            {
+                _slots[i].DeInit();
+
+                _slots.RemoveAt(i);
+
+                if (_slots.Count == 0)
+                {
+                    DeInit();
+
+                    return;
+                }
+
+                if (i == _selectedPartsIndex || _selectedPartsIndex > _slots.Count)
+                {
+                    _selectedPartsIndex = 0;
+                    _slots[_selectedPartsIndex].Selected = true;
+                    SetPartsInfo(_slots[_selectedPartsIndex].Parts);
+                }
+
+                return;
+            }
+        }
     }
 
-    private void SetPartsPanelInfo(Parts parts)
+    public void WheelInput(int value)
     {
-        _nameLabel.text = parts.name;
+        if (_slots.Count == 0) return;
 
+        int index = Mathf.Clamp(_selectedPartsIndex + value, 0, _slots.Count - 1);
+        if (index == _selectedPartsIndex) return;
 
-        _stat1Label.text = $"Stat1\n{parts.Stat.Stat1}";
-        _stat2Label.text = $"Stat2\n{parts.Stat.Stat2}";
-        _stat3Label.text = $"Stat3\n{parts.Stat.Stat3}";
-        _stat4Label.text = $"Stat4\n{parts.Stat.Stat4}";
+        _slots[_selectedPartsIndex].Selected = false;
+        _slots[index].Selected = true;
 
-        _barImage.fillAmount = parts.Quality / 100.0f;
+        _selectedPartsIndex = index;
+        SetPartsInfo(_slots[_selectedPartsIndex].Parts);
+    }
+
+    private void SetPartsInfo(PartsBase partsBase)
+    {
+        _partsPanel.SetActive(false);
+        _screwPanel.SetActive(false);
+
+        if (partsBase is Parts)
+        {
+            _partsPanel.SetActive(true);
+
+            Parts parts = partsBase as Parts;
+
+            _nameLabel.text = parts.name;
+
+            _stat1Label.text = $"Stat1\n{parts.Stat.Stat1}";
+            _stat2Label.text = $"Stat2\n{parts.Stat.Stat2}";
+            _stat3Label.text = $"Stat3\n{parts.Stat.Stat3}";
+            _stat4Label.text = $"Stat4\n{parts.Stat.Stat4}";
+
+            _barImage.fillAmount = parts.Quality / 100.0f;
+        }
+        else
+        {
+            _screwPanel.SetActive(true);
+        }
     }
 }
