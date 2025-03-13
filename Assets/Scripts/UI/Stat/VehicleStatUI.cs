@@ -7,16 +7,21 @@ using UnityEngine.UI;
 public class VehicleStatUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _currentGoldText;
-    [SerializeField] private int _currentGold;
     // Start is called before the first frame update
     void Start()
     {
-        _currentGoldText.text = _currentGold.ToString();
+        Init();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void Init()
+    {
+        _currentGoldText.text = GameManager.Instance.CurrentGold.ToString();
     }
 }

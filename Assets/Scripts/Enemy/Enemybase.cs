@@ -11,6 +11,7 @@ public enum State
     Move,
     Attack,
     Skill,
+    Interaction,
     Dead
 }
 
@@ -35,7 +36,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     public float RotationSpeed { get => _rotationSpeed; set => _rotationSpeed = value; }
     public float AttackCycle { get => _attackCycle; set => _attackCycle = value; }
 
-    IEnemyState _enemyState;
+    protected IEnemyState _enemyState;
 
     //State
     protected EnemyIdle EnemyIdle;
@@ -89,6 +90,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
         else OnIdle();
 
         Excute();
+
+        Debug.Log("부모 스크립트");
     }
 
     protected void Excute()
@@ -154,7 +157,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
         bullet.GetComponent<Bullet>().Init(transform, _target, _bulletDamage, 0);
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    protected virtual void OnTriggerStay2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
@@ -164,7 +167,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    protected virtual void OnTriggerExit2D(Collider2D other)
     {
         
         if (other.CompareTag("Player"))
@@ -176,7 +179,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     }
 
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         _currentHp -= damage;
         if( _currentHp < 0 )
