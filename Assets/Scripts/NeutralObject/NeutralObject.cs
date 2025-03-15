@@ -75,7 +75,7 @@ public class NeutralObject : EnemyBase
     /// </summary>
     /// <param name="message">띄울 메시지</param>
     /// <param name="time">메시지를 띄울 시간, 매개변수를 넘겨주지 않으면 기본으로 float.MaxValue 동안 띄운다.</param>
-    public void ShowMessage(string message, float time = float.MaxValue)
+    public void ShowMessage(string message, float time = 365.0f)
     {
         TextMeshPro text = TextObject.GetComponent<TextMeshPro>();
         string currentText = text.text;
@@ -139,7 +139,8 @@ public class NeutralObject : EnemyBase
     {
         base.OnTriggerExit2D(other);
 
-        TextObject.SetActive(false);
+        if (IsFriendly)
+            TextObject.SetActive(false);
     }
 
     public override void TakeDamage(float damage)
@@ -155,11 +156,13 @@ public class NeutralObject : EnemyBase
         gameObject.tag = "Enemy";
         IsFriendly = false;
 
-        //
+        //이미 범위 내에 neutralObject가 있어서 OnTriggerEnter2D가 작동되지 않는 문제 해결
         BoxCollider2D collider = GetComponent<BoxCollider2D>();
+        //SetActive는 객체 비활성화, enabled는 컴포넌트 비활성화
         collider.enabled = false;
         collider.enabled = true;
 
+        ShowMessage("!!!");
         TextObject.SetActive(true);
     }
 }

@@ -2385,7 +2385,7 @@ MonoBehaviour:
   _moveSpeed: 3
   _movementRadius: 3
   _movementCycle: 5
-  _detectionRadius: 0
+  _detectionRadius: 5
   _rotationSpeed: 200
   _attackCycle: 0.1
   _bullet: {fileID: 2891142839322404738, guid: be5c66b04fd0c8b43be5d621e3be0802, type: 3}
@@ -3047,12 +3047,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18a43b9f33b6b047a0ee9b524a8693a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentHp: 10
-  _health: 10
+  _currentHp: 1000
+  _health: 1000
   _moveSpeed: 3
   _movementRadius: 3
   _movementCycle: 5
-  _detectionRadius: 0
+  _detectionRadius: 5
   _rotationSpeed: 200
   _attackCycle: 0.1
   _bullet: {fileID: 2891142839322404738, guid: be5c66b04fd0c8b43be5d621e3be0802, type: 3}

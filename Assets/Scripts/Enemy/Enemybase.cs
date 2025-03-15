@@ -66,6 +66,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     public virtual void Init()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+
+        Collider2D detectionCollider = transform.Find("EnemyDetection").GetComponent<Collider2D>();
+        SetColliderSize(detectionCollider, _detectionRadius);
+
         _circleCollider2D = GetComponent<CircleCollider2D>();
 
         _currentState = State.Move;
@@ -178,6 +182,17 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 
     }
 
+    void SetColliderSize(Collider2D detectionCollider, float size)
+    {
+        if (detectionCollider is BoxCollider2D box)
+        {
+            box.size = new Vector2(size, size);
+        }
+        else if (detectionCollider is CircleCollider2D circle)
+        {
+            circle.radius = size;
+        }
+    }
 
     public virtual void TakeDamage(float damage)
     {
