@@ -8,7 +8,7 @@ namespace Tuning
 {
     public class PartsDispensor : MonoBehaviour
     {
-        [SerializeField] private List<GameObject> _objectsQueue;
+        [SerializeField] private List<PartsData> _queue;
         [SerializeField] private Transform _placeHolder;
 
         [SerializeField] private DetectionArea _detectionArea;
@@ -22,14 +22,20 @@ namespace Tuning
             _button.onClick.AddListener(() =>
             {
                 if (!_canDispense) return;
-                if (_objectsQueue.Count <= 0) return;   
+                if (_queue.Count <= 0) return;   
 
                 _canDispense = false;
-                GameObject obj = _objectsQueue[0];
-                obj.SetActive(true);
 
-                obj.transform.position = _placeHolder.transform.position;
-                _objectsQueue.RemoveAt(0);
+                var data = _queue[0];
+
+                var parts = PartsPool.Instance.CreateParts(data);
+
+                parts.transform.position = _placeHolder.transform.position;
+                var r = parts.transform.eulerAngles;
+                r.z = Random.Range(0.0f, 180.0f);
+                parts.transform.eulerAngles = r;
+                
+                _queue.RemoveAt(0);
 
                 Invoke("SetInteractable", 0.5f);
             });
