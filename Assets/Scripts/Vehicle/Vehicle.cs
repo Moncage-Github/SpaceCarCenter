@@ -237,5 +237,10 @@ public class Vehicle : MonoBehaviour, IDamageable
         //    Destroy(item.gameObject);
         //}
     }
+
+    public void GetFuel(float fuel)
+    {
+        _stat.CurrentFuelAmount += fuel;    
+    }
 }
 

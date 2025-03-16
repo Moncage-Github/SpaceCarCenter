@@ -55,6 +55,10 @@ public class GameManager : MonoBehaviour
         set => _beforeCollectionInfo = value;
     }
 
+    //TODO:: 저장할 거
+    [SerializeField] private int _currentGold;
+    public int CurrentGold { get => _currentGold; set => _currentGold = value; }
+
     void Awake()
     {
         if (_instance == null)
