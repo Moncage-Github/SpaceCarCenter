@@ -26,7 +26,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     [SerializeField] private float _movementCycle;      //Enemy의 활동 주기
     [SerializeField] private float _detectionRadius;    //Enemy의 플레이어 감지 범위
     [SerializeField] private float _rotationSpeed;      //Enemy의 회전 속도
-    [SerializeField] private float _attackCycle;        //Enemy의 공격 주기
+    [SerializeField] protected float _attackCycle;        //Enemy의 공격 주기
 
     //Setter
     public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
@@ -45,15 +45,15 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     protected EnemySkill EnemySkill;
     protected EnemyAttack EnemyAttack;
 
-    private Rigidbody2D _rigidbody2D;
+    protected Rigidbody2D EnemyRigidbody2D;
     private CircleCollider2D _circleCollider2D;
 
 
     //Bullet
-    [SerializeField] private GameObject _bullet;
+    [SerializeField] protected GameObject _bullet;
     [SerializeField] private Transform _bulletPos;
 
-    private Transform _target;
+    protected Transform _target;
     [SerializeField] private float _bulletDamage;
 
     // Start is called before the first frame update
@@ -65,7 +65,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 
     public virtual void Init()
     {
-        _rigidbody2D = GetComponent<Rigidbody2D>();
+        EnemyRigidbody2D = GetComponent<Rigidbody2D>();
 
         Collider2D detectionCollider = transform.Find("EnemyDetection").GetComponent<Collider2D>();
         SetColliderSize(detectionCollider, _detectionRadius);
@@ -78,7 +78,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
         EnemyMove = new EnemyMove(this);
         EnemyDead = new EnemyDead(this);
         EnemySkill = new EnemySkill(this);
-        EnemyAttack = new EnemyAttack(this, _bullet);
+        EnemyAttack = new EnemyAttack(this);
 
         _currentHp = _health;
     }
@@ -86,7 +86,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     // Update is called once per frame
     protected virtual void Update()
     {
-
+        
         if (_currentState == State.Move) OnMove();
         else if (_currentState == State.Dead) OnDead();
         else if ( _currentState == State.Skill) OnSkill();
