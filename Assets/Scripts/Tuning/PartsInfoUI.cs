@@ -7,86 +7,119 @@ using UnityEngine.UI;
 public class PartsInfoUI : MonoBehaviour
 {
     [Header("Panel")]
-    [SerializeField] private GameObject _partsPanel;
-    [SerializeField] private GameObject _screwPanel;
-
-    [Space(3.0f)]
-    [Header("Name")]
-    [SerializeField] private Text _nameLabel;
-
-    [Space(3.0f)]
-    [Header("Stat")]
-    [SerializeField] private Text _stat1Label;
-    [SerializeField] private Text _stat2Label;
-    [SerializeField] private Text _stat3Label;
-    [SerializeField] private Text _stat4Label;
-
-    [Space(3.0f)]
-    [Header("Image")]
-    [SerializeField] private Image _partsImage;
-
-    [Space(3.0f)]
-    [Header("Quality")]
-    [SerializeField] private Image _barImage;
+    [SerializeField] private InfoPanel _infoPanel;
 
     [Space(3.0f)]
     [Header("Slot")]
-    [SerializeField] private List<Image> _slots;
+    [SerializeField] private Transform _slotLayout;
+    [SerializeField] private List<InfoSlotUI> _slots;
+    [SerializeField] private GameObject _slotsPrefab;
 
-    int _slotsCount;
-
-    public void ShowPanel(PartsBase parts)
+    private int _selectedPartsIndex;
+    public IInfoUIShowable GetSelectedObject 
     {
-        _partsPanel.SetActive(false);
-        _screwPanel.SetActive(false);
-
-        if(parts is  Parts)
-            ShowPanel(parts as Parts);
-
-        else if (parts is Screw)
-            ShowPanel(parts as Screw);
+        get
+        {
+            if (_slots.Count > 0) return _slots[_selectedPartsIndex].Object;
+            else return null;
+        }
     }
 
-    public void ShowPanel(Screw screw)
+    public void ResetUI()
     {
-        _screwPanel.SetActive(true);
-    }
-
-    public void ShowPanel(Parts parts)
-    {
-        _partsPanel.SetActive(true);
-
-        SetPartsPanelInfo(parts);
+        DeInit();
+        foreach (var slot in _slots)
+        {
+            slot.DeInit();
+        }
+        _slots.Clear();
     }
 
     public void DeInit()
     {
-        _partsPanel.SetActive(false);
-        _screwPanel.SetActive(false);
+        _infoPanel.gameObject.SetActive(false);
+        _slotLayout.gameObject.SetActive(true);
+        _selectedPartsIndex = 0;
     }
 
-    public void AddPartsInfo(PartsBase parts)
+    public void AddPartsInfo(IInfoUIShowable obj)
     {
-        _slotsCount++;
-        _slots[_slotsCount - 1].gameObject.SetActive(true) ; 
+        for (int i = 0; i < _slots.Count; i++)
+        {
+            if (_slots[i].Object == obj)
+            {
+                return;
+            }
+        }
+
+        var slot = Instantiate(_slotsPrefab, _slotLayout).GetComponent<InfoSlotUI>();
+        _slots.Add(slot);
+
+        slot.Init(obj);
+
+        if (_slots.Count == 1)
+        {
+            _infoPanel.gameObject.SetActive(true);
+
+            _selectedPartsIndex = 0;
+            _slots[_selectedPartsIndex].Selected = true;
+
+            obj.SetPartsInfo(_infoPanel);
+        }
     }
 
-    public void RemovePartsInfo(PartsBase parts)
+    public void RemovePartsInfo(IInfoUIShowable parts)
     {
-        _slots[_slotsCount - 1].gameObject.SetActive(false);
-        _slotsCount--;
+        for (int i = 0; i < _slots.Count; i++)
+        {
+            if (_slots[i].Object == parts)
+            {
+                _slots[i].DeInit();
+
+                _slots.RemoveAt(i);
+
+                if (_slots.Count == 0)
+                {
+                    DeInit();
+
+                    return;
+                }
+
+                if (i == _selectedPartsIndex || _selectedPartsIndex > _slots.Count)
+                {
+                    _selectedPartsIndex = 0;
+                    _slots[_selectedPartsIndex].Selected = true;
+                    //SetPartsInfo(parts.Data);
+                }
+
+                return;
+            }
+        }
     }
 
-    private void SetPartsPanelInfo(Parts parts)
+    public void WheelInput(int value)
     {
-        _nameLabel.text = parts.name;
+        if (_slots.Count == 0) return;
 
+        int index = Mathf.Clamp(_selectedPartsIndex + value, 0, _slots.Count - 1);
+        if (index == _selectedPartsIndex) return;
 
-        _stat1Label.text = $"Stat1\n{parts.Stat.Stat1}";
-        _stat2Label.text = $"Stat2\n{parts.Stat.Stat2}";
-        _stat3Label.text = $"Stat3\n{parts.Stat.Stat3}";
-        _stat4Label.text = $"Stat4\n{parts.Stat.Stat4}";
+        _slots[_selectedPartsIndex].Selected = false;
+        _slots[index].Selected = true;
 
-        _barImage.fillAmount = parts.Quality / 100.0f;
+        _selectedPartsIndex = index;
+        _slots[_selectedPartsIndex].Object.SetPartsInfo(_infoPanel);
     }
+
+    public void PickUpParts()
+    {
+        _slotLayout.gameObject.SetActive(false);
+
+        foreach(var slot in _slots)
+        {
+            slot.DeInit();
+        }
+        _slots.Clear();
+    }
+
 }

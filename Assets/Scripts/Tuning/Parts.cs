@@ -1,147 +1,114 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Tuning
 {
-    public class PartsStat 
+    [RequireComponent(typeof(BlinkObject))]
+    public class Parts : MonoBehaviour, IInfoUIShowable
     {
-        public int Stat1;
-        public int Stat2;
-        public int Stat3;
-        public int Stat4;
+        [field: SerializeField] public PartsData Data { get; protected set; }
+        
+        public PartsType Type { get => Data.Type; }
 
-        public PartsStat(int stat1, int stat2, int stat3, int stat4)
+        private CapsuleCollider2D _collider;
+
+        private BlinkObject _blinkObject;
+
+        private SpriteRenderer _renderer;
+
+        private void Awake()
         {
-            Stat1 = stat1;
-            Stat2 = stat2;
-            Stat3 = stat3;
-            Stat4 = stat4;
-        }
-    }
+            _renderer = GetComponent<SpriteRenderer>();
+            _collider = GetComponent<CapsuleCollider2D>();
 
-    public class Parts : PartsBase
-    {
-        public readonly PartsStat Stat = new(10, 5, 3, 4);
-        public enum State { Dropped, PickUped, Composed, ScrewComposed };
-        public bool NeedsScrewTightening;
-
-        private readonly int _maxScrewTightenCount = 4;
-        private int _curScrewTightenCount = 0;
-
-        [SerializeField] private PartsType _type;
-        public PartsType Type { get => _type; private set => _type = value; }
-
-        private PartsSlot _slot;
-
-
-        private int _quality;
-        public int Quality
-        {
-            get => _quality;
-            private set
-            {
-                _quality = Mathf.Clamp(value, 0, 100);
-            }
+            _blinkObject = GetComponent<BlinkObject>();
         }
 
-        [SerializeField] private Screw _screw;
-
-        //States
-        public State CurState;
-
-        private void Start()
+        private void OnEnable()
         {
-            Quality = Random.Range(0, 80);
+            PartsPool.Instance.AddObjectAtPool(this);
+        }
+
+        private void OnDisable()
+        {
+            PartsPool.Instance?.RemoveObjectAtPool(this);
         }
 
         public void Init()
         {
-            if (NeedsScrewTightening)
+            _renderer.sprite = Data.Sprite;
+
+            UpdateCollider();
+        }
+
+        public void Init(PartsData data)
+        {
+            Data = data;
+            Init();
+        }
+
+        private void UpdateCollider()
+        {
+            if (_renderer.sprite == null)
             {
-                CurState = State.ScrewComposed;
-                _curScrewTightenCount = _maxScrewTightenCount;
-                _screw.Pickup();
-                _screw.transform.SetParent(transform);
-                _screw.gameObject.SetActive(false);
+                //Debug.LogWarning("스프라이트가 없습니다!");
+                return;
+            }
+
+            // 스프라이트의 바운드 정보를 가져옴
+            Bounds spriteBounds = _renderer.sprite.bounds;
+            Vector3 size = spriteBounds.size;
+
+            // 방향 자동 설정
+            if (size.y >= size.x)
+            {
+                _collider.direction = CapsuleDirection2D.Vertical;
             }
             else
             {
-                CurState = State.Composed;
+                _collider.direction = CapsuleDirection2D.Horizontal;
             }
+
+            // 콜라이더 오프셋과 크기 설정
+            _collider.offset = spriteBounds.center;
+            _collider.size = size;
         }
 
-        public override void Drop()
+        public void OnSelected()
         {
-            CurState = State.Dropped;
-            base.Drop();
+            _blinkObject.StartBlink();
+            var pos = transform.position;
+            pos.z = -1;
+            transform.position = pos;
         }
 
-        public override void Pickup()
+        public void OnUnselected()
         {
-            CurState = State.PickUped;
-            base.Pickup();
+            _blinkObject.StopBlink();
+            var pos = transform.position;
+            pos.z = 0;
+            transform.position = pos;
         }
 
-        public void DeCompositeFromSlot()
+        public bool IsMouseEnter(Vector2 mousePos)
         {
-            GetSlot().DecompositionParts();
-            SetSlot(null);
-            Pickup();
+            return _collider.OverlapPoint(mousePos);
         }
-            
-        public void CompositeToSlot(PartsSlot slot)
+
+        public void SetPartsInfo(InfoPanel infoPanel)
         {
-            Renderer.sortingOrder = slot.LayerOrder - 1;
-            CurState = State.Composed;
-            SetSlot(slot);
+            infoPanel.Init();
+
+            infoPanel.SetName(Data.Name);
+            infoPanel.SetPartsImage(Data.Sprite);
+
+            infoPanel.SetStat1(Data.Stat1);
+            infoPanel.SetStat2(Data.Stat2);
+            infoPanel.SetStat3(Data.Stat3);
+            infoPanel.SetStat4(Data.Stat4);
+
+            infoPanel.SetQualilty(Data.Quality);
         }
-
-        public void SetScrew(Screw screw)
-        {
-            if (!NeedsScrewTightening) return;
-
-            _screw = screw;
-
-            if (_screw == null) return;
-
-            _screw.transform.SetParent(transform);
-            _screw.transform.localPosition = Vector3.zero;
-        }
-
-        public void TryTightenScrew()
-        {
-            CurState = State.ScrewComposed;
-
-            _curScrewTightenCount++;
-            if (_curScrewTightenCount >= _maxScrewTightenCount)
-            {
-                _screw.gameObject.SetActive(false);
-                _curScrewTightenCount = _maxScrewTightenCount;
-                Debug.Log("Screw Tighten Finish");
-            }
-        }
-
-        public void UnSrcew()
-        {
-            _screw.gameObject.SetActive(true);
-
-            _curScrewTightenCount--;
-            if (_curScrewTightenCount <= 0)
-            {
-                CurState = State.Composed;
-                _screw.Drop();
-                _screw.gameObject.SetActive(true);
-                _screw.transform.position = transform.position;
-                _screw.transform.parent = null;
-                SetScrew(null);
-            }
-        }
-
-        public void FixParts(int amount) => Quality += amount;
-
-        private void SetSlot(PartsSlot slot)
-        {
-            _slot = slot;
-        }
-        public PartsSlot GetSlot() { return _slot; }
     }
 }

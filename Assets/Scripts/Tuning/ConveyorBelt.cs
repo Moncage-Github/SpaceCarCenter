@@ -21,7 +21,7 @@ namespace Tuning
         {
             if(collision.TryGetComponent(out Parts parts))
             {
-                if (parts.CurState != Parts.State.Dropped) return;
+               // if (parts.CurState != Parts.State.Dropped) return;
             }
 
             BoxCollider2D boxCollider = collision as BoxCollider2D;
@@ -31,7 +31,7 @@ namespace Tuning
 
             if (otherDown >= beltUp)
             {
-                collision.transform.Translate(-_beltSpeed * Time.fixedDeltaTime, 0, 0);
+                collision.transform.Translate(-_beltSpeed * Time.fixedDeltaTime, 0, 0, Space.World);
 
             }
         }
