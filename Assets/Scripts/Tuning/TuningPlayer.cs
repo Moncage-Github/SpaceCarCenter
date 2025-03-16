@@ -1,3 +1,4 @@
+using Spine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,10 +14,8 @@ namespace Tuning
     {
         private TuningPlayerInput _input;
 
-        public static TuningPlayer Instance;
-
-        private PartsBase _back;
-        private bool _isItemPickUped = false;
+        private PartsData _back;
+        private bool _isPickUp = false;
 
         private float _defaultSpeed;
         private float _defaultJumpforce;
@@ -24,6 +23,7 @@ namespace Tuning
         [Space(3.0f)]
         [Header("Inventory")]
         [SerializeField] private ToolInventory _inven;
+        [SerializeField] private SpriteRenderer _backRenderer;
 
         [SerializeField] private HammerMiniGame _miniGame;
 
@@ -31,14 +31,14 @@ namespace Tuning
 
         public void Awake()
         {
-            Instance = this;
             _input = new TuningPlayerInput();
             _defaultJumpforce = JumpForce;
             _defaultSpeed = Speed;
             //_inven.ChangeTool(TuningTool.Type.Hand);
 
             _cameraX = Camera.main.orthographicSize * Screen.width / Screen.height - transform.lossyScale.x / 2;
-            }
+            _back = null;
+        }
 
         void OnEnable()
         {
@@ -72,11 +72,6 @@ namespace Tuning
             _input.PlayerAction.Inven.performed -= OnInvenKey;
         }
 
-        private void OnDestroy()
-        {
-            Instance = null;
-        }
-
         public override void Move(float value)
         {
             if (!CanMove) return;
@@ -84,41 +79,40 @@ namespace Tuning
             position.x += value * Speed * Time.deltaTime;
             position.x = Mathf.Clamp(position.x, -_cameraX, _cameraX);
 
-
             transform.localPosition = position;
         }
 
 
-        public bool EquipParts(PartsBase parts)
+        public bool PickUpParts(PartsData data)
         {
-            if (_isItemPickUped) return false;
+            if (_isPickUp) return false;
 
-            _isItemPickUped = true;
+            PartsPool.Instance.PickUpParts(data);
+
+            _backRenderer.sprite = data.Sprite;
+
+            _back = data;
+
+            _isPickUp = true;
             Speed *= 0.5f;
             JumpForce *= 0.8f;
-            _back = parts;
-            _back.transform.parent = transform;
-            _back.transform.localPosition = Vector3.zero;
 
             return true;
         }
 
-        public bool UnequipParts()
+        public void PickUpScrew(Screw screw)
         {
-            if (!_isItemPickUped) return false;
-            _isItemPickUped = false;
-            Speed = _defaultSpeed;
-            JumpForce = _defaultJumpforce;
+            _isPickUp = true;
+            _back = null;   
+            _backRenderer.sprite = screw.GetSprite();
 
-            _back = null;
+            PartsPool.Instance.PickUpScrew();
 
-            return true;
         }
-
 
         public void OnInvenKey(InputAction.CallbackContext context)
         {
-            string name =context.control.name;
+            string name = context.control.name;
 
             if (int.TryParse(name, out int invenNum))
             {
@@ -135,202 +129,130 @@ namespace Tuning
             }
         }
 
-        /*
         public void LeftClick(InputAction.CallbackContext context)
         {
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            var partsPool = PartsPool.Instance;
+            var selectedParts = partsPool.SelectedObject;
 
-            int layerMask = LayerMask.GetMask("TuningInteraction");
-
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
-
-            // 등에 파츠 있는 파츠 떨어뜨리기
-            if (hit.collider == null)
+            if (_isPickUp)
             {
-                if (_isItemPickUped == true)
+                var slots = partsPool.GetAllOverlapedSlots();
+
+                if (slots.Count == 0)
                 {
-                    DropParts();
+                    if (_inven.CurTool == ToolType.Hand && selectedParts == null)
+                    {
+                        if (_back != null)
+                        {
+                            DropParts();
+                        }
+                        else
+                        {
+                            DropScrew();
+                        }
+                    }
                     return;
                 }
-                return;
-            }
 
-            float dist = Vector2.Distance(transform.position, hit.collider.transform.position);
-            if (dist > 3.0f) return;
+                if (_back == null) return;
 
-            // 등에 있는 아이템 조립
-            if (_isItemPickUped)
-            {
-                PartsSlot slot = hit.collider.GetComponent<PartsSlot>();
-                if (slot == null) return;
-                CompositionParts(slot);
-                return;
-            }
-            else
-            {
-                // 등에 아무것도 없고 파츠 클릭
-                Parts parts = hit.collider.GetComponent<Parts>();
-                if (parts != null)
+                foreach (var slot in slots)
                 {
-                    if (_inven.CurTool.ToolType == TuningTool.Type.Driver)
+                    if (slot.Type == _back.Type && slot.HasParts == false)
                     {
-                        if (parts.CurState == Parts.State.ScrewComposed)
-                        {
-                            SrewParts(parts);
+                        if (!CheckDistance(slot.transform)) continue;
 
-                            return;
-                        }
-                    }
-                    else if (_inven.CurTool.ToolType == TuningTool.Type.Hammer)
-                    {
-                        if (parts.Quality < 100)
-                        {
-                            StartHammerGame(parts);
-                            return;
-                        }
-                    }
+                        partsPool.EquipPartsAtSlot(slot, _back);
 
-                    //조립되어 있는 파츠 분리 후 줍기
-                    if (parts.CurState == Parts.State.Composed)
-                    {
-                        DecompositionParts(parts);
-                        return;
-                    }
-                    //바닥에 있는 파츠 줍기
-                    else if (parts.CurState == Parts.State.Dropped)
-                    {
-                        PickupParts(parts);
-                        return;
-                    }
-                }
-            }
-        }
-        */
+                        _isPickUp = false;
+                        Speed = _defaultSpeed;
+                        JumpForce = _defaultJumpforce;
+                        _backRenderer.sprite = null;
 
-        public void LeftClick(InputAction.CallbackContext context)
-        {
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
-
-            int layerMask = LayerMask.GetMask("TuningInteraction");
-
-            RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
-
-            if(hits.Length == 0)
-            {
-                if (!_isItemPickUped) return;
-                if (_inven.CurTool != ToolType.Hand) return;
-                DropParts();
-                return; 
-            }
-
-            float dist = Vector2.Distance(transform.position, mousePos);
-            if (dist > 4.0f) return;
-
-            if (_isItemPickUped)
-            {
-                foreach (RaycastHit2D hit in hits)
-                {
-                    var slot = hit.collider.GetComponent<PartsSlot>();
-
-                    if (slot == null) continue;
-
-                    if (CompositionParts(slot))
-                    {
                         return;
                     }
                 }
             }
 
-            var toolType = _inven.CurTool;
-            if(toolType == ToolType.Hand)
+            if (_inven.CurTool == ToolType.Hand)
             {
-                foreach (RaycastHit2D hit in hits)
+                if (selectedParts is PartsSlot)
                 {
-                    if(_isItemPickUped) break; 
+                    var slot = selectedParts as PartsSlot;
+                    if (!CheckDistance(slot.transform)) return;
+                    if (slot.HasScrew) return;
 
-                    // 등에 아무것도 없고 파츠 클릭
-                    Parts parts = hit.collider.GetComponent<Parts>();
-                    if (parts == null)
-                    {
-                        Screw screw = hit.collider.GetComponent<Screw>();
-                        if (screw == null) continue;
-                        PickupParts(screw);
-                        return;
-                    }
+                    var data = partsPool.UnEquipPartsAtSlot(slot);
+                    PickUpParts(data);
 
-                    //조립되어 있는 파츠 분리 후 줍기
-                    if (parts.CurState == Parts.State.Composed)
-                    {
-                        DecompositionParts(parts);
-                        return;
-                    }
-                    //바닥에 있는 파츠 줍기
-                    else if (parts.CurState == Parts.State.Dropped)
-                    {
-                        PickupParts(parts);
-                        return;
-                    }
+                    return;
+                }
+                else if (selectedParts is Parts)
+                {
+                    var parts = selectedParts as Parts;
+                    if (!CheckDistance(parts.transform)) return;
+
+                    PickUpParts(parts.Data);
+                    Destroy(parts.gameObject);
+                }
+                else if (selectedParts is Screw)
+                {
+                    var screw = selectedParts as Screw;
+
+                    PickUpScrew(screw);
+                    Destroy(screw.gameObject);
                 }
             }
-
-            else if (_inven.CurTool == ToolType.ScrewDriver)
+            else if(_inven.CurTool == ToolType.ScrewDriver)
             {
-                foreach (RaycastHit2D hit in hits)
-                {
-                    Parts parts = hit.collider.GetComponent<Parts>();
-                    if (parts == null) continue;
-                    if (parts.CurState == Parts.State.ScrewComposed)
-                    {
-                        UnSrewParts(parts);
+                if (selectedParts is not PartsSlot) return;
+                var slot = selectedParts as PartsSlot;
+                if (!CheckDistance(slot.transform)) return;
 
-                        return;
-                    }
-                }
+                if (!slot.HasScrew) return;
+                slot.UntightenScrew();
             }
-            else if (_inven.CurTool == ToolType.Hammer)
+            else if(_inven.CurTool == ToolType.Hammer)
             {
-                foreach (RaycastHit2D hit in hits)
-                {
-                    Parts parts = hit.collider.GetComponent<Parts>();
-                    if (parts == null) return;
+                if (selectedParts is not PartsSlot) return;
+                var slot = selectedParts as PartsSlot;
+                if (!slot.HasParts || slot.Data.Quality == 100) return;
 
-                    if (parts.Quality < 100)
-                    {
-                        StartHammerGame(parts);
-                        return;
-                    }
-                }
+                StartHammerGame(slot.Data);
             }
         }
 
         public void RightClick(InputAction.CallbackContext context)
         {
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            if (_inven.CurTool != ToolType.ScrewDriver) return;
 
-            int layerMask = LayerMask.GetMask("TuningInteraction");
+            PartsSlot slot = PartsPool.Instance.GetOverlapedSlot();
 
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, layerMask);
+            if (!slot.HasParts || !slot.Data.NeedScrew) return;
 
-            if (hit.collider == null) return;
-
-            float dist = Vector2.Distance(transform.position, mousePos);
-            if (dist > 4.0f) return;
-
-            if (_inven.CurTool == ToolType.ScrewDriver)
+            if (slot.HasScrew)
             {
-                Parts parts = hit.collider.gameObject.GetComponent<Parts>();
-
-                ScrewParts(parts);
+                if (_isPickUp == false)
+                {
+                    slot.TightenScrew();
+                }
+            }
+            else
+            {
+                if (_isPickUp == true && _back == null)
+                {
+                    slot.EquipScrew();
+                    _isPickUp = false;
+                    _backRenderer.sprite = null;
+                    PartsPool.Instance.DropScrwe();
+                }
             }
         }
 
-        public void StartHammerGame(Parts parts)
+        public void StartHammerGame(PartsData data)
         {
             _miniGame.gameObject.SetActive(true);
-            _miniGame.Init(parts);
+            _miniGame.Init(data);
             _input.PlayerAction.LeftClick.performed -= LeftClick;
             _input.PlayerAction.LeftClick.performed += _miniGame.OnClick;
         }
@@ -339,74 +261,44 @@ namespace Tuning
         {
             _input.PlayerAction.LeftClick.performed -= _miniGame.OnClick;
             _input.PlayerAction.LeftClick.performed += LeftClick;
-        }
-
-        private void PickupParts(PartsBase parts)
-        {
-            Debug.Log("Try PickUp Parts");
-            parts.Pickup();
-            EquipParts(parts);
+            PartsPool.Instance.ResetUI();
         }
         private void DropParts()
         {       
-            Debug.Log("Drop Parts");
-            _back.Drop();
-            UnequipParts();
+            if (!_isPickUp) return;
+
+            _isPickUp = false;
+            Speed = _defaultSpeed;
+            JumpForce = _defaultJumpforce;
+            _backRenderer.sprite = null;
+
+            PartsPool.Instance.DropParts();
+            var dropParts = PartsPool.Instance.CreateParts(_back);
+            dropParts.transform.position = transform.position;
+
+            _back = null;
         }
 
-        private bool CompositionParts(PartsSlot slot)
+        private void DropScrew()
         {
-            if (!slot.IsEmpty())
-            {
-                Debug.Log("The parts is already installed");
-                return false;
-            }
+            if (!_isPickUp) return;
 
-            var parts = _back as Parts;
-            if (parts == null) return false;
+            _isPickUp = false;
 
-            bool isSuccess = slot.TryCompositionParts(parts);
-            if (!isSuccess) return false;
+            _backRenderer.sprite = null;
+            PartsPool.Instance.DropScrwe();
 
-            return UnequipParts();
-
+            var screw = PartsPool.Instance.CreateScrew();
+            screw.transform.position = transform.position;      
         }
 
-        private void DecompositionParts(Parts parts)
+        private bool CheckDistance(Transform other)
         {
-            Debug.Log("Try DeComposite Parts");
-            parts.DeCompositeFromSlot();
-            EquipParts(parts);
-        }
+            if(other == null) return false;
 
-        private void UnSrewParts(Parts parts)
-        {
-            Debug.Log("Unscrewing");
-            parts.UnSrcew();
-        }
-
-        private void ScrewParts(Parts parts)
-        {
-            if (parts == null) return;
-            if (parts.NeedsScrewTightening == false) return;
-            if (parts.CurState == Parts.State.Composed)
-            {
-                if (_back == null || _back is not Screw) return;
-                Screw screw = _back as Screw;
-                Debug.Log("Try TightenScew");
-                UnequipParts();
-                
-                parts.SetScrew(screw);
-                parts.TryTightenScrew();
-                return;
-            }
-            else if (parts.CurState == Parts.State.ScrewComposed)
-            {
-                if (_back != null) return;
-                Debug.Log("Try TightenScew");
-                parts.TryTightenScrew();
-                return;
-            }
+            float dist = Vector2.Distance(transform.position, other.position);
+            if (dist > 5.0f) return false;
+            return true;
         }
     }
 }

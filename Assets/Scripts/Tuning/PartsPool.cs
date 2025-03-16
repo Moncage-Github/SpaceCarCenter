@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -8,75 +9,241 @@ namespace Tuning
 {
     public class PartsPool : MonoBehaviour
     {
-        public static PartsPool Instance;
+        private static PartsPool _instance;
+        public static PartsPool Instance 
+        { 
+            get
+            {
+                if(_instance == null)
+                    _instance = FindObjectOfType<PartsPool>();
+                return _instance;
+            }
+        }
 
-        [SerializeField] private List<PartsBase> _partsList = new List<PartsBase>();
+        [SerializeField] private List<IInfoUIShowable> _objectList = new();
+
+        [SerializeField] private List<PartsSlot> _slotList = new List<PartsSlot>();
 
         [SerializeField] private PartsInfoUI _infoUI;
 
-        public PartsBase SelectedParts => _infoUI.GetSelectedParts();
+        [SerializeField] private GameObject _partsPrefab;
+        [SerializeField] private GameObject _screwPrefab;
+
+        private bool _pickUp;
+        public IInfoUIShowable SelectedObject { get => _infoUI.GetSelectedObject; }
 
         public bool PickUped;
 
-        private void Awake()
+        private void OnDestroy()
         {
-            Instance = this;
+            _instance = null;
         }
 
-        public void AddPartsAtPool(PartsBase parts)
+        public void AddObjectAtPool(IInfoUIShowable obj)
         {
-            _partsList.Add(parts);
+            if (!_objectList.Contains(obj))
+                _objectList.Add(obj);
         }
 
-        public void RemovePartsAtPool(PartsBase parts)
+        public void RemoveObjectAtPool(IInfoUIShowable obj)
         {
-            if (_partsList.Contains(parts))
-                _partsList.Remove(parts);
+            if (_objectList.Contains(obj))
+                _objectList.Remove(obj);
         }
 
-        public void AddOverlapedParts(PartsBase parts)
+        public void AddSlotAtPool(PartsSlot slot)
         {
-            _infoUI.AddPartsInfo(parts);
+            if (!_slotList.Contains(slot))
+                _slotList.Add(slot); 
         }
 
-        public void RemoveOverlapedParts(PartsBase parts)
+        public void RemoveSlotAtPool(PartsSlot slot)
         {
-            _infoUI.RemovePartsInfo(parts);
+            if (_slotList.Contains(slot))
+                _slotList.Remove(slot);
         }
 
-        public void WheelInput(int input)
+        public void AddOverlapedParts(IInfoUIShowable obj)
         {
-            _infoUI.WheelInput(-input);
+            _infoUI.AddPartsInfo(obj);
         }
 
-        private void Update()
+        public void RemoveOverlapedParts(IInfoUIShowable obj)
         {
-            UpadateOverlapedParts();
+            _infoUI.RemovePartsInfo(obj);
         }
 
-        private void UpadateOverlapedParts()
+        public void EquipPartsAtSlot(PartsSlot slot, PartsData data)
         {
+            slot.EquipParts(data);
+            DropParts();
+            AddObjectAtPool(slot);
+        }
 
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+        public PartsData UnEquipPartsAtSlot(PartsSlot slot)
+        {
+            RemoveObjectAtPool(slot);
+            var data = slot.UnequipParts();
+            return data;
+        }
 
-            foreach (var parts in _partsList)
+        private void EnableEquipPreviewSlot(PartsData data)
+        {
+            foreach(var slot in _slotList)
             {
-                if (parts.Collider.OverlapPoint(mousePos))
+                if (slot.Type == data.Type)
                 {
-                    AddOverlapedParts(parts);
-                }
-                else
-                {
-                    RemoveOverlapedParts(parts);
+                    slot.EnableEquipPreview(data.Sprite);
                 }
             }
         }
 
-
-        private void OnDestroy()
+        private void DisableEquipPreviewSlot()
         {
-            Instance = null;
+            foreach (var slot in _slotList)
+            {
+                if (slot.IsInPreviewMode)
+                {
+                    slot.DisableEquipPreview();
+                }
+            }
+        }
+
+        private void EnableScrewPreviewSlot()
+        {
+            foreach (var slot in _slotList)
+            {
+                if (slot.IsInPreviewMode || !slot.HasParts) continue;
+
+                slot.EnableScrewPreview();
+            }
+        }
+
+        private void DisableScrewPreviewSlot()
+        {
+            foreach (var slot in _slotList)
+            {
+                if (slot.IsInPreviewMode)
+                {
+                    slot.DisableScrewPreview();
+                }
+            }
+        }
+
+        public PartsSlot GetOverlapedSlot()
+        {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+
+            for (int i = 0; i < _slotList.Count; i++)
+            {
+                if (_slotList[i].IsMouseEnter(mousePos))
+                {
+
+                    return _slotList[i];
+                }
+            }
+            return null;
+        }
+
+        public List<PartsSlot> GetAllOverlapedSlots()
+        {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+            List <PartsSlot> slots = new List<PartsSlot>();
+            for (int i = 0; i < _slotList.Count; i++)
+            {
+                if (_slotList[i].IsMouseEnter(mousePos))
+                {
+                    slots.Add(_slotList[i]);
+                }
+            }
+
+            return slots;
+        }
+
+        public void WheelInput(int input)
+        {
+            if (_pickUp) return;
+            _infoUI.WheelInput(-input);
+        }
+
+        public void PickUpParts(PartsData data)
+        {
+            _pickUp = true; 
+            _infoUI.PickUpParts();
+            EnableEquipPreviewSlot(data);
+        }
+        public void DropParts()
+        {
+            _pickUp = false;
+            _infoUI.DeInit();
+            DisableEquipPreviewSlot();
+        }
+
+        public void PickUpScrew()
+        {
+            _pickUp = true;
+            _infoUI.PickUpParts();
+            EnableScrewPreviewSlot();
+        }
+
+        public void DropScrwe()
+        {
+            _pickUp = false;
+            _infoUI.DeInit();
+            DisableScrewPreviewSlot();
+        }
+
+        public Parts CreateParts(PartsData data)
+        {
+            Parts parts = Instantiate(_partsPrefab).GetComponent<Parts>();
+            parts.Init(data);
+
+            return parts;
+        }
+
+        public Screw CreateScrew()
+        {
+            Screw screw = Instantiate(_screwPrefab).GetComponent<Screw>();
+
+            return screw;
+        }
+
+        private void Update()
+        {
+            if (_pickUp)
+            { 
+                     
+            }
+            else
+            {
+                UpadateOverlapedParts();
+            }
+        }
+
+        private void UpadateOverlapedParts()
+        {
+            Vector2 mousePos = Mouse.current.position.ReadValue();
+            mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+
+            foreach (var obj in _objectList)
+            {
+                if (obj.IsMouseEnter(mousePos))
+                {
+                    AddOverlapedParts(obj);
+                }
+                else
+                {
+                    RemoveOverlapedParts(obj);
+                }
+            }
+        }
+
+        public void ResetUI()
+        {
+            _infoUI.ResetUI();
+            UpadateOverlapedParts();
         }
     }
 }

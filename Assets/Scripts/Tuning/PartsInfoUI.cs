@@ -7,27 +7,7 @@ using UnityEngine.UI;
 public class PartsInfoUI : MonoBehaviour
 {
     [Header("Panel")]
-    [SerializeField] private GameObject _partsPanel;
-    [SerializeField] private GameObject _screwPanel;
-
-    [Space(3.0f)]
-    [Header("Name")]
-    [SerializeField] private Text _nameLabel;
-
-    [Space(3.0f)]
-    [Header("Stat")]
-    [SerializeField] private Text _stat1Label;
-    [SerializeField] private Text _stat2Label;
-    [SerializeField] private Text _stat3Label;
-    [SerializeField] private Text _stat4Label;
-
-    [Space(3.0f)]
-    [Header("Image")]
-    [SerializeField] private Image _partsImage;
-
-    [Space(3.0f)]
-    [Header("Quality")]
-    [SerializeField] private Image _barImage;
+    [SerializeField] private InfoPanel _infoPanel;
 
     [Space(3.0f)]
     [Header("Slot")]
@@ -36,33 +16,37 @@ public class PartsInfoUI : MonoBehaviour
     [SerializeField] private GameObject _slotsPrefab;
 
     private int _selectedPartsIndex;
-
-
-    public PartsBase GetSelectedParts()
+    public IInfoUIShowable GetSelectedObject 
     {
-        if( _selectedPartsIndex > _slots.Count - 1)
-            return null;
-
-        return _slots [_selectedPartsIndex].Parts;
+        get
+        {
+            if (_slots.Count > 0) return _slots[_selectedPartsIndex].Object;
+            else return null;
+        }
     }
 
-    public void ShowPanel(PartsBase parts)
+    public void ResetUI()
     {
-        _selectedPartsIndex = 0;
-        SetPartsInfo(parts);
+        DeInit();
+        foreach (var slot in _slots)
+        {
+            slot.DeInit();
+        }
+        _slots.Clear();
     }
 
     public void DeInit()
     {
-        _partsPanel.SetActive(false);
-        _screwPanel.SetActive(false);
+        _infoPanel.gameObject.SetActive(false);
+        _slotLayout.gameObject.SetActive(true);
+        _selectedPartsIndex = 0;
     }
 
-    public void AddPartsInfo(PartsBase parts)
+    public void AddPartsInfo(IInfoUIShowable obj)
     {
         for (int i = 0; i < _slots.Count; i++)
         {
-            if (_slots[i].Parts == parts)
+            if (_slots[i].Object == obj)
             {
                 return;
             }
@@ -71,22 +55,24 @@ public class PartsInfoUI : MonoBehaviour
         var slot = Instantiate(_slotsPrefab, _slotLayout).GetComponent<InfoSlotUI>();
         _slots.Add(slot);
 
-        slot.Init(parts);
+        slot.Init(obj);
 
         if (_slots.Count == 1)
         {
+            _infoPanel.gameObject.SetActive(true);
+
             _selectedPartsIndex = 0;
             _slots[_selectedPartsIndex].Selected = true;
 
-            ShowPanel(parts);
+            obj.SetPartsInfo(_infoPanel);
         }
     }
 
-    public void RemovePartsInfo(PartsBase parts)
+    public void RemovePartsInfo(IInfoUIShowable parts)
     {
         for (int i = 0; i < _slots.Count; i++)
         {
-            if( _slots[i].Parts == parts) 
+            if (_slots[i].Object == parts)
             {
                 _slots[i].DeInit();
 
@@ -103,7 +89,7 @@ public class PartsInfoUI : MonoBehaviour
                 {
                     _selectedPartsIndex = 0;
                     _slots[_selectedPartsIndex].Selected = true;
-                    SetPartsInfo(_slots[_selectedPartsIndex].Parts);
+                    //SetPartsInfo(parts.Data);
                 }
 
                 return;
@@ -122,32 +108,18 @@ public class PartsInfoUI : MonoBehaviour
         _slots[index].Selected = true;
 
         _selectedPartsIndex = index;
-        SetPartsInfo(_slots[_selectedPartsIndex].Parts);
+        _slots[_selectedPartsIndex].Object.SetPartsInfo(_infoPanel);
     }
 
-    private void SetPartsInfo(PartsBase partsBase)
+    public void PickUpParts()
     {
-        _partsPanel.SetActive(false);
-        _screwPanel.SetActive(false);
+        _slotLayout.gameObject.SetActive(false);
 
-        if (partsBase is Parts)
+        foreach(var slot in _slots)
         {
-            _partsPanel.SetActive(true);
-
-            Parts parts = partsBase as Parts;
-
-            _nameLabel.text = parts.name;
-
-            _stat1Label.text = $"Stat1\n{parts.Stat.Stat1}";
-            _stat2Label.text = $"Stat2\n{parts.Stat.Stat2}";
-            _stat3Label.text = $"Stat3\n{parts.Stat.Stat3}";
-            _stat4Label.text = $"Stat4\n{parts.Stat.Stat4}";
-
-            _barImage.fillAmount = parts.Quality / 100.0f;
+            slot.DeInit();
         }
-        else
-        {
-            _screwPanel.SetActive(true);
-        }
+        _slots.Clear();
     }
+
 }

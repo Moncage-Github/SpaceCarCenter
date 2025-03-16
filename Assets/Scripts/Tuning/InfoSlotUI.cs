@@ -11,7 +11,7 @@ namespace Tuning
         [SerializeField] private Image _partsImage;
         [SerializeField] private Image _slotBack;
 
-        public PartsBase Parts { get; private set; }
+        public IInfoUIShowable Object { get; private set; }
         
         private bool _selected;
         public bool Selected
@@ -22,27 +22,26 @@ namespace Tuning
                 if (value)
                 {
                     _slotBack.color = Color.white;
-                    Parts.Select = true;
+                    Object.OnSelected();
 
                 }
                 else
                 {
                     _slotBack.color = Color.gray;
-                    Parts.Select = false;
-
+                    Object.OnUnselected();
                 }
             }
         }
 
-        public void Init(PartsBase parts)
+        public void Init(IInfoUIShowable obj)
         {
             gameObject.SetActive(true);
-            Parts = parts;
+            Object = obj;
         }
 
         public void DeInit()
         {
-            Parts.Select = false;
+            Object.OnUnselected();
             Destroy(gameObject);
         }
     }

@@ -8,6 +8,8 @@ namespace Tuning
 {
     public class HammerMiniGame : MonoBehaviour
     {
+        [SerializeField] private TuningPlayer _player;
+
         [Header("Bar")]
         [SerializeField] private Image _bar;
         [SerializeField] private RectTransform _zone;
@@ -31,13 +33,12 @@ namespace Tuning
         [Header("QualityBar")]
         [SerializeField] private Image _qualityBarImage;
 
+        PartsData _data;
 
-        private Parts _partsRef;
-
-        public void Init(Parts parts)
+        public void Init(PartsData data)
         {
-            _partsRef = parts;
-            _qualityBarImage.fillAmount = _partsRef.Quality / 100.0f;
+            _data = data;
+            _qualityBarImage.fillAmount = _data.Quality / 100.0f;
 
             _cursorImage.rectTransform.anchoredPosition = new Vector2(0, 0);
 
@@ -96,7 +97,7 @@ namespace Tuning
         private void FinishGame()
         {
             gameObject.SetActive(false);
-            TuningPlayer.Instance.FinishHammerGame();
+            _player.FinishHammerGame();
         }
 
         private void StopCursor()
@@ -147,9 +148,9 @@ namespace Tuning
 
         private void FixParts(int amount)
         {
-            float fillAmount = (_partsRef.Quality + amount) / 100.0f;
+            float fillAmount = (_data.Quality + amount) / 100.0f;
             StartCoroutine(ChangeFillAmount(_qualityBarImage, fillAmount, 0.5f));
-            _partsRef.FixParts(amount);
+            _data.FixParts(amount);
         }
 
         private IEnumerator ChangeFillAmount(Image img, float target, float time)
