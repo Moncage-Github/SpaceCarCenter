@@ -15,6 +15,32 @@ public class PlayerEquipment : MonoBehaviour
 
         VehicleInit(GameManager.Instance.EquipmentData.EquipmentScriptable.CurrentSelectVehicle);
 
+        EquipmentInstantiate();
+    }
+
+
+    void VehicleInit(int vehicleId)
+    {
+        switch (vehicleId)
+        {
+            case 0:
+                CurrentEquip.Add(EquipIndexNumber.Top, null);
+                CurrentEquip.Add(EquipIndexNumber.Left, null);
+                CurrentEquip.Add(EquipIndexNumber.Right, null);
+                CurrentEquip.Add(EquipIndexNumber.Center, null);
+                CurrentEquip.Add(EquipIndexNumber.Bottom, null);
+                break;
+            default:
+                break;
+        }
+        
+    }
+
+    /// <summary>
+    /// 장착된 장비를 실제로 생성하는 함수
+    /// </summary>
+    void EquipmentInstantiate()
+    {
         foreach (var data in GameManager.Instance.EquipmentData.CurrentVehicle.EquipmentPos)
         {
             //장비가 비었으면 넘어가기
@@ -35,24 +61,7 @@ public class PlayerEquipment : MonoBehaviour
             equipmentPrefab.transform.parent = transform;
             //장비 초기화
             equipmentPrefab.GetComponent<BaseEquipment>().SetVehivle(_vehicle, data.ItemId);
-        }
-    }
 
-
-    void VehicleInit(int vehicleId)
-    {
-        switch (vehicleId)
-        {
-            case 0:
-                CurrentEquip.Add(EquipIndexNumber.Top, null);
-                CurrentEquip.Add(EquipIndexNumber.Left, null);
-                CurrentEquip.Add(EquipIndexNumber.Right, null);
-                CurrentEquip.Add(EquipIndexNumber.Center, null);
-                CurrentEquip.Add(EquipIndexNumber.Bottom, null);
-                break;
-            default:
-                break;
         }
-        
     }
 }

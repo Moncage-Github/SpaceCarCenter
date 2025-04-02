@@ -7,6 +7,11 @@ using static UnityEngine.GraphicsBuffer;
 
 public class BossBase : EnemyBase
 {
+    [Space]
+
+    //기본 보스의 변수들
+    [Header("Basic Boss Settings")]
+
     [SerializeField] protected bool BattleMode;
     [SerializeField] protected float SkillCycle;
     protected List<IEnemyState> SkillList = new List<IEnemyState>();
@@ -107,6 +112,11 @@ public class BossBase : EnemyBase
         return;
     }
 
+    protected override void OnMove()
+    {
+        
+    }
+
     protected virtual void SkillEnd()
     {
         _currentState = State.Idle;
@@ -141,6 +151,8 @@ public class BossBase : EnemyBase
         }
 
     }
+
+    
 }
 
 public class BossBasicAttack : EnemyAttack
