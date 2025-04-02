@@ -348,8 +348,24 @@ MonoBehaviour:
   AttackTimer: 0
   SkillTimer: 0
   _dashZone: {fileID: 8881058343618444240}
-  _dashCollider: {fileID: 0}
-  _dashChargeTime: 5
+  _dashCollider: {fileID: 4470226240821045857}
+  _dashDistance: 10
+  _dashChargeTime: 1.2
+  _dashSpeed: 20
+  _dashPower: 20
+  _dashDamage: 50
+  _stormBullet: {fileID: 2891142839322404738, guid: be5c66b04fd0c8b43be5d621e3be0802, type: 3}
+  _stormBulletSpeed: 2
+  _stormBulletDamage: 5
+  _bulletsPerRotation: 8
+  _rotationCount: 3
+  _fireDelay: 0
+  _quadBullet: {fileID: 2891142839322404738, guid: be5c66b04fd0c8b43be5d621e3be0802, type: 3}
+  _quadBulletSpeed: 20
+  _quadBulletDamage: 15
+  _squadPrefab: {fileID: 6198997927327273176, guid: cba0c7c9083b9f848b5b93089f398008, type: 3}
+  _summonCount: 3
+  _squad: []
 --- !u!1 &2907321688430876322
 GameObject:
   m_ObjectHideFlags: 0
@@ -584,7 +600,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8945207106887455784
 Transform:
   m_ObjectHideFlags: 0

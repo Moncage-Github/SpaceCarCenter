@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        _timer = 3.0f;
+        _timer = 5.0f;
     }
 
     private void Update()
@@ -31,6 +31,9 @@ public class Bullet : MonoBehaviour
     {
         if(_shooter != collision.transform)
         {
+            if (_shooter.CompareTag(collision.gameObject.tag))
+                return;
+
             IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
             if (damageable != null)
             {
@@ -46,6 +49,11 @@ public class Bullet : MonoBehaviour
             }
         }
 
+    }
+
+    public void SetSpeed(float speed)
+    {
+        _bulletSpeed = speed;
     }
 
     /// <summary>
@@ -98,7 +106,7 @@ public class Bullet : MonoBehaviour
     /// 이 메서드는 두 점 사이의 거리를 계산합니다. 
     /// 유효하지 않은 좌표가 입력될 경우 예외를 던질 수 있습니다.
     /// </remarks>
-    public void Init(Vector3 from, Vector3 to, Transform shooter, float Damage, int EquipmentId)
+    public void Init(Vector3 from, Vector3 to, Transform shooter, float Damage, int EquipmentId = 0)
     {
         _shooter = shooter;
         _shooterEquipmentId = EquipmentId;

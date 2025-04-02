@@ -1654,6 +1654,7 @@ MonoBehaviour:
   IsAttack: 1
   IsFriendly: 0
   IsInteraction: 0
+  _spawnPosition: []
   TextObject: {fileID: 1586104188}
   cost: 0
 --- !u!4 &990062412
@@ -2395,6 +2396,9 @@ MonoBehaviour:
   IsAttack: 0
   IsFriendly: 1
   IsInteraction: 1
+  _spawnPosition:
+  - {x: -10, y: -483, z: 0}
+  - {x: -12, y: -483, z: 0}
   TextObject: {fileID: 132537367}
   cost: 1000
 --- !u!212 &1474117689
@@ -3062,6 +3066,7 @@ MonoBehaviour:
   IsAttack: 0
   IsFriendly: 1
   IsInteraction: 1
+  _spawnPosition: []
   TextObject: {fileID: 937274001}
   cost: 500
   _fuelAmount: 20
@@ -3673,10 +3678,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 939288298026312352, guid: c392053929289a3438fe272c464da76b, type: 3}
-      propertyPath: _dashCollider
-      value: 
-      objectReference: {fileID: 5164486911663316282}
+    - target: {fileID: 2034609947161076099, guid: c392053929289a3438fe272c464da76b, type: 3}
+      propertyPath: m_Constraints
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2068682391580761605, guid: c392053929289a3438fe272c464da76b, type: 3}
       propertyPath: m_Name
       value: BasicBoss
@@ -3726,11 +3731,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c392053929289a3438fe272c464da76b, type: 3}
---- !u!58 &5164486911663316282 stripped
-CircleCollider2D:
-  m_CorrespondingSourceObject: {fileID: 4470226240821045857, guid: c392053929289a3438fe272c464da76b, type: 3}
-  m_PrefabInstance: {fileID: 5164486911663316281}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

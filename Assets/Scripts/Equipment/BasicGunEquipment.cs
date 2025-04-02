@@ -65,7 +65,7 @@ public class BasicGunEquipment : BaseEquipment
         
         Debug.Log(transform.up.normalized.ToString());
         //총 반대 방향 벡터와 반동량 계산 후 차량에 반동 적용
-        Vehicle.GetComponent<Rigidbody2D>().velocity += -(Vector2)transform.up.normalized * _recoilForce;
+        Vehicle.Rigidbody2D.velocity += -(Vector2)transform.up.normalized * _recoilForce;
 
         _reloading = true;
         _timer = _reloadTime;

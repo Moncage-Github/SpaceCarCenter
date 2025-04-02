@@ -25,6 +25,10 @@ public class NeutralObject : EnemyBase
     /// 중립 몹 상호작용 여부
     /// </summary>
     public bool IsInteraction;
+    /// <summary>
+    /// 중립 몹 스폰 위치
+    /// </summary>
+    [SerializeField] private List<Vector3> _spawnPosition;
 
     public GameObject TextObject;
     protected Vehicle vehicle;
@@ -68,6 +72,11 @@ public class NeutralObject : EnemyBase
         base.Init();
 
         IsFriendly = true;
+
+        if(_spawnPosition.Count > 0)
+        {
+            transform.position = _spawnPosition[UnityEngine.Random.Range(0, _spawnPosition.Count)];
+        }
     }
 
     /// <summary>
@@ -129,7 +138,13 @@ public class NeutralObject : EnemyBase
                 //우클릭 시 중립 해제
                 else if(Input.GetMouseButtonDown(1))
                 {
-                    MakeNotFriendly();
+                    Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    Collider2D hitCollider = Physics2D.OverlapPoint(mousePosition);
+
+                    if (hitCollider.gameObject == gameObject)
+                    {
+                        MakeNotFriendly();
+                    }
                 }
             }
         }

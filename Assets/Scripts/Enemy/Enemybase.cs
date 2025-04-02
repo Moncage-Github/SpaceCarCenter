@@ -86,7 +86,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     // Update is called once per frame
     protected virtual void Update()
     {
-        
+        if(Vector3.Distance(transform.position , GameManager.Instance.Vehicle.position) > 50)
+        {
+            return;
+        }
+
         if (_currentState == State.Move) OnMove();
         else if (_currentState == State.Dead) OnDead();
         else if ( _currentState == State.Skill) OnSkill();
@@ -100,6 +104,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 
     protected void Excute()
     {
+        EnemyRigidbody2D.angularVelocity = 0.0f;
+
         _enemyState.Update(this);
     }
 

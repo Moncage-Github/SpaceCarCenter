@@ -59,6 +59,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _currentGold;
     public int CurrentGold { get => _currentGold; set => _currentGold = value; }
 
+    [HideInInspector]
+    public Transform Vehicle;
+
     void Awake()
     {
         if (_instance == null)
