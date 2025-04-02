@@ -10,7 +10,7 @@ public abstract class PlayerBase : MonoBehaviour
     private float _moveValue;
 
     [SerializeField] private Rigidbody2D _rigidbody;
-    [SerializeField] private Collider2D _collider;
+    [SerializeField] private BoxCollider2D _collider;
 
     private bool _isGround;
     private bool _isDownPressed;
@@ -45,7 +45,9 @@ public abstract class PlayerBase : MonoBehaviour
 
         if (_isDownPressed)
         {
-            RaycastHit2D rayHit = Physics2D.BoxCast(_rigidbody.position, new Vector2(transform.lossyScale.x, 0.2f),0 , Vector3.down, transform.localScale.y / 2, LayerMask.GetMask("Platform"));
+            var origin = transform.position;
+            
+            RaycastHit2D rayHit = Physics2D.BoxCast(origin, new Vector2(_collider.size.x, 0.2f),0 , Vector3.down, _collider.size.y / 2, LayerMask.GetMask("Platform"));
             if (rayHit.collider == null) return; 
             if(rayHit.collider.GetComponent<PlatformEffector2D>() != null)
             {
@@ -70,7 +72,7 @@ public abstract class PlayerBase : MonoBehaviour
     {
         if(_rigidbody.velocity.y > 0) return false;
 
-        RaycastHit2D rayHit = Physics2D.BoxCast(_rigidbody.position, new Vector2(transform.lossyScale.x, 0.2f),0 , Vector3.down, transform.localScale.y / 2, LayerMask.GetMask("Platform"));
+        RaycastHit2D rayHit = Physics2D.BoxCast(transform.position, new Vector2(_collider.size.x, 0.2f),0 , Vector3.down, _collider.size.y / 2, LayerMask.GetMask("Platform"));
         if (rayHit.collider == null) return false;
         _isDownJump = false;
         return true;
@@ -90,9 +92,9 @@ public abstract class PlayerBase : MonoBehaviour
         _collider.enabled = false;
         _isDownJump = true;
 
-        _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, -JumpForce / 2.0f);
+        _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, -JumpForce);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
 
         _collider.enabled = true;
     }

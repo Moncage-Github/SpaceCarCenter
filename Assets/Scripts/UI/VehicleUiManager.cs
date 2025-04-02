@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class VehicleUiManager : MonoBehaviour
 {
@@ -88,6 +85,7 @@ public class VehicleUiManager : MonoBehaviour
             {
                 VehicleEquipmentInfo info = vehicleInfo.EquipmentPos.Find(info => info.EquipmentPositionType == childIndex.EquipNumber);
 
+                Transform image = child.transform.GetChild(0);
 
                 //TODO:: 장비가 장착되지 않은 슬롯에 대한 처리
                 if (childIndex.CurrentEquipmentId == 0)
@@ -95,7 +93,7 @@ public class VehicleUiManager : MonoBehaviour
                     
                     child.transform.localPosition = new Vector3(info.EquipmentPosition.x * 100, info.EquipmentPosition.y * 175, 0);
 
-                    Transform image = child.transform.GetChild(0);
+                    
                     image.GetComponent<Image>().enabled = false;
 
                     Image temp = child.transform.GetComponent<Image>();
@@ -118,12 +116,11 @@ public class VehicleUiManager : MonoBehaviour
 
                     if (equip != null)
                     {
-                        Transform image = child.transform.GetChild(0);
                         image.GetComponent<Image>().enabled = true;
                         image.GetComponent<Image>().sprite = equip.Equipment.ImageLog;
                         image.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
 
-                        child.transform.GetComponent<RectTransform>().sizeDelta = new Vector3(equip.Equipment.ImageLog.rect.width * 0.07f, equip.Equipment.ImageLog.rect.height * 0.07f);
+                        //child.transform.GetComponent<RectTransform>().sizeDelta = new Vector3(50, 50);
 
                         Image temp = child.transform.GetComponent<Image>();
                         Color color = temp.color;
@@ -134,7 +131,7 @@ public class VehicleUiManager : MonoBehaviour
 
                         //image.enabled = false;
 
-                        SettingItemImage(equip.Equipment.EquipmentId, image);
+                        SettingItemImage(equip.Equipment.EquipmentId, child);
                     }
                     
                 }
@@ -144,10 +141,16 @@ public class VehicleUiManager : MonoBehaviour
     }
 
 
-    private void SettingItemImage(int itemId, Transform image)
+    private void SettingItemImage(int itemId, Transform index)
     {
+        Transform image = index.transform.GetChild(0);
         RectTransform imageRect = image.GetComponent<RectTransform>();
-        
+
+        Image temp = image.transform.GetComponent<Image>();
+        Color color = temp.color;
+        color.a = 0x000001;
+        temp.color = color;
+
 
         switch (itemId)
         {
@@ -155,6 +158,18 @@ public class VehicleUiManager : MonoBehaviour
                 imageRect.sizeDelta = new Vector2(image.GetComponent<RectTransform>().sizeDelta.x * 2f, image.GetComponent<RectTransform>().sizeDelta.y * 2f);
 
                 imageRect.position = _imageTransform.GetComponent<RectTransform>().position;
+
+                temp = image.transform.GetComponent<Image>();
+                color = temp.color;
+                color.a = 0x000001 / 2.0f;
+                temp.color = color;
+
+                index.SetSiblingIndex(1);
+
+                break;
+            case 21:
+                RectTransform standardImageRec = _imageTransform.GetComponent<RectTransform>();
+                imageRect.position = new Vector3(standardImageRec.position.x, standardImageRec.position.y - standardImageRec.sizeDelta.y * 0.8f, standardImageRec.position.y);
                 break;
             default:
                 break;

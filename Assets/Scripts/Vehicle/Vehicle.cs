@@ -11,6 +11,10 @@ public class Vehicle : MonoBehaviour, IDamageable
     private VehicleInventory _inventory;
 
     private Rigidbody2D _rigidbody2D;
+    public Rigidbody2D Rigidbody2D { get { return _rigidbody2D; } }
+
+    private BoxCollider2D _boxCollider2D;
+    public BoxCollider2D BoxCollider2D { get { return _boxCollider2D; } }
 
     [SerializeField] private VehicleStat _stat;
     [SerializeField] private VehicleData _data;
@@ -49,12 +53,15 @@ public class Vehicle : MonoBehaviour, IDamageable
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        _boxCollider2D = GetComponent<BoxCollider2D>();
         _inventory = GetComponent<VehicleInventory>();
         _animator = _image.GetComponent<Animator>();
 
         //VehicleData data = DataManager.Instance.GetVehicleData("Test");
         _stat = new VehicleStat(_data);
         _hpChangeAction = () => { _vehicleUI.ChangeHpBar(_stat.CurrentHp / _stat.Data.MaxHp); };
+
+        GameManager.Instance.Vehicle = this.transform;
     }
 
     private void OnEnable()
@@ -146,29 +153,33 @@ public class Vehicle : MonoBehaviour, IDamageable
 
         _rigidbody2D.MoveRotation(_rotationAngle);
 
-        if (_currentSteering == _steeringInput) return;
 
-        _currentSteering = _steeringInput;
+        //회전 시 기우러지는 애니매이션
+        //-------------------------------------------------------
+        //if (_currentSteering == _steeringInput) return;
 
-        //애니메이션
-        //좌회전
-        if (_steeringInput == -1)
-        {
-            Debug.Log("좌");
-            _animator.SetTrigger("LeftSteering");
-        }
-        //우회전
-        else if (_steeringInput == 1)
-        {
-            Debug.Log("좌");
-            _animator.SetTrigger("RightSteering");
-        }
-        //전진
-        else
-        {
-            Debug.Log("좌");
-            _animator.SetTrigger("FowardSteering");
-        }
+        //_currentSteering = _steeringInput;
+
+        ////애니메이션
+        ////좌회전
+        //if (_steeringInput == -1)
+        //{
+        //    Debug.Log("좌");
+        //    _animator.SetTrigger("LeftSteering");
+        //}
+        ////우회전
+        //else if (_steeringInput == 1)
+        //{
+        //    Debug.Log("우");
+        //    _animator.SetTrigger("RightSteering");
+        //}
+        ////전진
+        //else
+        //{
+        //    Debug.Log("전진");
+        //    _animator.SetTrigger("FowardSteering");
+        //}
+        //--------------------------------------------------------
     }
 
     // 차량의 진행방향의 수직방향의 속도를 감소
@@ -235,6 +246,11 @@ public class Vehicle : MonoBehaviour, IDamageable
         //    _inventory.AddItemToInventory(item.ItemCode);
         //    Destroy(item.gameObject);
         //}
+    }
+
+    public void GetFuel(float fuel)
+    {
+        _stat.CurrentFuelAmount += fuel;    
     }
 }
 

@@ -1,28 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Tuning
-{
+{   
     public class DetectionArea : MonoBehaviour
     {
-        [SerializeField] private Button _button;
+        public Action<Collider2D> OnEnterDetectionArea;
+        public Action<Collider2D> OnExitDetectionArea;
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.TryGetComponent(out TuningPlayer player))
-            {
-                _button.interactable = true;
-            }
+            OnEnterDetectionArea?.Invoke(collision);
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.gameObject.TryGetComponent(out TuningPlayer player))
-            {
-                _button.interactable = false;
-            }
+            OnExitDetectionArea?.Invoke(collision);
         }
     }
 }

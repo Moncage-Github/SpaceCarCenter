@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -58,6 +55,13 @@ public class GameManager : MonoBehaviour
         set => _beforeCollectionInfo = value;
     }
 
+    //TODO:: 저장할 거
+    [SerializeField] private int _currentGold;
+    public int CurrentGold { get => _currentGold; set => _currentGold = value; }
+
+    [HideInInspector]
+    public Transform Vehicle;
+
     void Awake()
     {
         if (_instance == null)
@@ -69,7 +73,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        Application.targetFrameRate = 60;
         EquipmentData = new EquipmentsData(_equiptmentScriptable);
         _sceneLoader = gameObject.AddComponent<SceneLoader>();
     }
@@ -78,7 +82,7 @@ public class GameManager : MonoBehaviour
     {
         _beforeState = _gameState;
         _gameState = GameState.Collection;
-        SceneManager.LoadScene("CollectionScene");
+        SceneManager.LoadScene("CollectionScene 1");
     }
 
     public void LoadLobbyScene(Action onComplete = null)

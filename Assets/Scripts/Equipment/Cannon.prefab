@@ -130,6 +130,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Vehicle: {fileID: 0}
+  ItemId: 0
   _reloadTime: 5
   _bulletPrefab: {fileID: 4496183260818766044, guid: 6a19813db3e12c142ae2c2d404453940, type: 3}
   _damage: 15
+  _recoilForce: 3
+  _rotationSpeed: 1000

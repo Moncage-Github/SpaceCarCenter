@@ -10,6 +10,8 @@ public class HarpoonEquipment : BaseEquipment
 
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private float _damage;
+    [SerializeField] private float _recoilForce;
+    [SerializeField] private float _rotationSpeed;
 
 
     // Start is called before the first frame update
@@ -21,6 +23,8 @@ public class HarpoonEquipment : BaseEquipment
     // Update is called once per frame
     void Update()
     {
+        Vector3 mousePos = GetMousePos();
+
         if (_reloading)
         {
             _timer -= Time.deltaTime;
@@ -31,16 +35,22 @@ public class HarpoonEquipment : BaseEquipment
         {
             Debug.Log("작살 발사");
 
-            Vector3 mousePos = GetMousePos();
+            
             Shooting(mousePos);
             _reloading = true;
             _timer = _reloadTime;
         }
+
+        //BaseEquipment의 함수
+        RotateTowardsTarget(mousePos, 0.01f, _rotationSpeed);
     }
 
     private void Shooting(Vector3 target)
     {
         GameObject bullet = Instantiate(_bulletPrefab, transform.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Init(transform.position, target, Vehicle.transform, _damage);
+        bullet.GetComponent<Bullet>().Init(transform.position, target, Vehicle.transform, _damage, ItemId);
+
+        //총 반대 방향 벡터와 반동량 계산 후 차량에 반동 적용
+        Vehicle.Rigidbody2D.velocity += -(Vector2)transform.up.normalized * _recoilForce;
     }
 }

@@ -11,12 +11,13 @@ public enum State
     Move,
     Attack,
     Skill,
+    Interaction,
     Dead
 }
 
 public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 {
-    private State _currentState = State.None;
+    protected State _currentState = State.None;
 
     [SerializeField] private float _currentHp;   
     [SerializeField] private float _health;   
@@ -25,7 +26,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     [SerializeField] private float _movementCycle;      //Enemy의 활동 주기
     [SerializeField] private float _detectionRadius;    //Enemy의 플레이어 감지 범위
     [SerializeField] private float _rotationSpeed;      //Enemy의 회전 속도
-    [SerializeField] private float _attackCycle;        //Enemy의 공격 주기
+    [SerializeField] protected float _attackCycle;        //Enemy의 공격 주기
 
     //Setter
     public float MoveSpeed { get => _moveSpeed; set => _moveSpeed = value; }
@@ -35,7 +36,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     public float RotationSpeed { get => _rotationSpeed; set => _rotationSpeed = value; }
     public float AttackCycle { get => _attackCycle; set => _attackCycle = value; }
 
-    IEnemyState _enemyState;
+    protected IEnemyState _enemyState;
 
     //State
     protected EnemyIdle EnemyIdle;
@@ -44,21 +45,31 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     protected EnemySkill EnemySkill;
     protected EnemyAttack EnemyAttack;
 
-    private Rigidbody2D _rigidbody2D;
+    protected Rigidbody2D EnemyRigidbody2D;
     private CircleCollider2D _circleCollider2D;
 
 
     //Bullet
-    [SerializeField] private GameObject _bullet;
+    [SerializeField] protected GameObject _bullet;
     [SerializeField] private Transform _bulletPos;
 
-    private Transform _target;
+    protected Transform _target;
     [SerializeField] private float _bulletDamage;
 
     // Start is called before the first frame update
+
+    private void Start()
+    {
+        Init();
+    }
+
     public virtual void Init()
     {
-        _rigidbody2D = GetComponent<Rigidbody2D>();
+        EnemyRigidbody2D = GetComponent<Rigidbody2D>();
+
+        Collider2D detectionCollider = transform.Find("EnemyDetection").GetComponent<Collider2D>();
+        SetColliderSize(detectionCollider, _detectionRadius);
+
         _circleCollider2D = GetComponent<CircleCollider2D>();
 
         _currentState = State.Move;
@@ -67,14 +78,18 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
         EnemyMove = new EnemyMove(this);
         EnemyDead = new EnemyDead(this);
         EnemySkill = new EnemySkill(this);
-        EnemyAttack = new EnemyAttack(this, _bullet);
+        EnemyAttack = new EnemyAttack(this);
 
         _currentHp = _health;
-}
+    }
 
     // Update is called once per frame
     protected virtual void Update()
     {
+        if(Vector3.Distance(transform.position , GameManager.Instance.Vehicle.position) > 50)
+        {
+            return;
+        }
 
         if (_currentState == State.Move) OnMove();
         else if (_currentState == State.Dead) OnDead();
@@ -83,10 +98,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
         else OnIdle();
 
         Excute();
+
+        Debug.Log("부모 스크립트");
     }
 
-    private void Excute()
+    protected void Excute()
     {
+        EnemyRigidbody2D.angularVelocity = 0.0f;
+
         _enemyState.Update(this);
     }
 
@@ -145,10 +164,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
     {
         Debug.Log("총알 발사");
         GameObject bullet = Instantiate(_bullet, _bulletPos.position, Quaternion.identity);
-        bullet.GetComponent<Bullet>().Init(transform, _target, _bulletDamage);
+        bullet.GetComponent<Bullet>().Init(transform, _target, _bulletDamage, 0);
     }
 
-    void OnTriggerStay2D(Collider2D other)
+    protected virtual void OnTriggerStay2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
@@ -158,7 +177,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 
     }
 
-    void OnTriggerExit2D(Collider2D other)
+    protected virtual void OnTriggerExit2D(Collider2D other)
     {
         
         if (other.CompareTag("Player"))
@@ -169,8 +188,19 @@ public class EnemyBase : MonoBehaviour, IDamageable, IGetHp
 
     }
 
+    void SetColliderSize(Collider2D detectionCollider, float size)
+    {
+        if (detectionCollider is BoxCollider2D box)
+        {
+            box.size = new Vector2(size, size);
+        }
+        else if (detectionCollider is CircleCollider2D circle)
+        {
+            circle.radius = size;
+        }
+    }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         _currentHp -= damage;
         if( _currentHp < 0 )
