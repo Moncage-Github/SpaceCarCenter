@@ -18,6 +18,13 @@ public class TollGate : NeutralObject
 
     protected override void OnInteraction()
     {
+        if (GameManager.Instance.CurrentGold < cost)
+        {
+            ShowMessage("돈이 부족합니다.", 2.0f);
+            return;
+        }
+        GameManager.Instance.CurrentGold -= cost;
+
         Debug.Log("중립 몹과 상호작용");
         //상호작용시 동작할 스크립트 _enemyState에 넣기
         _enemyState = new TollGateInteraction(this.gameObject, cost);

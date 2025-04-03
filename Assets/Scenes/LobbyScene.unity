@@ -492,6 +492,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _equiptmentScriptable: {fileID: 11400000, guid: e7d4e5e4dac8e764491b3b79c382ebea, type: 2}
+  _currentGold: 0
+  Vehicle: {fileID: 0}
 --- !u!4 &41893361
 Transform:
   m_ObjectHideFlags: 0
@@ -3116,7 +3118,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentGoldText: {fileID: 1529437505}
-  _currentGold: 20000
 --- !u!114 &462681950
 MonoBehaviour:
   m_ObjectHideFlags: 0

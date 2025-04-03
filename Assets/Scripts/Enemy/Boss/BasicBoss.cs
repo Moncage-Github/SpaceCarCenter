@@ -546,8 +546,4 @@ public class BasicBoss : BossBase
             //return new Vector3(randomX, 0, 0);
         }
     }
-
-
-    
-
 }
