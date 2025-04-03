@@ -59,7 +59,7 @@ public class NeutralObject : EnemyBase
     protected virtual void OnInteraction()
     {
         Debug.Log("중립 몹과 상호작용");
-        _currentState = State.Move;
+        //_currentState = State.Move;
 
         if (!IsInteraction)
             ShowMessage("이미 상호작용 했습니다.", 2.0f);

@@ -251,6 +251,7 @@ public class Vehicle : MonoBehaviour, IDamageable
     public void GetFuel(float fuel)
     {
         _stat.CurrentFuelAmount += fuel;    
+
     }
 }
 

@@ -75,7 +75,6 @@ public class GameManager : MonoBehaviour
         }
         Application.targetFrameRate = 60;
         EquipmentData = new EquipmentsData(_equiptmentScriptable);
-        _sceneLoader = gameObject.AddComponent<SceneLoader>();
     }
 
     public void LoadCollectionScene(Action onComplete = null)

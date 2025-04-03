@@ -38,7 +38,7 @@ public class VehicleStat
         {
             //Debug.Log("Current Feul Percentage : " +  value / MaxFuelAmount * 100 + "%");
             _currentFuelAmount = Mathf.Clamp(value, 0, Data.MaxFuelAmount);
-            _currentFuelAmount = value;
+           
             OnFuelChange?.Invoke(value / Data.MaxFuelAmount);
         }
     }
